@@ -6,7 +6,7 @@ if (strlen(session_id()) < 1) {
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
-	if ($_SESSION['consultac'] == 1 || $_SESSION['consultav'] == 1) {
+	if ($_SESSION['reporte'] == 1) {
 		require_once "../modelos/Consultas.php";
 
 		$consulta = new Consultas();

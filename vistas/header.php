@@ -310,58 +310,19 @@ $local_login = $_SESSION['local'];
           ?>
 
           <?php
-          if ($_SESSION['consultac'] == 1) {
-            echo '<li id="mConsultaC" class="treeview">
+          if ($_SESSION['reporte'] == 1) {
+            echo '<li id="mConsulta" class="treeview">
               <a href="#">
-                <i class="fa fa-bar-chart"></i> <span>Consulta Compras</span>
+                <i class="fa fa-bar-chart"></i> <span>Reportes</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li id="lConsulasC"><a href="comprasfecha.php"><i class="fa fa-circle-o"></i> Consulta Compras</a></li>                
-              </ul>
-            </li>';
-          }
-          ?>
-
-          <?php
-          if ($_SESSION['consultav'] == 1) {
-            echo '<li id="mConsultaV" class="treeview">
-              <a href="#">
-                <i class="fa fa-bar-chart"></i> <span>Consulta Ventas</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="lConsulasV"><a href="ventasfechacliente.php"><i class="fa fa-circle-o"></i> Consulta Ventas</a></li>                
-              </ul>
-            </li>';
-          }
-          ?>
-
-          <?php
-          if ($_SESSION['consultau'] == 1) {
-            echo '<li id="mConsultaU" class="treeview">
-              <a href="#">
-                <i class="fa fa-bar-chart"></i> <span>Consulta Usuario</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="lConsultaU"><a href="ventasfechausuario.php"><i class="fa fa-circle-o"></i> Consulta Ventas por Usuario</a></li>                
-                <li id="lConsultaP"><a href="productosmasvendido.php"><i class="fa fa-circle-o"></i> Productos más vendidos</a></li>                
-                <li id="lGraficoVP"><a href="graficoconsultasvp.php"><i class="fa fa-circle-o"></i> Gráfico Ventas y Productos</a></li>                
-              </ul>
-            </li>';
-          }
-          ?>
-
-          <?php
-          if ($_SESSION['consultad'] == 1) {
-            echo '<li id="mConsultaD" class="treeview">
-              <a href="#">
-                <i class="fa fa-bar-chart"></i> <span>Consulta Devoluciones</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="lConsultaD"><a href="productosmasdevuelto.php"><i class="fa fa-circle-o"></i> Productos más devueltos</a></li>                
+                <li id="lConsulasC"><a href="comprasfecha.php"><i class="fa fa-circle-o"></i> Consulta Compras</a></li>
+                <li id="lConsulasV"><a href="ventasfechacliente.php"><i class="fa fa-circle-o"></i> Consulta Ventas</a></li>  
+                <li id="lConsultaU"><a href="ventasfechausuario.php"><i class="fa fa-circle-o"></i> Consulta Ventas por Usuario</a></li>
+                <li id="lConsultaP"><a href="productosmasvendido.php"><i class="fa fa-circle-o"></i> Productos más vendidos</a></li>
+                <li id="lGraficoVP"><a href="graficoconsultasvp.php"><i class="fa fa-circle-o"></i> Gráfico Ventas y Productos</a></li>
+                <li id="lConsultaD"><a href="productosmasdevuelto.php"><i class="fa fa-circle-o"></i> Productos más devueltos</a></li>
               </ul>
             </li>';
           }

@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['consultau'] == 1) {
+  if ($_SESSION['reporte'] == 1) {
     require_once "../modelos/Consultas.php";
     $consulta = new Consultas();
 
