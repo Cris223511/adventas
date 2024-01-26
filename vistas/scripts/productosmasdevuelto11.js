@@ -74,4 +74,6 @@ function pintarTablas() {
 }
 
 pintarTablas();
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

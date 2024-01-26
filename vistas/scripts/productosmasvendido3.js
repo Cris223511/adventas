@@ -64,4 +64,6 @@ function articulosmasvendidos() {
 		}).DataTable();
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

@@ -156,4 +156,6 @@ function eliminar(idmarcas) {
 	})
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

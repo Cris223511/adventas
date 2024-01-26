@@ -245,4 +245,6 @@ function resetear() {
 	listar();
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

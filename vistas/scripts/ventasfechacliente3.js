@@ -231,4 +231,6 @@ function listartodasventasclientestotales() {
 	});
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

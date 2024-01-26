@@ -154,4 +154,6 @@ function eliminar(idpersona) {
 	})
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

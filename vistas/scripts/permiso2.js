@@ -64,4 +64,6 @@ function listar() {
 }
 
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

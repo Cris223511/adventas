@@ -234,4 +234,6 @@ function listartodasventasusuariousuariostotales() {
 	});
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

@@ -455,4 +455,6 @@ function eliminarDetalle(indice, idarticulo) {
 	evaluar()
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

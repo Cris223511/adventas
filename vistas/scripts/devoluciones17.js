@@ -383,4 +383,6 @@ function mostrarComentario(iddevolucion) {
 	});
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

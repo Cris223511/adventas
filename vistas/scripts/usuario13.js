@@ -252,4 +252,6 @@ function eliminar(idusuario) {
 	})
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

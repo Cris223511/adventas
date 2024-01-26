@@ -159,4 +159,6 @@ function eliminar(idzona) {
 	})
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

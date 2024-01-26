@@ -105,4 +105,6 @@ function mostrar() {
 	});
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

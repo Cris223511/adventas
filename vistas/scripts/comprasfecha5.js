@@ -232,4 +232,6 @@ function listartodascomprasproveedorestotales() {
 	});
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

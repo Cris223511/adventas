@@ -444,4 +444,6 @@ function imprimir() {
 	$("#print").printArea();
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

@@ -243,4 +243,6 @@ function eliminar(idalmacen) {
 	})
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

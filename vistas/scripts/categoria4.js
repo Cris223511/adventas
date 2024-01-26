@@ -154,4 +154,6 @@ function eliminar(idcategoria) {
 }
 
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

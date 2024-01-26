@@ -156,4 +156,6 @@ function eliminar(idmedida) {
 	})
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

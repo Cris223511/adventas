@@ -308,7 +308,7 @@ $local_login = $_SESSION['local'];
           </li>';
           }
           ?>
-
+  
           <?php
           if ($_SESSION['reporte'] == 1) {
             echo '<li id="mReporte" class="treeview">
@@ -321,9 +321,9 @@ $local_login = $_SESSION['local'];
                 <li id="lConsulasV"><a href="ventasfechacliente.php"><i class="fa fa-circle-o"></i> Reporte Ventas</a></li>  
                 <li id="lConsultaU"><a href="ventasfechausuario.php"><i class="fa fa-circle-o"></i> Reporte Ventas por Usuario</a></li>
                 <li id="lConsultaVP"><a href="ventasporproducto.php"><i class="fa fa-circle-o"></i> Reporte Ventas por Producto</a></li>
-                <li id="lConsultaCU"><a href="#"><i class="fa fa-circle-o"></i> Reporte Cuotas</a></li>
+                <!-- <li id="lConsultaCU"><a href="#"><i class="fa fa-circle-o"></i> Reporte Cuotas</a></li>
                 <li id="lConsultaCUU"><a href="#"><i class="fa fa-circle-o"></i> Reporte Cuotas por Usuario</a></li>
-                <li id="lConsultaCP"><a href="#"><i class="fa fa-circle-o"></i> Reporte Cuotas por Producto</a></li>
+                <li id="lConsultaCP"><a href="#"><i class="fa fa-circle-o"></i> Reporte Cuotas por Producto</a></li> -->
                 <li id="lConsultaP"><a href="productosmasvendido.php"><i class="fa fa-circle-o"></i> Productos más vendidos</a></li>
                 <li id="lGraficoVP"><a href="graficoconsultasvp.php"><i class="fa fa-circle-o"></i> Gráfico Ventas y Productos</a></li>
                 <li id="lConsultaD"><a href="productosmasdevuelto.php"><i class="fa fa-circle-o"></i> Productos más Devueltos</a></li>

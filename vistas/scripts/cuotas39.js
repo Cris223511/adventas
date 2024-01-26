@@ -520,4 +520,6 @@ function irDetalle() {
 	return;
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

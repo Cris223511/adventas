@@ -581,4 +581,6 @@ function eliminarDetalle(indice, idservicio) {
 	evaluar()
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

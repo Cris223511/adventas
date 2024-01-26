@@ -4,4 +4,6 @@ function init(){
     $('#lGraficoVP').addClass("active");
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});

@@ -112,4 +112,6 @@ function guardarPagos(e) {
 	limpiar();
 }
 
-init();
+document.addEventListener('DOMContentLoaded', function () {
+	init();
+});
