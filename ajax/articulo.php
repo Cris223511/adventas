@@ -150,7 +150,7 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->almacen,
 						"5" => $reg->marca,
 						"6" => $reg->codigo_producto,
-						"7" => $reg->codigo,
+						"7" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
 						"8" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
 						"9" => $reg->stock_minimo,
 						"10" => $reg->precio_compra == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,

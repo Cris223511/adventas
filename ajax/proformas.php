@@ -89,7 +89,7 @@ if (!isset($_SESSION["nombre"])) {
                                 </thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->precio_venta . '</td><td>' . $reg->descuento . '</td><td>' . $reg->subtotal . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? $reg->subtotal * 0.18 : $reg->subtotal * 0);
 				}
 
@@ -137,8 +137,8 @@ if (!isset($_SESSION["nombre"])) {
 							<td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td>
 							<td><input type="number" name="cantidad[]" id="cantidad[]" value="' . $reg->cantidad . '" readonly></td>
 							<td><input type="number" name="precio_venta[]" id="precio_venta[]" value="' . $reg->precio_venta . '" readonly></td>
-							<td><input type="number" name="descuento[]" id="descuento[]" value="' . $reg->descuento . '" readonly></td>
-							<td>' . $reg->subtotal . '</td>
+							<td><input type="number" name="descuento[]" id="descuento[]" value="' . "$reg->descuento" . '" readonly></td>
+							<td>' . "<nav>S/. $reg->subtotal</nav>" . '</td>
 						  </tr>';
 
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? $reg->subtotal * 0.18 : $reg->subtotal * 0);
@@ -352,7 +352,7 @@ if (!isset($_SESSION["nombre"])) {
 						"9" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
 						"10" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
 						"11" => $reg->codigo_producto,
-						"12" => $reg->codigo,
+						"12" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
 						"13" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
 						"14" => $reg->stock_minimo,
 						"15" => $reg->precio_compra == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,

@@ -9,7 +9,7 @@ function init() {
 		$('#idproveedor').selectpicker('refresh');
 	});
 
-	$('#mConsultaC').addClass("treeview active");
+	$('#mReporte').addClass("treeview active");
 	$('#lConsulasC').addClass("active");
 
 	//Obtenemos la fecha actual
@@ -66,7 +66,7 @@ function listarcompras() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []
 		}).DataTable();
 
 	listarcomprastotales(fecha_inicio, fecha_fin, idproveedor);
@@ -74,7 +74,7 @@ function listarcompras() {
 
 function listarcomprastotales(fecha_inicio, fecha_fin, idproveedor) {
 	$.post("../ajax/consultas.php?op=listarcomprastotales&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin + "&idproveedor=" + idproveedor, function (r) {
-		$("#tbllistado tfoot th").eq(5).html(r);
+		$("#tbllistado tfoot th").eq(6).html(r);
 		console.log(r);
 	});
 }
@@ -118,7 +118,7 @@ function listartodascomprasfecha() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []
 		}).DataTable();
 
 	listartodascomprasfechatotales(fecha_inicio, fecha_fin);
@@ -126,7 +126,7 @@ function listartodascomprasfecha() {
 
 function listartodascomprasfechatotales(fecha_inicio, fecha_fin) {
 	$.post("../ajax/consultas.php?op=listartodascomprasfechatotales&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin, function (r) {
-		$("#tbllistado tfoot th").eq(5).html(r);
+		$("#tbllistado tfoot th").eq(6).html(r);
 		console.log(r);
 	});
 }
@@ -169,7 +169,7 @@ function listartodascompras() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []
 		}).DataTable();
 
 	listartodascomprastotales(idproveedor);
@@ -177,7 +177,7 @@ function listartodascompras() {
 
 function listartodascomprastotales(idproveedor) {
 	$.post("../ajax/consultas.php?op=listartodascomprastotales&idproveedor=" + idproveedor, function (r) {
-		$("#tbllistado tfoot th").eq(5).html(r);
+		$("#tbllistado tfoot th").eq(6).html(r);
 		console.log(r);
 	});
 }
@@ -219,7 +219,7 @@ function listartodascomprasproveedores() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []
 		}).DataTable();
 
 	listartodascomprasproveedorestotales();
@@ -227,7 +227,7 @@ function listartodascomprasproveedores() {
 
 function listartodascomprasproveedorestotales() {
 	$.post("../ajax/consultas.php?op=listartodascomprasproveedorestotales", function (r) {
-		$("#tbllistado tfoot th").eq(5).html(r);
+		$("#tbllistado tfoot th").eq(6).html(r);
 		console.log(r);
 	});
 }

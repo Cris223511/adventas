@@ -11,7 +11,7 @@ function init() {
 		$("#idusuario").val(idusuario);
 		$('#idusuario').selectpicker('refresh');
 	});
-	$('#mConsultaU').addClass("treeview active");
+	$('#mReporte').addClass("treeview active");
 	$('#lConsultaU').addClass("active");
 
 	//Obtenemos la fecha actual
@@ -68,7 +68,7 @@ function listarventasusuario() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 
 	listarventasusuariototales(fecha_inicio, fecha_fin, idusuario);
@@ -76,7 +76,7 @@ function listarventasusuario() {
 
 function listarventasusuariototales(fecha_inicio, fecha_fin, idusuario) {
 	$.post("../ajax/consultas.php?op=listarventasusuariototales&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin + "&idusuario=" + idusuario, function (r) {
-		$("#tbllistado tfoot th").eq(5).html(r);
+		$("#tbllistado tfoot th").eq(6).html(r);
 		console.log(r);
 	});
 }
@@ -120,7 +120,7 @@ function listartodasventasusuariofecha() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 
 	listartodasventasusuariofechatotales(fecha_inicio, fecha_fin);
@@ -128,7 +128,7 @@ function listartodasventasusuariofecha() {
 
 function listartodasventasusuariofechatotales(fecha_inicio, fecha_fin) {
 	$.post("../ajax/consultas.php?op=listartodasventasusuariofechatotales&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin, function (r) {
-		$("#tbllistado tfoot th").eq(5).html(r);
+		$("#tbllistado tfoot th").eq(6).html(r);
 		console.log(r);
 	});
 }
@@ -171,7 +171,7 @@ function listartodasventasusuario() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 
 	listartodasventasusuariototales(idusuario);
@@ -179,7 +179,7 @@ function listartodasventasusuario() {
 
 function listartodasventasusuariototales(idusuario) {
 	$.post("../ajax/consultas.php?op=listartodasventasusuariototales&idusuario=" + idusuario, function (r) {
-		$("#tbllistado tfoot th").eq(5).html(r);
+		$("#tbllistado tfoot th").eq(6).html(r);
 		console.log(r);
 	});
 }
@@ -221,7 +221,7 @@ function listartodasventasusuariousuarios() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 
 	listartodasventasusuariousuariostotales();
@@ -229,7 +229,7 @@ function listartodasventasusuariousuarios() {
 
 function listartodasventasusuariousuariostotales() {
 	$.post("../ajax/consultas.php?op=listartodasventasusuariousuariostotales", function (r) {
-		$("#tbllistado tfoot th").eq(5).html(r);
+		$("#tbllistado tfoot th").eq(6).html(r);
 		console.log(r);
 	});
 }

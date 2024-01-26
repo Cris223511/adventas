@@ -13,61 +13,6 @@ if (!isset($_SESSION["nombre"])) {
 
 
 		switch ($_GET["op"]) {
-			case 'comprasfecha':
-
-				$fecha_inicio = $_REQUEST["fecha_inicio"];
-				$fecha_fin = $_REQUEST["fecha_fin"];
-
-				$rspta = $consulta->comprasfecha($fecha_inicio, $fecha_fin);
-				$data = array();
-
-				while ($reg = $rspta->fetch_object()) {
-					$cargo_detalle = "";
-
-					switch ($reg->cargo) {
-						case 'superadmin':
-							$cargo_detalle = "Superadministrador";
-							break;
-						case 'admin':
-							$cargo_detalle = "Administrador";
-							break;
-						case 'cliente':
-							$cargo_detalle = "Cliente";
-							break;
-						case 'vendedor':
-							$cargo_detalle = "Vendedor";
-							break;
-						case 'almacenero':
-							$cargo_detalle = "Almacenero";
-							break;
-						case 'encargado':
-							$cargo_detalle = "Encargado";
-							break;
-						default:
-							break;
-					}
-					
-					$data[] = array(
-						"0" => $reg->fecha,
-						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->proveedor,
-						"3" => $reg->tipo_comprobante,
-						"4" => $reg->serie_comprobante . ' ' . $reg->num_comprobante,
-						"5" => $reg->total_compra,
-						"6" => $reg->impuesto,
-						"7" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
-							'<span class="label bg-red">Anulado</span>'
-					);
-				}
-				$results = array(
-					"sEcho" => 1, //Información para el datatables
-					"iTotalRecords" => count($data), //enviamos el total registros al datatable
-					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
-					"aaData" => $data
-				);
-				echo json_encode($results);
-
-				break;
 
 				// ventas
 
@@ -105,16 +50,16 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->cliente,
+						"2" => '<strong>' . $reg->cliente . '</strong>',
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => "<nav>S/. $reg->total_venta</nav>",
-						"7" => $reg->impuesto,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
@@ -176,7 +121,7 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
@@ -185,7 +130,7 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => "<nav>S/. $reg->total_venta</nav>",
-						"7" => $reg->impuesto,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
@@ -245,16 +190,16 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->cliente,
+						"2" => '<strong>' . $reg->cliente . '</strong>',
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => "<nav>S/. $reg->total_venta</nav>",
-						"7" => $reg->impuesto,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
@@ -311,7 +256,7 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
@@ -320,7 +265,7 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => "<nav>S/. $reg->total_venta</nav>",
-						"7" => $reg->impuesto,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
@@ -382,16 +327,17 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
-						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->metodo_pago,
-						"3" => $reg->tipo_comprobante,
-						"4" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"5" => "<nav>S/. $reg->total_venta</nav>",
-						"6" => $reg->impuesto,
-						"7" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"1" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
 				}
@@ -452,16 +398,17 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->metodo_pago,
-						"3" => $reg->tipo_comprobante,
-						"4" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"5" => "<nav>S/. $reg->total_venta</nav>",
-						"6" => $reg->impuesto,
-						"7" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
 				}
@@ -520,16 +467,17 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
-						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->metodo_pago,
-						"3" => $reg->tipo_comprobante,
-						"4" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"5" => "<nav>S/. $reg->total_venta</nav>",
-						"6" => $reg->impuesto,
-						"7" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"1" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
 				}
@@ -585,16 +533,17 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->metodo_pago,
-						"3" => $reg->tipo_comprobante,
-						"4" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"5" => "<nav>S/. $reg->total_venta</nav>",
-						"6" => $reg->impuesto,
-						"7" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
 				}
@@ -611,6 +560,440 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listartodasventasusuariousuariostotales':
 
 				$rspta = $consulta->listartodasventasusuariousuarios();
+				$total = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$total = $total + $reg->total_venta;
+				}
+				echo 'S/.' . number_format($total, 2, '.', '');
+				break;
+
+				// ventas por productos
+
+			case 'listarventasproducto':
+
+				$fecha_inicio = $_REQUEST["fecha_inicio"];
+				$fecha_fin = $_REQUEST["fecha_fin"];
+				$idcliente = $_REQUEST["idcliente"];
+
+				$rspta = $consulta->listarventas($fecha_inicio, $fecha_fin, $idcliente);
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button></a>' .
+							'</div>',
+						"1" => $reg->fecha,
+						"2" => $reg->usuario . ' - ' . $cargo_detalle,
+						"3" => '<strong>' . $reg->cliente . '</strong>',
+						"4" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"5" => $reg->tipo_comprobante,
+						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listarventastotalesproducto':
+				$fecha_inicio = $_GET["fecha_inicio"];
+				$fecha_fin = $_GET["fecha_fin"];
+				$idcliente = $_GET["idcliente"];
+
+				$rspta = $consulta->listarventas($fecha_inicio, $fecha_fin, $idcliente);
+				$total = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$total = $total + $reg->total_venta;
+				}
+				echo 'S/.' . number_format($total, 2, '.', '');
+				break;
+
+			case 'listartodasventasfechaproducto':
+
+				$fecha_inicio = $_REQUEST["fecha_inicio"];
+				$fecha_fin = $_REQUEST["fecha_fin"];
+
+				$rspta = $consulta->listartodasventasfecha($fecha_inicio, $fecha_fin);
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button></a>' .
+							'</div>',
+						"1" => $reg->fecha,
+						"2" => $reg->usuario . ' - ' . $cargo_detalle,
+						"3" => $reg->cliente,
+						"4" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"5" => $reg->tipo_comprobante,
+						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listartodasventasfechatotalesproducto':
+				$fecha_inicio = $_GET["fecha_inicio"];
+				$fecha_fin = $_GET["fecha_fin"];
+
+				$rspta = $consulta->listartodasventasfecha($fecha_inicio, $fecha_fin);
+				$total = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$total = $total + $reg->total_venta;
+				}
+				echo 'S/.' . number_format($total, 2, '.', '');
+				break;
+
+			case 'listartodasventasproducto':
+
+				$idcliente = $_REQUEST["idcliente"];
+
+				$rspta = $consulta->listartodasventas($idcliente);
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button></a>' .
+							'</div>',
+						"1" => $reg->fecha,
+						"2" => $reg->usuario . ' - ' . $cargo_detalle,
+						"3" => '<strong>' . $reg->cliente . '</strong>',
+						"4" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"5" => $reg->tipo_comprobante,
+						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listartodasventastotalesproducto':
+				$idcliente = $_REQUEST["idcliente"];
+
+				$rspta = $consulta->listartodasventas($idcliente);
+				$total = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$total = $total + $reg->total_venta;
+				}
+				echo 'S/.' . number_format($total, 2, '.', '');
+				break;
+
+			case 'listartodasventasclientesproducto':
+
+				$rspta = $consulta->listartodasventasclientes();
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button></a>' .
+							'</div>',
+						"1" => $reg->fecha,
+						"2" => $reg->usuario . ' - ' . $cargo_detalle,
+						"3" => $reg->cliente,
+						"4" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"5" => $reg->tipo_comprobante,
+						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listartodasventasclientestotalesproducto':
+
+				$rspta = $consulta->listartodasventasclientes();
+				$total = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$total = $total + $reg->total_venta;
+				}
+				echo 'S/.' . number_format($total, 2, '.', '');
+				break;
+
+			case 'listarventasusuarioproducto':
+
+				$fecha_inicio = $_REQUEST["fecha_inicio"];
+				$fecha_fin = $_REQUEST["fecha_fin"];
+				$idusuario = $_REQUEST["idusuario"];
+
+				$rspta = $consulta->listarventasusuario($fecha_inicio, $fecha_fin, $idusuario);
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button></a>' .
+							'</div>',
+						"1" => $reg->fecha,
+						"2" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"3" => $reg->cliente,
+						"4" => $reg->metodo_pago,
+						"5" => $reg->tipo_comprobante,
+						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listarventasusuariototalesproducto':
+				$fecha_inicio = $_GET["fecha_inicio"];
+				$fecha_fin = $_GET["fecha_fin"];
+				$idusuario = $_GET["idusuario"];
+
+				$rspta = $consulta->listarventasusuario($fecha_inicio, $fecha_fin, $idusuario);
+				$total = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$total = $total + $reg->total_venta;
+				}
+				echo 'S/.' . number_format($total, 2, '.', '');
+				break;
+			case 'listartodasventasusuarioproducto':
+
+				$idusuario = $_REQUEST["idusuario"];
+
+				$rspta = $consulta->listartodasventasusuario($idusuario);
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button></a>' .
+							'</div>',
+						"1" => $reg->fecha,
+						"2" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"3" => $reg->cliente,
+						"4" => $reg->metodo_pago,
+						"5" => $reg->tipo_comprobante,
+						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listartodasventasusuariototalesproducto':
+				$idusuario = $_REQUEST["idusuario"];
+
+				$rspta = $consulta->listartodasventasusuario($idusuario);
 				$total = 0;
 
 				while ($reg = $rspta->fetch_object()) {
@@ -847,7 +1230,7 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
@@ -856,7 +1239,7 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => $reg->total_compra,
-						"7" => $reg->impuesto,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
@@ -918,16 +1301,16 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->proveedor,
+						"2" => '<strong>' . $reg->proveedor . '</strong>',
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => $reg->total_compra,
-						"7" => $reg->impuesto,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
@@ -987,16 +1370,16 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->proveedor,
+						"2" => '<strong>' . $reg->proveedor . '</strong>',
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => $reg->total_compra,
-						"7" => $reg->impuesto,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
@@ -1053,7 +1436,7 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					
+
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
@@ -1062,7 +1445,7 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => $reg->total_compra,
-						"7" => $reg->impuesto,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);

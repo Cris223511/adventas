@@ -78,7 +78,7 @@ if (!isset($_SESSION["nombre"])) {
                                 </thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->precio_venta . '</td><td>' . $reg->descuento . '</td><td>' . $reg->subtotal . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? $reg->subtotal * 0.18 : $reg->subtotal * 0);
 				}
 
@@ -101,6 +101,71 @@ if (!isset($_SESSION["nombre"])) {
 						<th><h4 id="total">S/.' . number_format($rspta2["total_venta"], 2, '.', '') . '</h4><input type="hidden" name="total_venta" id="total_venta"></th>
 						</tr>
 					</tfoot>';
+				break;
+
+			case 'listarDetalleproductoventa':
+				$id = $_GET['id'];
+				$rspta = $venta->listarDetallePorProducto($id);
+
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->usuario . ' - ' . $cargo_detalle,
+						"1" => $reg->cliente,
+						"2" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
+						"3" => $reg->nombre,
+						"4" => $reg->cantidad,
+						"5" => "<nav>S/. $reg->precio_venta</nav>",
+						"6" => "<nav>S/. $reg->descuento</nav>",
+						"7" => "<nav>S/. $reg->subtotal</nav>",
+						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"9" => "<nav>S/. $reg->total_venta</nav>",
+						"10" => $reg->metodo_pago,
+						"11" => $reg->tipo_comprobante,
+						"12" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"13" => $reg->stock,
+						"14" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>',
+					);
+				}
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+
+				echo json_encode($results);
+
 				break;
 
 			case 'listar':
@@ -303,7 +368,7 @@ if (!isset($_SESSION["nombre"])) {
 						"9" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
 						"10" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
 						"11" => $reg->codigo_producto,
-						"12" => $reg->codigo,
+						"12" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
 						"13" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
 						"14" => $reg->stock_minimo,
 						"15" => $reg->precio_compra == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,

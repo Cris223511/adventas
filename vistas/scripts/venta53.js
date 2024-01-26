@@ -392,7 +392,6 @@ function mostrar(idventa) {
 			});
 		})
 	});
-
 }
 
 //Función para anular registros

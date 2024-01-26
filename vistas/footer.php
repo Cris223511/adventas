@@ -96,7 +96,7 @@
       }
 
       function nowrapCell() {
-        ["#tbllistado", "#tblarticulos", "#tbltrabajadores"].forEach(selector => {
+        ["#tbllistado", "#tbllistado2", "#tblarticulos", "#tbltrabajadores"].forEach(selector => {
           addClassToCells(selector, "nowrap-cell");
         });
       }
@@ -116,7 +116,7 @@
       }
 
       $(document).on('draw.dt', function(e, settings) {
-        if ($(settings.nTable).is('#tbllistado') || $(settings.nTable).is('#tblarticulos') || $(settings.nTable).is('#tbltrabajadores')) {
+        if ($(settings.nTable).is('#tbllistado') || $(settings.nTable).is('#tbllistado2') || $(settings.nTable).is('#tblarticulos') || $(settings.nTable).is('#tbltrabajadores')) {
           const table = $(settings.nTable).DataTable();
           if (table.rows({
               page: 'current'
@@ -128,14 +128,14 @@
       });
 
       $(document).ajaxSuccess(function(event, xhr, settings) {
-        if (settings.url.includes("op=listar") || settings.url.includes("op=listarArticulosVenta")) {
+        if (settings.url.includes("op=listar") || settings.url.includes("op=listarDetalle") || settings.url.includes("op=listarDetalleproductoventa") || settings.url.includes("op=listarArticulosVenta")) {
           nowrapCell();
         }
       });
     </script>
 
     <script>
-      const thElements = document.querySelectorAll("#tblarticulos th, #tbllistado th, #tbltrabajadores th");
+      const thElements = document.querySelectorAll("#tblarticulos th, #tbllistado th, #tbllistado2 th, #tbltrabajadores th");
 
       thElements.forEach((e) => {
         e.textContent = e.textContent.toUpperCase();

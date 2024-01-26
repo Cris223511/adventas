@@ -145,7 +145,7 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-12 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label class="label_input" style="width: 90px;">Descripción:</label>
-                      <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="50" placeholder="Descripción del artículo" autocomplete="off">
+                      <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Descripción del artículo" autocomplete="off">
                     </div>
                   </div>
                   <div class="form-group col-lg-10 col-md-8 col-sm-12 botones" style="background-color: white !important; padding: 10px 10px 10px 0 !important; float: right;">

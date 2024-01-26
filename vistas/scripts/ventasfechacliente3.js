@@ -8,7 +8,7 @@ function init() {
 		$("#idcliente").html(r);
 		$('#idcliente').selectpicker('refresh');
 	});
-	$('#mConsultaV').addClass("treeview active");
+	$('#mReporte').addClass("treeview active");
 	$('#lConsulasV').addClass("active");
 
 	//Obtenemos la fecha actual
@@ -65,7 +65,7 @@ function listarventas() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 
 	listarventastotales(fecha_inicio, fecha_fin, idcliente);
@@ -117,7 +117,7 @@ function listartodasventasfecha() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 
 	listartodasventasfechatotales(fecha_inicio, fecha_fin);
@@ -168,7 +168,7 @@ function listartodasventas() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 
 	listartodasventastotales(idcliente);
@@ -218,7 +218,7 @@ function listartodasventasclientes() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 5,//Paginación
-			"order": [[0, "desc"]]//Ordenar (columna,orden)
+			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 
 	listartodasventasclientestotales();

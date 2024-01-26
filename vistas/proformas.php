@@ -189,7 +189,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <button class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
-                <button class="btn btn-secondary" type="submit" id="btnGuardar3"><i class="fa fa-save"></i> Guardar</button>
+                <button class="btn btn-secondary" type="submit" id="btnGuardar3"><i class="fa fa-save"></i> Enviar</button>
               </div>
             </form>
           </div>

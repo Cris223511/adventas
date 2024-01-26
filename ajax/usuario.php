@@ -215,13 +215,13 @@ switch ($_GET["op"]) {
 				default:
 					break;
 			}
-			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre  . ' - ' . $cargo_detalle . '</option>';
+			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre . ' ' . $reg->apellido  . ' - ' . $cargo_detalle . '</option>';
 		}
 		break;
 
 	case 'selectUsuarios':
 		$cargoSession = $_SESSION["cargo"];
-		if ($cargoSession == "administrador") {
+		if ($cargoSession == "superadmin") {
 			$rspta = $usuario->listarASCactivos();
 		} else {
 			$rspta = $usuario->listarPorUsuarioASCActivos($_SESSION['idusuario']);
@@ -253,7 +253,7 @@ switch ($_GET["op"]) {
 				default:
 					break;
 			}
-			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre  . ' - ' . $cargo_detalle . '</option>';
+			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre . ' ' . $reg->apellido  . ' - ' . $cargo_detalle . '</option>';
 		}
 		break;
 

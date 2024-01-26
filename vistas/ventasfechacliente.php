@@ -19,7 +19,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Consulta de Ventas</h1>
+                <h1 class="box-title">Reporte de Ventas al contado</h1>
                 <div class="box-tools pull-right">
                 </div>
               </div>
@@ -27,15 +27,15 @@ if (!isset($_SESSION["nombre"])) {
               <!-- centro -->
               <div class="panel-body table-responsive" id="listadoregistros">
                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                  <label>Fecha Inicio</label>
+                  <label>Fecha Inicio:</label>
                   <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio" value="<?php echo date("Y-m-d"); ?>">
                 </div>
                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                  <label>Fecha Fin</label>
+                  <label>Fecha Fin:</label>
                   <input type="date" class="form-control" name="fecha_fin" id="fecha_fin" value="<?php echo date("Y-m-d"); ?>">
                 </div>
                 <div class="form-inline col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                  <label>Cliente</label>
+                  <label>Cliente:</label>
                   <select name="idcliente" id="idcliente" class="form-control selectpicker" data-live-search="true" required></select>
                 </div>
                 <div class="row">
@@ -52,7 +52,7 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                   <thead>
                     <th>Fecha</th>
-                    <th>Usuario</th>
+                    <th>Usuario Vendedor</th>
                     <th>Cliente</th>
                     <th>Método de pago</th>
                     <th>Comprobante</th>
