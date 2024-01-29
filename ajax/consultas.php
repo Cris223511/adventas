@@ -1002,6 +1002,431 @@ if (!isset($_SESSION["nombre"])) {
 				echo 'S/.' . number_format($total, 2, '.', '');
 				break;
 
+				// ventas y productos
+
+			case 'listarventasyproducto':
+
+				$fecha_inicio = $_REQUEST["fecha_inicio"];
+				$fecha_fin = $_REQUEST["fecha_fin"];
+				$idcliente = $_REQUEST["idcliente"];
+
+				$rspta = $consulta->listarventasyproducto($fecha_inicio, $fecha_fin, $idcliente);
+				$data = array();
+
+				$lastIdVenta = null;
+				$firstIteration = true;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => $reg->usuario . ' - ' . $cargo_detalle,
+						"5" => '<strong>' . $reg->cliente . '</strong>',
+						"6" => $reg->cantidad,
+						"7" => $reg->nombre,
+						"8" => "<nav>S/. $reg->total_venta</nav>",
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta = $reg->idventa;
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listartodasventasfechayproducto':
+
+				$fecha_inicio = $_REQUEST["fecha_inicio"];
+				$fecha_fin = $_REQUEST["fecha_fin"];
+
+				$rspta = $consulta->listartodasventasfechayproducto($fecha_inicio, $fecha_fin);
+				$data = array();
+
+				$lastIdVenta = null;
+				$firstIteration = true;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => $reg->usuario . ' - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->cantidad,
+						"7" => $reg->nombre,
+						"8" => "<nav>S/. $reg->total_venta</nav>",
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta = $reg->idventa;
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listartodasventasyproducto':
+
+				$idcliente = $_REQUEST["idcliente"];
+
+				$rspta = $consulta->listartodasventasyproducto($idcliente);
+				$data = array();
+
+				$lastIdVenta = null;
+				$firstIteration = true;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => $reg->usuario . ' - ' . $cargo_detalle,
+						"5" => '<strong>' . $reg->cliente . '</strong>',
+						"6" => $reg->cantidad,
+						"7" => $reg->nombre,
+						"8" => "<nav>S/. $reg->total_venta</nav>",
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta = $reg->idventa;
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listartodasventasclientesyproducto':
+
+				$rspta = $consulta->listartodasventasclientesyproducto();
+				$data = array();
+
+				$lastIdVenta = null;
+				$firstIteration = true;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => $reg->usuario . ' - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->cantidad,
+						"7" => $reg->nombre,
+						"8" => "<nav>S/. $reg->total_venta</nav>",
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta = $reg->idventa;
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listarventasusuarioyproducto':
+
+				$fecha_inicio = $_REQUEST["fecha_inicio"];
+				$fecha_fin = $_REQUEST["fecha_fin"];
+				$idusuario = $_REQUEST["idusuario"];
+
+				$rspta = $consulta->listarventasusuarioyproducto($fecha_inicio, $fecha_fin, $idusuario);
+				$data = array();
+
+				$lastIdVenta = null;
+				$firstIteration = true;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->cantidad,
+						"7" => $reg->nombre,
+						"8" => "<nav>S/. $reg->total_venta</nav>",
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta = $reg->idventa;
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listartodasventasusuarioyproducto':
+
+				$idusuario = $_REQUEST["idusuario"];
+
+				$rspta = $consulta->listartodasventasusuarioyproducto($idusuario);
+				$data = array();
+
+				$lastIdVenta = null;
+				$firstIteration = true;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->cantidad,
+						"7" => $reg->nombre,
+						"8" => "<nav>S/. $reg->total_venta</nav>",
+						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta = $reg->idventa;
+				}
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
 				// artículos más vendidos
 
 			case 'articulosmasvendidos':
@@ -1234,7 +1659,7 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->proveedor,
+						"2" => '<strong>' . $reg->proveedor . '</strong>',
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
@@ -1305,7 +1730,7 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => $reg->fecha,
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => '<strong>' . $reg->proveedor . '</strong>',
+						"2" => $reg->proveedor,
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,

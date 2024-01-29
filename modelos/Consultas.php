@@ -87,6 +87,44 @@ class Consultas
 		return ejecutarConsulta($sql);
 	}
 
+	// ventas y productos
+
+	public function listarventasyproducto($fecha_inicio, $fecha_fin, $idcliente)
+	{
+		$sql = "SELECT dv.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y') as fecha,dv.idarticulo,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,al.ubicacion as almacen,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal,a.idarticulo,a.idcategoria,a.codigo,a.codigo_producto,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,v.estado FROM detalle_venta dv LEFT JOIN venta v ON v.idventa=dv.idventa LEFT JOIN persona p ON v.idcliente=p.idpersona LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN articulo a on dv.idarticulo=a.idarticulo WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idcliente='$idcliente' ORDER by v.idventa ASC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listartodasventasfechayproducto($fecha_inicio, $fecha_fin)
+	{
+		$sql = "SELECT dv.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y') as fecha,dv.idarticulo,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,al.ubicacion as almacen,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal,a.idarticulo,a.idcategoria,a.codigo,a.codigo_producto,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,v.estado FROM detalle_venta dv LEFT JOIN venta v ON v.idventa=dv.idventa LEFT JOIN persona p ON v.idcliente=p.idpersona LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN articulo a on dv.idarticulo=a.idarticulo WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' ORDER by v.idventa ASC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listartodasventasyproducto($idcliente)
+	{
+		$sql = "SELECT dv.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y') as fecha,dv.idarticulo,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,al.ubicacion as almacen,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal,a.idarticulo,a.idcategoria,a.codigo,a.codigo_producto,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,v.estado FROM detalle_venta dv LEFT JOIN venta v ON v.idventa=dv.idventa LEFT JOIN persona p ON v.idcliente=p.idpersona LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN articulo a on dv.idarticulo=a.idarticulo WHERE v.idcliente='$idcliente' ORDER by v.idventa DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listartodasventasclientesyproducto()
+	{
+		$sql = "SELECT dv.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y') as fecha,dv.idarticulo,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,al.ubicacion as almacen,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal,a.idarticulo,a.idcategoria,a.codigo,a.codigo_producto,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,v.estado FROM detalle_venta dv LEFT JOIN venta v ON v.idventa=dv.idventa LEFT JOIN persona p ON v.idcliente=p.idpersona LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN articulo a on dv.idarticulo=a.idarticulo WHERE v.idcliente=p.idpersona ORDER by v.idventa DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarventasusuarioyproducto($fecha_inicio, $fecha_fin, $idusuario)
+	{
+		$sql = "SELECT dv.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y') as fecha,dv.idarticulo,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,al.ubicacion as almacen,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal,a.idarticulo,a.idcategoria,a.codigo,a.codigo_producto,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,v.estado FROM detalle_venta dv LEFT JOIN venta v ON v.idventa=dv.idventa LEFT JOIN persona p ON v.idcliente=p.idpersona LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN articulo a on dv.idarticulo=a.idarticulo WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idusuario='$idusuario' ORDER by v.idventa ASC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listartodasventasusuarioyproducto($idusuario)
+	{
+		$sql = "SELECT dv.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y') as fecha,dv.idarticulo,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,al.ubicacion as almacen,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal,a.idarticulo,a.idcategoria,a.codigo,a.codigo_producto,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,v.estado FROM detalle_venta dv LEFT JOIN venta v ON v.idventa=dv.idventa LEFT JOIN persona p ON v.idcliente=p.idpersona LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN articulo a on dv.idarticulo=a.idarticulo WHERE v.idusuario='$idusuario' ORDER by v.idventa DESC";
+		return ejecutarConsulta($sql);
+	}
+
 	// artículos más vendidos
 
 	public function articulosmasvendidos()

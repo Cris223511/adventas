@@ -238,7 +238,30 @@
     </script>
 
     <?php
-    if ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin") {
+    if ($_SESSION["cargo"] == "almacenero") {
+      echo '<script>
+            $(document).ajaxSuccess(function(event, xhr, settings) {
+                if (!$("#mAlmacen").hasClass("active") &&
+                    !$("#mCompras").hasClass("active")) {
+                    $(".dt-buttons").hide();
+                }
+            });
+          </script>';
+    } elseif ($_SESSION["cargo"] == "vendedor") {
+      echo '<script>
+              $(document).ajaxSuccess(function(event, xhr, settings) {
+                  if (!$("#mPagos").hasClass("active") &&
+                      !$("#lMarcas").hasClass("active") &&
+                      !$("#lMedidas").hasClass("active") &&
+                      !$("#lCategorias").hasClass("active") &&
+                      !$("#lProveedores").hasClass("active") &&
+                      !$("#lZonas").hasClass("active")
+                  ) {
+                      $(".dt-buttons").hide();
+                  }
+              });
+            </script>';
+    } elseif ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin" && $_SESSION["cargo"] != "encargado") {
       echo '<script>
               $(document).ajaxSuccess(function(event, xhr, settings) {
                 $(".dt-buttons").hide();
@@ -246,7 +269,6 @@
             </script>';
     }
     ?>
-
 
     </body>
 

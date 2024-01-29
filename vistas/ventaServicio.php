@@ -37,7 +37,7 @@ if (!isset($_SESSION["nombre"])) {
                   <a data-toggle="modal" href="#myModal2">
                     <button type="button" class="btn btn-secondary" style="color: black !important;" onclick="limpiar();"> <span class="fa fa-plus-circle"></span> Agregar</button>
                   </a>
-                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
                     <a href="../reportes/rptventasservicio.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte

@@ -131,6 +131,8 @@ function actualizarPersonales(idalmacen) {
 // }
 
 function generarSiguienteCorrelativo(numeros) {
+	numeros = numeros.trim() === "" ? "0000" : numeros;
+
 	const siguienteNumero = parseInt(numeros, 10) + 1;
 	const longitud = numeros.length;
 	const siguienteCorrelativo = String(siguienteNumero).padStart(longitud, '0');

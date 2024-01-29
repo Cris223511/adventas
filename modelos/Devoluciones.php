@@ -82,7 +82,7 @@ class Devolucion
 					d.estado
 				FROM devolucion d
 				LEFT JOIN usuario ual ON d.idalmacenero = ual.idusuario
-				WHERE d.iddevolucion='$iddevolucion' AND (estado = 'Pendiente' OR estado = 'Finalizado' OR estado = 'En curso')";
+				WHERE d.iddevolucion='$iddevolucion' AND (d.estado = 'Pendiente' OR d.estado = 'Finalizado' OR d.estado = 'En curso')";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
@@ -202,7 +202,7 @@ class Devolucion
 				FROM devolucion d
 				LEFT JOIN usuario uen ON d.idencargado = uen.idusuario
 				LEFT JOIN usuario ual ON d.idalmacenero = ual.idusuario
-				WHERE d.iddevolucion = '$iddevolucion' AND (estado = 'Pendiente' OR estado = 'Finalizado' OR estado = 'En curso')";
+				WHERE d.iddevolucion = '$iddevolucion' AND (d.estado = 'Pendiente' OR d.estado = 'Finalizado' OR d.estado = 'En curso')";
 		return ejecutarConsulta($sql);
 	}
 

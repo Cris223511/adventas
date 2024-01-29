@@ -69,6 +69,8 @@ function init() {
 // }
 
 function generarSiguienteCorrelativo(numeros) {
+	numeros = numeros.trim() === "" ? "0000" : numeros;
+
 	const siguienteNumero = parseInt(numeros, 10) + 1;
 	const longitud = numeros.length;
 	const siguienteCorrelativo = String(siguienteNumero).padStart(longitud, '0');
@@ -147,7 +149,7 @@ function listar() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [10, 20, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla

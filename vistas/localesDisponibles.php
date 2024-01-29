@@ -23,7 +23,7 @@ if (!isset($_SESSION["nombre"])) {
                   <!-- <button class="btn btn-success" id="btnasignar" onclick="mostrarform2(true)">
                     <i class="fa fa-sign-out"></i> Asignar
                   </button> -->
-                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
                     <a href="../reportes/rptlocalesdisponibles.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte

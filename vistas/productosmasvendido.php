@@ -20,7 +20,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Productos más vendidos
-                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
                     <a href="../reportes/rptproductosmasvendido.php" target="_blank"><button class="btn btn-secondary" style="color: black !important;"><i class="fa fa-clipboard"></i> Reporte</button></a>
                   <?php } ?>
                 </h1>

@@ -22,11 +22,13 @@ if (!isset($_SESSION["nombre"])) {
                   <a data-toggle="modal" href="#myModal">
                     <button type="button" class="btn btn-secondary" style="color: black !important;" onclick="limpiar()"> <span class="fa fa-plus-circle"></span> Agregar</button>
                   </a>
-                  <a href="../reportes/rptclientes.php" target="_blank">
-                    <button class="btn btn-secondary" style="color: black !important;">
-                      <i class="fa fa-clipboard"></i> Reporte
-                    </button>
-                  </a>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
+                    <a href="../reportes/rptclientes.php" target="_blank">
+                      <button class="btn btn-secondary" style="color: black !important;">
+                        <i class="fa fa-clipboard"></i> Reporte
+                      </button>
+                    </a>
+                  <?php } ?>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>

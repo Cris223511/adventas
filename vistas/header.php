@@ -308,7 +308,7 @@ $local_login = $_SESSION['local'];
           </li>';
           }
           ?>
-  
+
           <?php
           if ($_SESSION['reporte'] == 1) {
             echo '<li id="mReporte" class="treeview">
@@ -327,6 +327,22 @@ $local_login = $_SESSION['local'];
                 <li id="lConsultaP"><a href="productosmasvendido.php"><i class="fa fa-circle-o"></i> Productos más vendidos</a></li>
                 <li id="lGraficoVP"><a href="graficoconsultasvp.php"><i class="fa fa-circle-o"></i> Gráfico Ventas y Productos</a></li>
                 <li id="lConsultaD"><a href="productosmasdevuelto.php"><i class="fa fa-circle-o"></i> Productos más Devueltos</a></li>
+              </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
+          if ($_SESSION['reporteP'] == 1) {
+            echo '<li id="mReporteP" class="treeview">
+              <a href="#">
+                <i class="fa fa-bar-chart"></i> <span>Reportes de Productos</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <!-- <li id="lReportePC"><a href="comprasyproductos.php"><i class="fa fa-circle-o"></i> Reporte Compras y productos</a></li> -->
+                <li id="lReportePV"><a href="ventasyproductos.php"><i class="fa fa-circle-o"></i> Reporte Ventas y productos</a></li>  
+                <!-- <li id="lReportePCU"><a href="cuotasyproductos.php"><i class="fa fa-circle-o"></i> Reporte Cuotas y productos</a></li> -->
               </ul>
             </li>';
           }

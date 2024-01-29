@@ -25,7 +25,7 @@ if (!isset($_SESSION["nombre"])) {
                   <?php
                   }
                   ?>
-                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
                     <a href="../reportes/rptusuarios.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte
@@ -71,7 +71,7 @@ if (!isset($_SESSION["nombre"])) {
                 </table>
               </div>
               <div class="panel-body" id="formularioregistros">
-                <form name="formulario" id="formulario" method="POST">
+                <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Nombre(*):</label>
                     <input type="hidden" name="idusuario" id="idusuario">
