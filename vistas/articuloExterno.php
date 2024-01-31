@@ -85,6 +85,12 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock mínimo</th>
                     <th>Precio de compra</th>
                     <th>Precio de venta</th>
+                    <th>Ganancia</th>
+                    <th>Talla</th>
+                    <th>Color</th>
+                    <th>Peso</th>
+                    <th>U. medida</th>
+                    <th>Posición</th>
                     <th>Agregado por</th>
                     <th>Estado</th>
                   </thead>
@@ -103,6 +109,12 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock mínimo</th>
                     <th>Precio de compra</th>
                     <th>Precio de venta</th>
+                    <th>Granancia</th>
+                    <th>Talla</th>
+                    <th>Color</th>
+                    <th>Peso</th>
+                    <th>U. medida</th>
+                    <th>Posición</th>
                     <th>Agregado por</th>
                     <th>Estado</th>
                   </tfoot>
@@ -150,13 +162,17 @@ if (!isset($_SESSION["nombre"])) {
                       <label style="width: 100px;">Stock mínimo(*):</label>
                       <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="1" placeholder="Stock mínimo" required>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Precio compra(*):</label>
-                      <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de compra." required>
+                    <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                      <label class="label_input" style="width: 100px;">Precio compra(*):</label>
+                      <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de compra." required>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                    <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label style="width: 100px;">Precio venta(*):</label>
-                      <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de venta." required>
+                      <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de venta." required>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                      <label style="width: 100px;">Ganancia(*):</label>
+                      <input type="number" class="form-control" name="ganancia" id="ganancia" step="any" placeholder="Ganancia total." disabled required>
                     </div>
                     <div class="form-group col-lg-12 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label class="label_input" style="width: 90px;">Descripción:</label>

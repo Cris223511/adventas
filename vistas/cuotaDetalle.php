@@ -13,7 +13,7 @@ if (!isset($_SESSION["nombre"])) {
   if ($_SESSION['cuotas'] == 1) {
 
     include('../config/Conexion.php');
-    $sql = "SELECT cu.idcuotas,cu.fecha_hora as fecha,cu.fecha_anulado as anulado,z.idzona as idzona,al.idalmacen as idalmacen,cu.idcliente,ucl.nombre as cliente,ucv.nombre as vendedor,ucl.tipo_documento as tipo_doc_cl,ucv.tipo_documento as tipo_doc_ve,ucl.num_documento as num_doc_cl,ucv.num_documento as num_doc_ve,ucl.idusuario as idcliente,ucv.idusuario as idvendedor,u.idusuario,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.cargo AS cargo,z.ubicacion as ubicacion,z.zona as zona,al.ubicacion as almacen,cu.tipo_comprobante,cu.serie_comprobante,cu.num_comprobante,cu.total_venta,cu.monto_pagado,cu.impuesto,cu.estado FROM cuotas cu LEFT JOIN usuario ucl ON cu.idcliente=ucl.idusuario LEFT JOIN usuario ucv ON cu.idvendedor=ucv.idusuario LEFT JOIN usuario u ON cu.idusuario=u.idusuario LEFT JOIN zonas z ON cu.idzona=z.idzona LEFT JOIN almacen al ON cu.idalmacen=al.idalmacen WHERE cu.idcuotas='$id'";
+    $sql = "SELECT cu.idcuotas,cu.fecha_hora as fecha,cu.fecha_anulado as anulado,z.idzona as idzona,al.idalmacen as idalmacen,cu.idcliente,CONCAT(ucl.nombre,' ',ucl.apellido) as cliente,CONCAT(ucv.nombre,' ',ucv.apellido) as vendedor,ucl.tipo_documento as tipo_doc_cl,ucv.tipo_documento as tipo_doc_ve,ucl.num_documento as num_doc_cl,ucv.num_documento as num_doc_ve,ucl.idusuario as idcliente,ucv.idusuario as idvendedor,u.idusuario,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.cargo AS cargo,z.ubicacion as ubicacion,z.zona as zona,al.ubicacion as almacen,cu.tipo_comprobante,cu.serie_comprobante,cu.num_comprobante,cu.total_venta,cu.monto_pagado,cu.impuesto,cu.estado FROM cuotas cu LEFT JOIN usuario ucl ON cu.idcliente=ucl.idusuario LEFT JOIN usuario ucv ON cu.idvendedor=ucv.idusuario LEFT JOIN usuario u ON cu.idusuario=u.idusuario LEFT JOIN zonas z ON cu.idzona=z.idzona LEFT JOIN almacen al ON cu.idalmacen=al.idalmacen WHERE cu.idcuotas='$id'";
     $result = $conexion->query($sql);
 
     $sql = "SELECT dc.idcuotas,a.codigo,dc.idarticulo,a.nombre,dc.cantidad,dc.precio_venta,dc.descuento,(dc.cantidad*dc.precio_venta-dc.descuento) as subtotal FROM detalle_cuotas dc LEFT JOIN articulo a on dc.idarticulo=a.idarticulo where dc.idcuotas='$id'";
@@ -215,7 +215,7 @@ if (!isset($_SESSION["nombre"])) {
                       <hr style="height: 15px; margin: 0;">
                       <div class="contenido">
                         <div class="cajamitad1">
-                          <h4 class="subtituloinfo">CLIENTE</h4>
+                          <h4 class="subtituloinfo">USUARIO CLIENTE</h4>
                           <h5 class="tituloinfo"><?php echo $row['cliente'] ?> - <?php echo $row['tipo_doc_cl'] ?>: <?php echo $row['num_doc_cl'] ?></h5>
                         </div>
                         <!-- <div class="cajamitad2">
@@ -226,7 +226,7 @@ if (!isset($_SESSION["nombre"])) {
                       <hr style="height: 15px; margin: 0;">
                       <div class="contenido">
                         <div class="cajamitad1">
-                          <h4 class="subtituloinfo">VENDEDOR</h4>
+                          <h4 class="subtituloinfo">USUARIO VENDEDOR</h4>
                           <h5 class="tituloinfo"><?php echo $row['vendedor'] ?> - <?php echo $row['tipo_doc_ve'] ?>: <?php echo $row['num_doc_ve'] ?></h5>
                         </div>
                         <!-- <div class="cajamitad2">

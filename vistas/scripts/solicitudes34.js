@@ -514,12 +514,12 @@ function agregarDetalle(marca, categoria, idarticulo, stock, articulo) {
 
 	if (idarticulo != "") {
 		var fila = '<tr class="filas" id="fila' + cont + '">' +
-			'<td><button type="button" class="btn btn-danger" onclick="eliminarDetalle(' + cont + ', ' + idarticulo + ')">X</button></td>' +
-			'<td><input type="hidden" name="idarticulo[]" value="' + idarticulo + '">' + articulo + '</td>' +
+			'<td class="nowrap-cell"><button type="button" class="btn btn-danger" onclick="eliminarDetalle(' + cont + ', ' + idarticulo + ')">X</button></td>' +
+			'<td class="nowrap-cell"><input type="hidden" name="idarticulo[]" value="' + idarticulo + '">' + articulo + '</td>' +
 			'<td>' + categoria + '</td>' +
 			'<td>' + marca + '</td>' +
 			'<td>' + stock + '</td>' +
-			'<td><input type="number" name="cantidad[]" id="cantidad[]" value="' + cantidad + '"></td>' +
+			'<td class="nowrap-cell"><input type="number" name="cantidad[]" id="cantidad[]" value="' + cantidad + '"></td>' +
 			'</tr>';
 		cont++;
 		detalles = detalles + 1;

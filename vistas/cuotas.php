@@ -62,6 +62,8 @@ if (!isset($_SESSION["nombre"])) {
                     <thead>
                       <th style="width: 12%;">Opciones</th>
                       <th>Agregado por</th>
+                      <th>Cliente</th>
+                      <th>Vendedor</th>
                       <th>Fecha Creación</th>
                       <th>Fecha Anulación</th>
                       <th>Ubicación del local</th>
@@ -79,6 +81,8 @@ if (!isset($_SESSION["nombre"])) {
                     <tfoot>
                       <th>Opciones</th>
                       <th>Agregado por</th>
+                      <th>Cliente</th>
+                      <th>Vendedor</th>
                       <th>Fecha Creación</th>
                       <th>Fecha Anulación</th>
                       <th>Ubicación del local</th>
@@ -97,13 +101,13 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body" id="formularioregistros">
                 <form name="formulario" id="formulario" method="POST">
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label>Cliente(*):</label>
+                    <label>Usuario Cliente(*):</label>
                     <input type="hidden" name="idcuotas" id="idcuotas">
                     <select id="idcliente" name="idcliente" class="form-control selectpicker" data-live-search="true" required>
                     </select>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label>Vendedor(*):</label>
+                    <label>Usuario Vendedor(*):</label>
                     <select id="idvendedor" name="idvendedor" class="form-control selectpicker" data-live-search="true" required>
                     </select>
                   </div>
@@ -165,14 +169,15 @@ if (!isset($_SESSION["nombre"])) {
                         <th>Opciones</th>
                         <th>Artículo</th>
                         <th>Cantidad</th>
+                        <th>Precio compra</th>
                         <th>Precio venta</th>
                         <th>Descuento</th>
                         <th>Subtotal</th>
-                        <th></th>
                       </thead>
                       <tfoot>
                         <tr>
                           <th>IGV</th>
+                          <th></th>
                           <th></th>
                           <th></th>
                           <th></th>
@@ -183,6 +188,7 @@ if (!isset($_SESSION["nombre"])) {
                         </tr>
                         <tr>
                           <th>TOTAL</th>
+                          <th></th>
                           <th></th>
                           <th></th>
                           <th></th>
@@ -239,6 +245,7 @@ if (!isset($_SESSION["nombre"])) {
                 <th>STOCK MÍNIMO</th>
                 <th>PRECIO DE COMPRA</th>
                 <th>PRECIO DE VENTA</th>
+                <th>GANANCIA</th>
                 <th>AGREGADO POR</th>
                 <th>ESTADO</th>
               </thead>
@@ -262,6 +269,7 @@ if (!isset($_SESSION["nombre"])) {
                 <th>STOCK MÍNIMO</th>
                 <th>PRECIO DE COMPRA</th>
                 <th>PRECIO DE VENTA</th>
+                <th>GANANCIA</th>
                 <th>AGREGADO POR</th>
                 <th>ESTADO</th>
               </tfoot>

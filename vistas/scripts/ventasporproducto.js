@@ -75,6 +75,10 @@ function mostrar(idventa) {
 				});
 			}
 		}).DataTable();
+
+	tabla2.on('init.dt', function () {
+		$('[data-toggle="popover"]').popover();
+	});
 }
 
 function cancelarForm() {

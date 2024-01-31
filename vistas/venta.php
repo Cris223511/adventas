@@ -181,6 +181,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Opciones</th>
                     <th>Artículo</th>
                     <th>Cantidad</th>
+                    <th>Precio compra</th>
                     <th>Precio venta</th>
                     <th>Descuento</th>
                     <th>Subtotal</th>
@@ -192,12 +193,14 @@ if (!isset($_SESSION["nombre"])) {
                       <th></th>
                       <th></th>
                       <th></th>
+                      <th></th>
                       <th>
                         <h4 id="igv">S/. 0.00</h4><input type="hidden" name="total_igv" id="total_igv">
                       </th>
                     </tr>
                     <tr>
                       <th>TOTAL</th>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>
@@ -251,6 +254,7 @@ if (!isset($_SESSION["nombre"])) {
                 <th>STOCK MÍNIMO</th>
                 <th>PRECIO DE COMPRA</th>
                 <th>PRECIO DE VENTA</th>
+                <th>GANANCIA</th>
                 <th>AGREGADO POR</th>
                 <th>ESTADO</th>
               </thead>
@@ -274,6 +278,7 @@ if (!isset($_SESSION["nombre"])) {
                 <th>STOCK MÍNIMO</th>
                 <th>PRECIO DE COMPRA</th>
                 <th>PRECIO DE VENTA</th>
+                <th>GANANCIA</th>
                 <th>AGREGADO POR</th>
                 <th>ESTADO</th>
               </tfoot>

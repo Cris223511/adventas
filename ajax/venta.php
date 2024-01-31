@@ -23,7 +23,7 @@ if (!isset($_SESSION["nombre"])) {
 		$tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
 		$serie_comprobante = isset($_POST["serie_comprobante"]) ? limpiarCadena($_POST["serie_comprobante"]) : "";
 		$num_comprobante = isset($_POST["num_comprobante"]) ? limpiarCadena($_POST["num_comprobante"]) : "";
-		$impuesto = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";
+		$impuesto = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";	
 		$total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";
 
 		switch ($_GET["op"]) {
@@ -33,7 +33,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $venta->insertar($idusuario, $idmetodopago, $idalmacen, $idcliente, $tipo_comprobante, $serie_comprobante, $num_comprobante, $impuesto, $total_venta, $_POST["idarticulo"], $_POST["cantidad"], $_POST["precio_venta"], $_POST["descuento"]);
+						$rspta = $venta->insertar($idusuario, $idmetodopago, $idalmacen, $idcliente, $tipo_comprobante, $serie_comprobante, $num_comprobante, $impuesto, $total_venta, $_POST["idarticulo"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"]);
 						if ($rspta === true) {
 							echo "Venta registrada";
 						} else {
@@ -72,13 +72,14 @@ if (!isset($_SESSION["nombre"])) {
                                     <th>Opciones</th>
                                     <th>Artículo</th>
                                     <th>Cantidad</th>
+                                    <th>Precio compra</th>
                                     <th>Precio venta</th>
                                     <th>Descuento</th>
                                     <th>Subtotal</th>
                                 </thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_compra</nav>" . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? $reg->subtotal * 0.18 : $reg->subtotal * 0);
 				}
 
@@ -90,10 +91,12 @@ if (!isset($_SESSION["nombre"])) {
 						<th></th>
 						<th></th>
 						<th></th>
+						<th></th>
 						<th><h4 id="igv">S/.' . number_format($igv, 2, '.', '') . '</h4><input type="hidden" name="total_igv" id="total_igv"></th>
 						</tr>
 						<tr>
 						<th>TOTAL</th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th></th>
@@ -356,14 +359,14 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						// "0" => ($reg->stock != '0') ? '<div style="display: flex; justify-content: center;"><button class="btn btn-warning" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->codigo . '\'); disableButton(this);"><span class="fa fa-plus"></span></button></div>' : '',
-						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_venta . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
 						"3" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,
 						"4" => $reg->categoria,
 						"5" => $reg->marca,
 						"6" => $reg->almacen,
-						"7" => ($reg->peso == '') ? 'Sin registrar.' : $reg->peso,
+						"7" => ($reg->peso == '0.00') ? 'Sin registrar.' : $reg->peso,
 						"8" => ($reg->talla == '') ? 'Sin registrar.' : $reg->talla,
 						"9" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
 						"10" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
@@ -371,10 +374,11 @@ if (!isset($_SESSION["nombre"])) {
 						"12" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
 						"13" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
 						"14" => $reg->stock_minimo,
-						"15" => $reg->precio_compra == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
-						"16" => $reg->precio_venta == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"17" => $reg->usuario . ' - ' . $cargo_detalle,
-						"18" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						"15" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
+						"16" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"17" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"18" => $reg->usuario . ' - ' . $cargo_detalle,
+						"19" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 				$results = array(

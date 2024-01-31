@@ -28,6 +28,7 @@ if (!isset($_SESSION["nombre"])) {
 		$stock_minimo = isset($_POST["stock_minimo"]) ? limpiarCadena($_POST["stock_minimo"]) : "";
 		$precio_compra = isset($_POST["precio_compra"]) ? limpiarCadena($_POST["precio_compra"]) : "";
 		$precio_venta = isset($_POST["precio_venta"]) ? limpiarCadena($_POST["precio_venta"]) : "";
+		$ganancia = isset($_POST["ganancia"]) ? limpiarCadena($_POST["ganancia"]) : "";
 		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 		$talla = isset($_POST["talla"]) ? limpiarCadena($_POST["talla"]) : "";
 		$color = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "";
@@ -56,7 +57,7 @@ if (!isset($_SESSION["nombre"])) {
 					} else if ($codigoExiste && $codigo != "") {
 						echo "El código de barra del artículo que ha ingresado ya existe.";
 					} else {
-						$rspta = $articulo->insertar($idusuario, $idcategoria, $idalmacen, $idmarcas, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $precio_compra, $precio_venta, $descripcion, $talla, $color, $peso, $posicion, $imagen);
+						$rspta = $articulo->insertar($idusuario, $idcategoria, $idalmacen, $idmarcas, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $precio_compra, $precio_venta, $ganancia, $descripcion, $talla, $color, $peso, $posicion, $imagen);
 						echo $rspta ? "Artículo registrado" : "Artículo no se pudo registrar";
 					}
 				} else {
@@ -64,7 +65,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El código del artículo que ha ingresado ya existe.";
 					} else {
-						$rspta = $articulo->editar($idarticulo, $idcategoria, $idalmacen, $idmarcas, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $precio_compra, $precio_venta, $descripcion, $talla, $color, $peso, $posicion, $imagen);
+						$rspta = $articulo->editar($idarticulo, $idcategoria, $idalmacen, $idmarcas, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $precio_compra, $precio_venta, $ganancia, $descripcion, $talla, $color, $peso, $posicion, $imagen);
 						echo $rspta ? "Artículo actualizado" : "Artículo no se pudo actualizar";
 					}
 				}
@@ -153,10 +154,16 @@ if (!isset($_SESSION["nombre"])) {
 						"7" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
 						"8" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
 						"9" => $reg->stock_minimo,
-						"10" => $reg->precio_compra == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
-						"11" => $reg->precio_venta == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"12" => $reg->usuario . ' - ' . $cargo_detalle,
-						"13" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>'),
+						"10" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
+						"11" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"12" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"13" => ($reg->talla == "") ? 'Sin registrar.' : $reg->talla,
+						"14" => ($reg->color == "") ? 'Sin registrar.' : $reg->color,
+						"15" => ($reg->peso == "0.00") ? 'Sin registrar.' : $reg->peso,
+						"16" => ($reg->medida == "") ? 'Sin registrar.' : $reg->medida,
+						"17" => ($reg->posicion == "") ? 'Sin registrar.' : $reg->posicion,
+						"18" => $reg->usuario . ' - ' . $cargo_detalle,
+						"19" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>'),
 					);
 				}
 				$results = array(

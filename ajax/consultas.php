@@ -1663,7 +1663,7 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => $reg->total_compra,
+						"6" => "<nav>S/. $reg->total_compra</nav>",
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
@@ -1734,7 +1734,7 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => $reg->total_compra,
+						"6" => "<nav>S/. $reg->total_compra</nav>",
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
@@ -1803,7 +1803,7 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => $reg->total_compra,
+						"6" => "<nav>S/. $reg->total_compra</nav>",
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
@@ -1869,7 +1869,7 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => $reg->total_compra,
+						"6" => "<nav>S/. $reg->total_compra</nav>",
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'

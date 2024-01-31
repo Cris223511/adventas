@@ -243,6 +243,7 @@ if (!isset($_SESSION["nombre"])) {
                 <th>STOCK MÍNIMO</th>
                 <th>PRECIO DE COMPRA</th>
                 <th>PRECIO DE VENTA</th>
+                <th>GANANCIA</th>
                 <th>AGREGADO POR</th>
                 <th>ESTADO</th>
               </thead>
@@ -266,6 +267,7 @@ if (!isset($_SESSION["nombre"])) {
                 <th>STOCK MÍNIMO</th>
                 <th>PRECIO DE COMPRA</th>
                 <th>PRECIO DE VENTA</th>
+                <th>GANANCIA</th>
                 <th>AGREGADO POR</th>
                 <th>ESTADO</th>
               </tfoot>

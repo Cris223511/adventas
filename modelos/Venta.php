@@ -9,7 +9,7 @@ class Venta
 	{
 	}
 
-	public function insertar($idusuario, $idmetodopago, $idalmacen, $idcliente, $tipo_comprobante, $serie_comprobante, $num_comprobante, $impuesto, $total_venta, $idarticulo, $cantidad, $precio_venta, $descuento)
+	public function insertar($idusuario, $idmetodopago, $idalmacen, $idcliente, $tipo_comprobante, $serie_comprobante, $num_comprobante, $impuesto, $total_venta, $idarticulo, $cantidad, $precio_compra, $precio_venta, $descuento)
 	{
 		// Inicializar variable de mensaje
 		$mensajeError = "";
@@ -26,6 +26,13 @@ class Venta
 		if ($error) {
 			// Si cumple, o sea si es verdadero, asignamos el mensaje correspondiente
 			$mensajeError = "El subtotal de uno de los artículos no puede ser menor a 0.";
+		}
+
+		// Luego verificamos si el precio de venta es menor al precio de compra
+		$error = $this->validarPrecioCompraPrecioVenta($idarticulo, $precio_compra, $precio_venta);
+		if ($error) {
+			// Si cumple, o sea si es verdadero, no se puede insertar
+			$mensajeError = "El precio de venta de uno de los artículos no puede ser menor al precio de compra.";
 		}
 
 		// Si hay un mensaje de error, retornar false y mostrar el mensaje en el script principal
@@ -53,6 +60,16 @@ class Venta
 		}
 
 		return $sw;
+	}
+
+	public function validarPrecioCompraPrecioVenta($idarticulo, $precio_compra, $precio_venta)
+	{
+		for ($i = 0; $i < count($idarticulo); $i++) {
+			if ($precio_venta[$i] < $precio_compra[$i]) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function validarStock($idarticulo, $cantidad)
@@ -125,13 +142,13 @@ class Venta
 
 	public function listarDetalle($idventa)
 	{
-		$sql = "SELECT dv.idventa,dv.idarticulo,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal FROM detalle_venta dv LEFT JOIN articulo a on dv.idarticulo=a.idarticulo where dv.idventa='$idventa'";
+		$sql = "SELECT dv.idventa,dv.idarticulo,a.nombre,dv.cantidad,dv.precio_venta,a.precio_compra,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal FROM detalle_venta dv LEFT JOIN articulo a on dv.idarticulo=a.idarticulo where dv.idventa='$idventa'";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarDetallePorProducto($idventa)
 	{
-		$sql = "SELECT dv.idventa,dv.idarticulo,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal,a.idarticulo,a.idcategoria,a.codigo,a.codigo_producto,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,v.estado FROM detalle_venta dv LEFT JOIN venta v ON v.idventa=dv.idventa LEFT JOIN persona p ON v.idcliente=p.idpersona LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN articulo a on dv.idarticulo=a.idarticulo where dv.idventa='$idventa'";
+		$sql = "SELECT dv.idventa,dv.idarticulo,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal,a.idarticulo,a.idcategoria,a.codigo,a.codigo_producto,a.stock,a.stock_minimo,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,v.estado FROM detalle_venta dv LEFT JOIN venta v ON v.idventa=dv.idventa LEFT JOIN persona p ON v.idcliente=p.idpersona LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN articulo a on dv.idarticulo=a.idarticulo where dv.idventa='$idventa'";
 		return ejecutarConsulta($sql);
 	}
 

@@ -10,7 +10,7 @@ class Cuotas
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idusuario, $idmetodopago, $idcliente, $idvendedor, $idzona, $idalmacen, $tipo_comprobante, $serie_comprobante, $num_comprobante, $impuesto, $total_venta, $idarticulo, $cantidad, $precio_venta, $descuento)
+	public function insertar($idusuario, $idmetodopago, $idcliente, $idvendedor, $idzona, $idalmacen, $tipo_comprobante, $serie_comprobante, $num_comprobante, $impuesto, $total_venta, $idarticulo, $cantidad, $precio_compra, $precio_venta, $descuento)
 	{
 		$datetime = new DateTime("", new DateTimeZone('America/Lima'));
 		$orderDate = $datetime->format('Y-m-d H:i:s');
@@ -32,6 +32,13 @@ class Cuotas
 		if ($error) {
 			// Si cumple, o sea si es verdadero, asignamos el mensaje correspondiente
 			$mensajeError = "El subtotal de uno de los artículos no puede ser menor a 0.";
+		}
+
+		// Luego verificamos si el precio de venta es menor al precio de compra
+		$error = $this->validarPrecioCompraPrecioVenta($idarticulo, $precio_compra, $precio_venta);
+		if ($error) {
+			// Si cumple, o sea si es verdadero, no se puede insertar
+			$mensajeError = "El precio de venta de uno de los artículos no puede ser menor al precio de compra.";
 		}
 
 		// Si hay un mensaje de error, retornar false y mostrar el mensaje en el script principal
@@ -58,6 +65,16 @@ class Cuotas
 		}
 
 		return $sw;
+	}
+
+	public function validarPrecioCompraPrecioVenta($idarticulo, $precio_compra, $precio_venta)
+	{
+		for ($i = 0; $i < count($idarticulo); $i++) {
+			if ($precio_venta[$i] < $precio_compra[$i]) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function validarStock($idarticulo, $cantidad)
@@ -159,7 +176,7 @@ class Cuotas
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idcuotas)
 	{
-		$sql = "SELECT cu.idcuotas, cu.fecha_hora as fecha, cu.fecha_anulado as anulado, z.idzona as idzona, al.idalmacen as idalmacen, cu.idcliente, ucl.nombre as cliente, ucv.nombre as vendedor, ucl.idusuario as idcliente, ucv.idusuario as idvendedor, u.idusuario, CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo, z.ubicacion as ubicacion, z.zona as zona, al.ubicacion as almacen, mp.idmetodopago, mp.nombre as metodo_pago, cu.tipo_comprobante, cu.serie_comprobante, cu.num_comprobante, cu.total_venta, cu.monto_pagado, cu.impuesto, cu.estado 
+		$sql = "SELECT cu.idcuotas, cu.fecha_hora as fecha, cu.fecha_anulado as anulado, z.idzona as idzona, al.idalmacen as idalmacen, cu.idcliente, CONCAT(ucl.nombre,' ',ucl.apellido) as cliente, CONCAT(ucv.nombre,' ',ucv.apellido) as vendedor, ucl.idusuario as idcliente, ucv.idusuario as idvendedor, u.idusuario, CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo, z.ubicacion as ubicacion, z.zona as zona, al.ubicacion as almacen, mp.idmetodopago, mp.nombre as metodo_pago, cu.tipo_comprobante, cu.serie_comprobante, cu.num_comprobante, cu.total_venta, cu.monto_pagado, cu.impuesto, cu.estado 
 		FROM cuotas cu 
 		LEFT JOIN usuario ucl ON cu.idcliente = ucl.idusuario
 		LEFT JOIN usuario ucv ON cu.idvendedor = ucv.idusuario
@@ -187,8 +204,8 @@ class Cuotas
 				   u.apellido AS apellido,
                    z.ubicacion AS ubicacion,
                    z.zona AS zona,
-				   ucl.nombre as cliente,
-				   ucv.nombre as vendedor,
+				   CONCAT(ucl.nombre,' ',ucl.apellido) as cliente,
+				   CONCAT(ucv.nombre,' ',ucv.apellido) as vendedor,
 				   ucl.apellido as cliente_apellido,
 				   ucv.apellido as vendedor_apellido,
                    cu.tipo_comprobante,
@@ -224,8 +241,8 @@ class Cuotas
 				   u.apellido AS apellido,
                    z.ubicacion AS ubicacion,
                    z.zona AS zona,
-				   ucl.nombre as cliente,
-				   ucv.nombre as vendedor,
+				   CONCAT(ucl.nombre,' ',ucl.apellido) as cliente,
+				   CONCAT(ucv.nombre,' ',ucv.apellido) as vendedor,
 				   ucl.apellido as cliente_apellido,
 				   ucv.apellido as vendedor_apellido,
                    cu.tipo_comprobante,
@@ -263,8 +280,8 @@ class Cuotas
 				   u.apellido AS apellido,
                    z.ubicacion AS ubicacion,
                    z.zona AS zona,
-				   ucl.nombre as cliente,
-				   ucv.nombre as vendedor,
+				   CONCAT(ucl.nombre,' ',ucl.apellido) as cliente,
+				   CONCAT(ucv.nombre,' ',ucv.apellido) as vendedor,
 				   ucl.apellido as cliente_apellido,
 				   ucv.apellido as vendedor_apellido,
                    cu.tipo_comprobante,
@@ -300,8 +317,8 @@ class Cuotas
 					   u.apellido AS apellido,
 					   z.ubicacion AS ubicacion,
 					   z.zona AS zona,
-					   ucl.nombre as cliente,
-					   ucv.nombre as vendedor,
+					   CONCAT(ucl.nombre,' ',ucl.apellido) as cliente,
+					   CONCAT(ucv.nombre,' ',ucv.apellido) as vendedor,
 					   ucl.apellido as cliente_apellido,
 					   ucv.apellido as vendedor_apellido,
 					   cu.tipo_comprobante,
@@ -327,7 +344,7 @@ class Cuotas
 
 	public function listarDetalle($idcuotas)
 	{
-		$sql = "SELECT dc.idcuotas,dc.idarticulo,a.nombre,dc.cantidad,dc.precio_venta,dc.descuento,(dc.cantidad*dc.precio_venta-dc.descuento) as subtotal FROM detalle_cuotas dc LEFT JOIN articulo a on dc.idarticulo=a.idarticulo where dc.idcuotas='$idcuotas'";
+		$sql = "SELECT dc.idcuotas,dc.idarticulo,a.nombre,dc.cantidad,dc.precio_venta,a.precio_compra,dc.descuento,(dc.cantidad*dc.precio_venta-dc.descuento) as subtotal FROM detalle_cuotas dc LEFT JOIN articulo a on dc.idarticulo=a.idarticulo where dc.idcuotas='$idcuotas'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -365,7 +382,7 @@ class Cuotas
 
 	public function ventacabecera($idcuotas)
 	{
-		$sql = "SELECT cu.idcuotas,cu.idcliente,DATE_FORMAT(cu.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha,z.idzona as idzona,al.idalmacen as idalmacen,ucl.nombre as cliente,ucv.nombre as vendedor,ucl.idusuario as idcliente,ucv.idusuario as idvendedor,ucl.tipo_documento as tipo_documentoc,ucl.num_documento as num_documentoc,ucl.direccion as direccionc,ucl.email as emailc,ucl.telefono as telefonoc,ucv.tipo_documento as tipo_documentov,ucv.num_documento as num_documentov,ucv.direccion as direccionv,ucv.email as emailv,ucv.telefono as telefonov,u.idusuario,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,z.ubicacion as ubicacion,z.zona as zona,al.ubicacion as almacen, mp.nombre as metodo_pago,cu.tipo_comprobante,cu.serie_comprobante,cu.num_comprobante,cu.total_venta,cu.impuesto,cu.estado FROM cuotas cu LEFT JOIN metodo_pago mp ON cu.idmetodopago = mp.idmetodopago LEFT JOIN usuario ucl ON cu.idcliente=ucl.idusuario LEFT JOIN usuario ucv ON cu.idvendedor=ucv.idusuario LEFT JOIN usuario u ON cu.idusuario=u.idusuario LEFT JOIN zonas z ON cu.idzona=z.idzona LEFT JOIN almacen al ON cu.idalmacen=al.idalmacen WHERE cu.idcuotas='$idcuotas'";
+		$sql = "SELECT cu.idcuotas,cu.idcliente,DATE_FORMAT(cu.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha,z.idzona as idzona,al.idalmacen as idalmacen,CONCAT(ucl.nombre,' ',ucl.apellido) as cliente,CONCAT(ucv.nombre,' ',ucv.apellido) as vendedor,ucl.idusuario as idcliente,ucv.idusuario as idvendedor,ucl.tipo_documento as tipo_documentoc,ucl.num_documento as num_documentoc,ucl.direccion as direccionc,ucl.email as emailc,ucl.telefono as telefonoc,ucv.tipo_documento as tipo_documentov,ucv.num_documento as num_documentov,ucv.direccion as direccionv,ucv.email as emailv,ucv.telefono as telefonov,u.idusuario,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,z.ubicacion as ubicacion,z.zona as zona,al.ubicacion as almacen, mp.nombre as metodo_pago,cu.tipo_comprobante,cu.serie_comprobante,cu.num_comprobante,cu.total_venta,cu.impuesto,cu.estado FROM cuotas cu LEFT JOIN metodo_pago mp ON cu.idmetodopago = mp.idmetodopago LEFT JOIN usuario ucl ON cu.idcliente=ucl.idusuario LEFT JOIN usuario ucv ON cu.idvendedor=ucv.idusuario LEFT JOIN usuario u ON cu.idusuario=u.idusuario LEFT JOIN zonas z ON cu.idzona=z.idzona LEFT JOIN almacen al ON cu.idalmacen=al.idalmacen WHERE cu.idcuotas='$idcuotas'";
 		return ejecutarConsulta($sql);
 	}
 

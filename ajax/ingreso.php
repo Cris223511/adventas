@@ -252,7 +252,7 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->categoria,
 						"5" => $reg->marca,
 						"6" => $reg->almacen,
-						"7" => ($reg->peso == '') ? 'Sin registrar.' : $reg->peso,
+						"7" => ($reg->peso == '0.00') ? 'Sin registrar.' : $reg->peso,
 						"8" => ($reg->talla == '') ? 'Sin registrar.' : $reg->talla,
 						"9" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
 						"10" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
@@ -260,10 +260,11 @@ if (!isset($_SESSION["nombre"])) {
 						"12" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
 						"13" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
 						"14" => $reg->stock_minimo,
-						"15" => $reg->precio_compra == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
-						"16" => $reg->precio_venta == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"17" => $reg->usuario . ' - ' . $cargo_detalle,
-						"18" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						"15" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
+						"16" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"17" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"18" => $reg->usuario . ' - ' . $cargo_detalle,
+						"19" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 				$results = array(

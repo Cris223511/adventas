@@ -51,6 +51,17 @@ function init() {
 	$('#lArticulos').addClass("active");
 }
 
+function changeGanancia() {
+	let precio_venta = $("#precio_venta").val();
+	let precio_compra = $("#precio_compra").val();
+
+	// Verificar si ambos campos están llenos
+	if (precio_venta !== '' && precio_compra !== '') {
+		let ganancia = precio_venta - precio_compra;
+		$("#ganancia").val(ganancia.toFixed(2));
+	}
+}
+
 function actualizarRUC() {
 	const selectLocal = document.getElementById("idalmacen");
 	const localRUCInput = document.getElementById("local_ruc");
@@ -78,6 +89,7 @@ function limpiar() {
 	$("#stock_minimo").val("");
 	$("#precio_compra").val("");
 	$("#precio_venta").val("");
+	$("#ganancia").val("");
 	$("#imagenmuestra").attr("src", "");
 	$("#imagenmuestra").hide();
 	$("#imagenactual").val("");
@@ -203,7 +215,10 @@ function guardaryeditar(e) {
 	}
 
 	$("#btnGuardar").prop("disabled", true);
+
+	$("#ganancia").prop("disabled", false);
 	var formData = new FormData($("#formulario")[0]);
+	$("#ganancia").prop("disabled", true);
 
 	$.ajax({
 		url: "../ajax/articulo.php?op=guardaryeditar",
@@ -251,6 +266,7 @@ function mostrar(idarticulo) {
 		$("#stock_minimo").val(data.stock_minimo);
 		$("#precio_compra").val(data.precio_compra);
 		$("#precio_venta").val(data.precio_venta);
+		$("#ganancia").val(data.ganancia);
 		$("#descripcion").val(data.descripcion);
 		$("#talla").val(data.talla);
 		$("#color").val(data.color);

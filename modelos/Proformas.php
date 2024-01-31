@@ -9,7 +9,7 @@ class Proforma
 	{
 	}
 
-	public function insertar($idusuario, $idmetodopago, $idalmacen, $idcliente, $tipo_comprobante, $serie_comprobante, $num_proforma, $impuesto, $total_venta, $idarticulo, $cantidad, $precio_venta, $descuento)
+	public function insertar($idusuario, $idmetodopago, $idalmacen, $idcliente, $tipo_comprobante, $serie_comprobante, $num_proforma, $impuesto, $total_venta, $idarticulo, $cantidad, $precio_compra, $precio_venta, $descuento)
 	{
 		// Inicializar variable de mensaje
 		$mensajeError = "";
@@ -26,6 +26,13 @@ class Proforma
 		if ($error) {
 			// Si cumple, o sea si es verdadero, asignamos el mensaje correspondiente
 			$mensajeError = "El subtotal de uno de los artículos no puede ser menor a 0.";
+		}
+
+		// Luego verificamos si el precio de venta es menor al precio de compra
+		$error = $this->validarPrecioCompraPrecioVenta($idarticulo, $precio_compra, $precio_venta);
+		if ($error) {
+			// Si cumple, o sea si es verdadero, no se puede insertar
+			$mensajeError = "El precio de venta de uno de los artículos no puede ser menor al precio de compra.";
 		}
 
 		// Si hay un mensaje de error, retornar false y mostrar el mensaje en el script principal
@@ -72,6 +79,16 @@ class Proforma
 		ejecutarConsulta($sql2);
 
 		return $sw;
+	}
+
+	public function validarPrecioCompraPrecioVenta($idarticulo, $precio_compra, $precio_venta)
+	{
+		for ($i = 0; $i < count($idarticulo); $i++) {
+			if ($precio_venta[$i] < $precio_compra[$i]) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function validarStock($idarticulo, $cantidad)
@@ -152,7 +169,7 @@ class Proforma
 
 	public function listarDetalle($idproforma)
 	{
-		$sql = "SELECT dp.idproforma,dp.idarticulo,a.nombre,dp.cantidad,dp.precio_venta,dp.descuento,(dp.cantidad*dp.precio_venta-dp.descuento) as subtotal FROM detalle_proforma dp LEFT JOIN articulo a on dp.idarticulo=a.idarticulo WHERE dp.idproforma='$idproforma'";
+		$sql = "SELECT dp.idproforma,dp.idarticulo,a.nombre,dp.cantidad,dp.precio_venta,a.precio_compra,dp.descuento,(dp.cantidad*dp.precio_venta-dp.descuento) as subtotal FROM detalle_proforma dp LEFT JOIN articulo a on dp.idarticulo=a.idarticulo WHERE dp.idproforma='$idproforma'";
 		return ejecutarConsulta($sql);
 	}
 

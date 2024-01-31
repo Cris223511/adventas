@@ -96,7 +96,7 @@
       }
 
       function nowrapCell() {
-        ["#tbllistado", "#tbllistado2", "#tblarticulos", "#tbltrabajadores"].forEach(selector => {
+        ["#tbllistado", "#detalles", "#tbllistado2", "#tblarticulos", "#tbltrabajadores"].forEach(selector => {
           addClassToCells(selector, "nowrap-cell");
         });
       }
@@ -197,7 +197,7 @@
 
     <script>
       function evitarCaracteresEspecialesCamposNumericos() {
-        var camposNumericos = document.querySelectorAll('input[type="number"]');
+        var camposNumericos = document.querySelectorAll('input[type="number"]:not(#ganancia)');
         camposNumericos.forEach(function(campo) {
           campo.addEventListener('keydown', function(event) {
             var teclasPermitidas = [46, 8, 9, 27, 13, 110, 190, 37, 38, 39, 40, 17, 82]; // ., delete, tab, escape, enter, flechas, Ctrl+R

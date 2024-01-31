@@ -51,7 +51,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $cuota->insertar($idusuario, $idmetodopago, $idcliente, $idvendedor, $idzona, $idalmacen, $tipo_comprobante, $serie_comprobante, $num_comprobante, $impuesto, $total_venta, $_POST["idarticulo"], $_POST["cantidad"], $_POST["precio_venta"], $_POST["descuento"]);
+						$rspta = $cuota->insertar($idusuario, $idmetodopago, $idcliente, $idvendedor, $idzona, $idalmacen, $tipo_comprobante, $serie_comprobante, $num_comprobante, $impuesto, $total_venta, $_POST["idarticulo"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"]);
 						if ($rspta === true) {
 							echo "Cuota registrada";
 						} else {
@@ -118,13 +118,14 @@ if (!isset($_SESSION["nombre"])) {
 				<th>Opciones</th>
 				<th>Artículo</th>
 				<th>Cantidad</th>
+				<th>Precio compra</th>
 				<th>Precio venta</th>
 				<th>Descuento</th>
 				<th>Subtotal</th>
 			</thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_compra</nav>" . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? ($reg->subtotal) * 0.18 : ($reg->subtotal) * 0);
 				}
 
@@ -136,10 +137,12 @@ if (!isset($_SESSION["nombre"])) {
 						<th></th>
 						<th></th>
 						<th></th>
+						<th></th>
 						<th><h4 id="igv">S/.' . number_format($igv, 2, '.', '') . '</h4><input type="hidden" name="total_igv" id="total_igv"></th>
 						</tr>
 						<tr>
 						<th>TOTAL</th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th></th>
@@ -313,17 +316,19 @@ if (!isset($_SESSION["nombre"])) {
 								('<a target="_blank" href="' . $url . $reg->idcuotas . '"> <button class="btn btn-secondary" style="color: black !important;"><i class="fa fa-file"></i></button></a>') : ('')) .
 							'</div>',
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
-						"2" => $reg->fecha,
-						"3" => ($reg->anulado == '00-00-0000 00:00:00') ? 'Sin registrar.' : $reg->anulado,
-						"4" => $reg->almacen,
-						"5" => $reg->ubicacion . ' - ' . $reg->zona,
-						"6" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
-						"7" => $reg->tipo_comprobante,
-						"8" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"9" => "<nav>$reg->total_venta S/.</nav>",
-						"10" => "<nav>$reg->monto_pagado S/.</nav>",
-						"11" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : '')),
-						'12' => ((($reg->estado == 'Deuda' || $reg->estado == 'Pagado') ? ('<div style="text-align: center;"><a href="../vistas/cuotaDetalle.php?id=' . $reg->idcuotas . '"> <button class="btn btn-secondary" style="color: black !important;" id="detalle"><i class="fa fa-sliders"></i></button></a></div>') : ''))
+						"2" => $reg->cliente,
+						"3" => $reg->vendedor,
+						"4" => $reg->fecha,
+						"5" => ($reg->anulado == '00-00-0000 00:00:00') ? 'Sin registrar.' : $reg->anulado,
+						"6" => $reg->almacen,
+						"7" => $reg->ubicacion . ' - ' . $reg->zona,
+						"8" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"9" => $reg->tipo_comprobante,
+						"10" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"11" => "<nav>$reg->total_venta S/.</nav>",
+						"12" => "<nav>$reg->monto_pagado S/.</nav>",
+						"13" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : '')),
+						'14' => ((($reg->estado == 'Deuda' || $reg->estado == 'Pagado') ? ('<div style="text-align: center;"><a href="../vistas/cuotaDetalle.php?id=' . $reg->idcuotas . '"> <button class="btn btn-secondary" style="color: black !important;" id="detalle"><i class="fa fa-sliders"></i></button></a></div>') : ''))
 					);
 				}
 				$results = array(
@@ -416,7 +421,7 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->categoria,
 						"5" => $reg->marca,
 						"6" => $reg->almacen,
-						"7" => ($reg->peso == '') ? 'Sin registrar.' : $reg->peso,
+						"7" => ($reg->peso == '0.00') ? 'Sin registrar.' : $reg->peso,
 						"8" => ($reg->talla == '') ? 'Sin registrar.' : $reg->talla,
 						"9" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
 						"10" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
@@ -424,10 +429,11 @@ if (!isset($_SESSION["nombre"])) {
 						"12" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
 						"13" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
 						"14" => $reg->stock_minimo,
-						"15" => $reg->precio_compra == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
-						"16" => $reg->precio_venta == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"17" => $reg->usuario . ' - ' . $cargo_detalle,
-						"18" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						"15" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
+						"16" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"17" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"18" => $reg->usuario . ' - ' . $cargo_detalle,
+						"19" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 				$results = array(

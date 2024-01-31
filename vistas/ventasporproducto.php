@@ -118,7 +118,7 @@ if (!isset($_SESSION["nombre"])) {
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title infotitulo">Artículos de la venta:</h4>
+            <h4 class="modal-title infotitulo">Artículos de la venta: <a data-toggle="popover" data-placement="bottom" title="Total de la venta" data-content="El <strong>Total de la venta</strong> es la suma de todos los <strong>subtotales</strong> y el <strong>impuesto</strong> (el 0% o 18% del subtotal)." data-html="true" style="color: #418bb7; cursor: pointer;"><i class="fa fa-question-circle"></i></a></h4>
           </div>
           <div class="panel-body">
             <form name="formulario" id="formulario" method="POST">
