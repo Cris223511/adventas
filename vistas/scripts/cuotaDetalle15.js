@@ -95,18 +95,23 @@ function guardarPagos(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El monto de pago supera al monto total a pagar.") {
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardar").prop("disabled", false);
+				return;
+			} else if (datos == "El monto de pago supera al monto total a pagar.") {
 				bootbox.alert(datos);
 				return;
-			}
-			bootbox.alert(datos);
-			$('#myModal').modal('hide');
-			mostrarPagos(idcuota);
-			contarPagos(idcuota);
+			} else {
+				bootbox.alert(datos);
+				$('#myModal').modal('hide');
+				mostrarPagos(idcuota);
+				contarPagos(idcuota);
 
-			setTimeout(function () {
-				window.location.reload();
-			}, 1500);
+				setTimeout(function () {
+					window.location.reload();
+				}, 1500);
+			}
 		}
 	});
 	limpiar();

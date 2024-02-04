@@ -228,8 +228,8 @@ function addStatus( $status )
 	$this->SetXY( $r1 + ($r2-$r1)/2-32, $y1+2 );
 	$this->SetFont( "Arial", "B", 10);
 	$this->Cell(10,5, "Estado", 0, 0, "C");
-	$this->SetXY( $r1 + ($r2-$r1)/2-33.5, $y1+10.5 );
-	$this->SetFont( "Arial", "", 8);
+	$this->SetXY( $r1 + ($r2-$r1)/2-32.5, $y1+10.5 );
+	$this->SetFont( "Arial", "", 10);
 	$this->Cell(10,5,$status, 0,0, "C");
 }
 

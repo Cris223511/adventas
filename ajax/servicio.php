@@ -17,7 +17,6 @@ if (!isset($_SESSION["nombre"])) {
 		$cargo = $_SESSION["cargo"];
 
 		$idservicio = isset($_POST["idservicio"]) ? limpiarCadena($_POST["idservicio"]) : "";
-		$idcategoria = isset($_POST["idcategoria"]) ? limpiarCadena($_POST["idcategoria"]) : "";
 		$idalmacen = isset($_POST["idalmacen"]) ? limpiarCadena($_POST["idalmacen"]) : "";
 		$codigo_producto = isset($_POST["codigo_producto"]) ? limpiarCadena($_POST["codigo_producto"]) : "";
 		$nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
@@ -28,21 +27,36 @@ if (!isset($_SESSION["nombre"])) {
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 
-				if (!file_exists($_FILES['imagen']['tmp_name']) || !is_uploaded_file($_FILES['imagen']['tmp_name'])) {
-					$imagen = $_POST["imagenactual"];
-				} else {
-					$ext = explode(".", $_FILES["imagen"]["name"]);
-					if ($_FILES['imagen']['type'] == "image/jpg" || $_FILES['imagen']['type'] == "image/jpeg" || $_FILES['imagen']['type'] == "image/png") {
-						$imagen = round(microtime(true)) . '.' . end($ext);
-						move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/servicios/" . $imagen);
+				if (!empty($_FILES['imagen']['name'])) {
+					$uploadDirectory = "../files/servicios/";
+
+					$tempFile = $_FILES['imagen']['tmp_name'];
+					$fileName = pathinfo($_FILES['imagen']['name'], PATHINFO_FILENAME);
+					$fileExtension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+					$newFileName = $fileName . '_' . round(microtime(true)) . '.' . $fileExtension;
+					$targetFile = $uploadDirectory . $newFileName;
+
+					// Verificar si es una imagen y mover el archivo
+					$allowedExtensions = array('jpg', 'jpeg', 'png');
+					if (in_array($fileExtension, $allowedExtensions) && move_uploaded_file($tempFile, $targetFile)) {
+						// El archivo se ha movido correctamente, ahora $newFileName contiene el nombre del archivo
+						$imagen = $newFileName;
+					} else {
+						// Error en la subida del archivo
+						echo "Error al subir la imagen.";
+						exit;
 					}
+				} else {
+					// No se ha seleccionado ninguna imagen
+					$imagen = $_POST["imagenactual"];
 				}
+
 				if (empty($idservicio)) {
 					$codigoProductoExiste = $servicio->verificarCodigoProductoExiste($codigo_producto);
 					if ($codigoProductoExiste) {
 						echo "El código del servicio que ha ingresado ya existe.";
 					} else {
-						$rspta = $servicio->insertar($idusuario, $idcategoria, $idalmacen, $codigo_producto, $nombre, $precio_venta, $descripcion, $imagen);
+						$rspta = $servicio->insertar($idusuario, $idalmacen, $codigo_producto, $nombre, $precio_venta, $descripcion, $imagen);
 						echo $rspta ? "Servicio registrado" : "Servicio no se pudo registrar";
 					}
 				} else {
@@ -50,7 +64,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El código del servicio que ha ingresado ya existe.";
 					} else {
-						$rspta = $servicio->editar($idservicio, $idcategoria, $idalmacen, $codigo_producto, $nombre, $precio_venta, $descripcion, $imagen);
+						$rspta = $servicio->editar($idservicio, $idalmacen, $codigo_producto, $nombre, $precio_venta, $descripcion, $imagen);
 						echo $rspta ? "Servicio actualizado" : "Servicio no se pudo actualizar";
 					}
 				}
@@ -128,19 +142,17 @@ if (!isset($_SESSION["nombre"])) {
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idservicio . ')"><i class="fa fa-pencil"></i></button>') .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary "style="height: 35px;" onclick="eliminar(' . $reg->idservicio . ')"><i class="fa fa-trash"></i></button>') .
 							(($reg->estado == '1') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idservicio . ')"><i class="fa fa-close"></i></button>')) :
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idservicio . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idservicio . ')"><i class="fa fa-close"></i></button>')) : (mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idservicio . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
 							'</div>',
 						"1" => '<a href="../files/servicios/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
 									<img src="../files/servicios/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
 								</a>',
 						"2" => $reg->nombre,
-						"3" => $reg->categoria,
-						"4" => $reg->almacen,
-						"5" => $reg->codigo_producto,
-						"6" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"7" => $reg->usuario . ' - ' . $cargo_detalle,
-						"8" => ($reg->estado == '1') ? '<span class="label bg-green">Activado</span>' :
+						"3" => $reg->almacen,
+						"4" => $reg->codigo_producto,
+						"5" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"6" => $reg->usuario . ' - ' . $cargo_detalle,
+						"7" => ($reg->estado == '1') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}
@@ -160,7 +172,7 @@ if (!isset($_SESSION["nombre"])) {
 				// if ($cargo == "superadmin") {
 				// 	$rspta = $servicio->listarTodosActivos();
 				// } else {
-					$rspta = $servicio->listarTodosActivosPorUsuario($idusuario, $idalmacenSession);
+				$rspta = $servicio->listarTodosActivosPorUsuario($idusuario, $idalmacenSession);
 				// }
 
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);

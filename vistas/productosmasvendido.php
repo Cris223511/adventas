@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['reporte'] == 1) {
+  if ($_SESSION['reporteP'] == 1) {
 ?>
     <!--Contenido-->
     <!-- Content Wrapper. Contains page content -->

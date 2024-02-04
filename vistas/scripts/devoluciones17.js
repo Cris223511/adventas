@@ -186,14 +186,20 @@ function guardaryeditar2(e) {
 		contentType: false,
 		processData: false,
 		success: function (datos) {
-			bootbox.alert(datos);
-			$("#btnGuardar2").prop("disabled", false);
-			$("#iddevolucion").val("");
-			$("#comentario").val("");
-			ocultarModal();
-			setTimeout(() => {
-				location.reload();
-			}, 1500);
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardar2").prop("disabled", false);
+				return;
+			} else {
+				bootbox.alert(datos);
+				$("#btnGuardar2").prop("disabled", false);
+				$("#iddevolucion").val("");
+				$("#comentario").val("");
+				ocultarModal();
+				setTimeout(() => {
+					location.reload();
+				}, 1500);
+			}
 		}
 	});
 }
@@ -210,17 +216,22 @@ function guardaryeditar3(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "Una de las cantidades a devolver superan a la cantidad prestada del artículo.") {
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardar3").prop("disabled", false);
+				return;
+			} else if (datos == "Una de las cantidades a devolver superan a la cantidad prestada del artículo.") {
 				bootbox.alert(datos);
 				$("#btnGuardar3").prop("disabled", false);
 				return;
+			} else {
+				bootbox.alert(datos);
+				limpiar();
+				ocultarModal();
+				setTimeout(() => {
+					location.reload();
+				}, 1500);
 			}
-			bootbox.alert(datos);
-			limpiar();
-			ocultarModal();
-			setTimeout(() => {
-				location.reload();
-			}, 1500);
 		}
 	});
 }
@@ -243,12 +254,18 @@ function guardaryeditar4(e) {
 		contentType: false,
 		processData: false,
 		success: function (datos) {
-			bootbox.alert(datos);
-			limpiar();
-			ocultarModal();
-			setTimeout(() => {
-				location.reload();
-			}, 1500);
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardar4").prop("disabled", false);
+				return;
+			} else {
+				bootbox.alert(datos);
+				limpiar();
+				ocultarModal();
+				setTimeout(() => {
+					location.reload();
+				}, 1500);
+			}
 		}
 	});
 }

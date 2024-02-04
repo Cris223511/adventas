@@ -36,7 +36,7 @@ function listarventasusuario() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -67,18 +67,9 @@ function listarventasusuario() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
-
-	listarventasusuariototales(fecha_inicio, fecha_fin, idusuario);
-}
-
-function listarventasusuariototales(fecha_inicio, fecha_fin, idusuario) {
-	$.post("../ajax/consultas.php?op=listarventasusuariototales&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin + "&idusuario=" + idusuario, function (r) {
-		$("#tbllistado tfoot th").eq(6).html(r);
-		console.log(r);
-	});
 }
 
 //Función Listar ventas usuario por fecha
@@ -88,7 +79,7 @@ function listartodasventasusuariofecha() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -119,18 +110,9 @@ function listartodasventasusuariofecha() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
-
-	listartodasventasusuariofechatotales(fecha_inicio, fecha_fin);
-}
-
-function listartodasventasusuariofechatotales(fecha_inicio, fecha_fin) {
-	$.post("../ajax/consultas.php?op=listartodasventasusuariofechatotales&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin, function (r) {
-		$("#tbllistado tfoot th").eq(6).html(r);
-		console.log(r);
-	});
 }
 
 //Función listar Ventas
@@ -139,7 +121,7 @@ function listartodasventasusuario() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -170,18 +152,9 @@ function listartodasventasusuario() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
-
-	listartodasventasusuariototales(idusuario);
-}
-
-function listartodasventasusuariototales(idusuario) {
-	$.post("../ajax/consultas.php?op=listartodasventasusuariototales&idusuario=" + idusuario, function (r) {
-		$("#tbllistado tfoot th").eq(6).html(r);
-		console.log(r);
-	});
 }
 
 //Función listar Ventas y Usuarios
@@ -189,7 +162,7 @@ function listartodasventasusuariousuarios() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -220,18 +193,9 @@ function listartodasventasusuariousuarios() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
-
-	listartodasventasusuariousuariostotales();
-}
-
-function listartodasventasusuariousuariostotales() {
-	$.post("../ajax/consultas.php?op=listartodasventasusuariousuariostotales", function (r) {
-		$("#tbllistado tfoot th").eq(6).html(r);
-		console.log(r);
-	});
 }
 
 document.addEventListener('DOMContentLoaded', function () {

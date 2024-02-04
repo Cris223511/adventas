@@ -8,7 +8,7 @@ function init() {
 		$("#idarticulo").html(r);
 		$('#idarticulo').selectpicker('refresh');
 	});
-	$('#mReporte').addClass("treeview active");
+	$('#mReporteP').addClass("treeview active");
 	$('#lConsultaP').addClass("active");
 
 	//Obtenemos la fecha actual

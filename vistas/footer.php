@@ -255,7 +255,14 @@
                       !$("#lMedidas").hasClass("active") &&
                       !$("#lCategorias").hasClass("active") &&
                       !$("#lProveedores").hasClass("active") &&
-                      !$("#lZonas").hasClass("active")
+                      !$("#lVentas").hasClass("active") &&
+                      !$("#lVentasServicio").hasClass("active") &&
+                      !$("#lCuotas").hasClass("active") &&
+                      !$("#lZonas").hasClass("active") &&
+                      !$("#lConsulasV").hasClass("active") &&
+                      !$("#lConsultaU").hasClass("active") &&
+                      !$("#lConsultaVP").hasClass("active") &&
+                      !$("#lReportePV").hasClass("active")
                   ) {
                       $(".dt-buttons").hide();
                   }

@@ -134,6 +134,9 @@ if (!isset($_SESSION["nombre"])) {
 					}
 				}
 
+				$firstIteration = true;
+				$totalPrecioVenta = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -180,13 +183,32 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"6" => $reg->total_venta,
 						"7" => $reg->usuario . ' - ' . $cargo_detalle,
 						"8" => $reg->fecha,
 						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->total_venta;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -293,12 +315,11 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => ($reg->estado == '1') ? '<button class="btn btn-secondary" data-idservicio="' . $reg->idservicio . '" onclick="agregarDetalle(' . $reg->idservicio . ',\'' . $reg->nombre . '\',\'' . $reg->precio_venta . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/servicios/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
-						"3" => $reg->categoria,
-						"4" => $reg->almacen,
-						"5" => $reg->codigo_producto,
-						"6" => $reg->precio_venta == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"7" => $reg->usuario . ' - ' . $cargo_detalle,
-						"8" => ($reg->estado == '1') ? '<span class="label bg-green">Activado</span>' :
+						"3" => $reg->almacen,
+						"4" => $reg->codigo_producto,
+						"5" => $reg->precio_venta == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"6" => $reg->usuario . ' - ' . $cargo_detalle,
+						"7" => ($reg->estado == '1') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}

@@ -170,7 +170,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				while ($reg = $rspta->fetch_object()) {
 					echo '<tr class="filas"><td>' . $reg->codigo_producto . '</td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
-					$igv = $igv + ($rspta2["impuesto"] == 18 ? ("<nav>S/. $reg->subtotal</nav>") * 0.18 : ("<nav>S/. $reg->subtotal</nav>") * 0);
+					$igv = $igv + ($rspta2["impuesto"] == 18 ? ($reg->subtotal) * 0.18 : ($reg->subtotal) * 0);
 				}
 				echo '
 					<tfoot>
@@ -274,6 +274,10 @@ if (!isset($_SESSION["nombre"])) {
 					}
 				}
 
+				$firstIteration = true;
+				$totalPrecioVenta = 0;
+				$totalMontoPagado = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -325,12 +329,38 @@ if (!isset($_SESSION["nombre"])) {
 						"8" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"9" => $reg->tipo_comprobante,
 						"10" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"11" => "<nav>$reg->total_venta S/.</nav>",
-						"12" => "<nav>$reg->monto_pagado S/.</nav>",
+						"11" => $reg->total_venta,
+						"12" => $reg->monto_pagado,
 						"13" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : '')),
 						'14' => ((($reg->estado == 'Deuda' || $reg->estado == 'Pagado') ? ('<div style="text-align: center;"><a href="../vistas/cuotaDetalle.php?id=' . $reg->idcuotas . '"> <button class="btn btn-secondary" style="color: black !important;" id="detalle"><i class="fa fa-sliders"></i></button></a></div>') : ''))
 					);
+
+					$totalPrecioVenta += $reg->total_venta;
+					$totalMontoPagado += $reg->monto_pagado;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "<strong>TOTAL</strong>",
+						"11" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"12" => '<strong>' . number_format($totalMontoPagado, 2) . '</strong>',
+						"13" => "",
+						"14" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -431,9 +461,9 @@ if (!isset($_SESSION["nombre"])) {
 						"14" => $reg->stock_minimo,
 						"15" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
 						"16" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"17" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
-						"18" => $reg->usuario . ' - ' . $cargo_detalle,
-						"19" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						// "17" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"17" => $reg->usuario . ' - ' . $cargo_detalle,
+						"18" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 				$results = array(

@@ -62,10 +62,10 @@ class Proforma
 		return $sw;
 	}
 
-	public function insertar2($idproforma, $idusuario, $idalmacen, $idcliente, $tipo_comprobante, $serie_comprobante, $num_proforma, $impuesto, $total_venta, $idarticulo, $cantidad, $precio_venta, $descuento)
+	public function insertar2($idproforma, $idusuario, $idmetodopago, $idalmacen, $idcliente, $tipo_comprobante, $serie_comprobante, $num_proforma, $impuesto, $total_venta, $idarticulo, $cantidad, $precio_venta, $descuento)
 	{
-		$sql1 = "INSERT INTO venta (idusuario,idalmacen,idcliente,tipo_comprobante,serie_comprobante, num_comprobante,fecha_hora,impuesto,total_venta,estado)
-		VALUES ('$idusuario','$idalmacen','$idcliente','$tipo_comprobante','$serie_comprobante','$num_proforma',SYSDATE(),'$impuesto','$total_venta','Aceptado')";
+		$sql1 = "INSERT INTO venta (idusuario,idmetodopago,idalmacen,idcliente,tipo_comprobante,serie_comprobante, num_comprobante,fecha_hora,impuesto,total_venta,estado)
+		VALUES ('$idusuario','$idmetodopago','$idalmacen','$idcliente','$tipo_comprobante','$serie_comprobante','$num_proforma',SYSDATE(),'$impuesto','$total_venta','Aceptado')";
 		$idventanew = ejecutarConsulta_retornarID($sql1);
 		$num_elementos = 0;
 		$sw = true;

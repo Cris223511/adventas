@@ -47,12 +47,17 @@ function init() {
 // }
 
 function generarSiguienteCorrelativo(numeros) {
-	numeros = numeros.trim() === "" ? "0000" : numeros;
+    numeros = numeros.trim() === "" ? "0000" : numeros;
 
-	const siguienteNumero = parseInt(numeros, 10) + 1;
-	const longitud = numeros.length;
-	const siguienteCorrelativo = String(siguienteNumero).padStart(longitud, '0');
-	return siguienteCorrelativo;
+    // Convertir a cadena si es un número
+    if (!isNaN(numeros)) {
+        numeros = String(numeros);
+    }
+
+    const siguienteNumero = parseInt(numeros, 10) + 1;
+    const longitud = numeros.length;
+    const siguienteCorrelativo = String(siguienteNumero).padStart(longitud, '0');
+    return siguienteCorrelativo;
 }
 
 //Función limpiar
@@ -242,13 +247,14 @@ function guardaryeditar(e) {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
+			} else {
+				bootbox.alert(datos);
+				limpiar();
+				ocultarModal();
+				setTimeout(() => {
+					location.reload();
+				}, 1500);
 			}
-			bootbox.alert(datos);
-			limpiar();
-			ocultarModal();
-			setTimeout(() => {
-				location.reload();
-			}, 1500);
 		}
 	});
 }
@@ -292,13 +298,14 @@ function guardaryeditar3(e) {
 				bootbox.alert(datos);
 				$("#btnGuardar3").prop("disabled", false);
 				return;
+			} else {
+				bootbox.alert(datos);
+				limpiar();
+				ocultarModal();
+				setTimeout(() => {
+					location.reload();
+				}, 1500);
 			}
-			bootbox.alert(datos);
-			limpiar();
-			ocultarModal();
-			setTimeout(() => {
-				location.reload();
-			}, 1500);
 		}
 	});
 }

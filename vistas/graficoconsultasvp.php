@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['reporte'] == 1) {
+  if ($_SESSION['reporteP'] == 1) {
     require_once "../modelos/Consultas.php";
     $consulta = new Consultas();
 
@@ -190,11 +190,11 @@ if (!isset($_SESSION["nombre"])) {
 
     let data2 = document.getElementById("totalesv2").textContent;
     let dataArr2 = data2.split(',').map(Number);
-    let max2 = Math.max(...dataArr2) + 1;
+    let max2 = Math.max(...dataArr2) + 4;
 
     let data3 = document.getElementById("totalesv").textContent;
     let dataArr3 = data3.split(',').map(Number);
-    let max3 = Math.max(...dataArr3) + 1;
+    let max3 = Math.max(...dataArr3) + 4;
 
     console.log(max, max2, max3);
 

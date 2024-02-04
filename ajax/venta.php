@@ -23,7 +23,7 @@ if (!isset($_SESSION["nombre"])) {
 		$tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
 		$serie_comprobante = isset($_POST["serie_comprobante"]) ? limpiarCadena($_POST["serie_comprobante"]) : "";
 		$num_comprobante = isset($_POST["num_comprobante"]) ? limpiarCadena($_POST["num_comprobante"]) : "";
-		$impuesto = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";	
+		$impuesto = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";
 		$total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";
 
 		switch ($_GET["op"]) {
@@ -110,6 +110,8 @@ if (!isset($_SESSION["nombre"])) {
 				$id = $_GET['id'];
 				$rspta = $venta->listarDetallePorProducto($id);
 
+				$igv = 0;
+				$totalVenta = 0;
 				$data = array();
 
 				while ($reg = $rspta->fetch_object()) {
@@ -146,19 +148,54 @@ if (!isset($_SESSION["nombre"])) {
 								</a>',
 						"3" => $reg->nombre,
 						"4" => $reg->cantidad,
-						"5" => "<nav>S/. $reg->precio_venta</nav>",
-						"6" => "<nav>S/. $reg->descuento</nav>",
-						"7" => "<nav>S/. $reg->subtotal</nav>",
-						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
-						"9" => "<nav>S/. $reg->total_venta</nav>",
-						"10" => $reg->metodo_pago,
-						"11" => $reg->tipo_comprobante,
-						"12" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"13" => $reg->stock,
-						"14" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"5" => $reg->precio_venta,
+						"6" => $reg->descuento,
+						"7" => $reg->subtotal,
+						"8" => $reg->metodo_pago,
+						"9" => $reg->tipo_comprobante,
+						"10" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"11" => $reg->stock,
+						"12" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>',
 					);
+
+					$igv = $reg->impuesto;
+					$totalVenta = $reg->total_venta;
 				}
+
+				$data[] = array(
+					"0" => "",
+					"1" => "",
+					"2" => "",
+					"3" => "",
+					"4" => "",
+					"5" => "",
+					"6" => "<strong>IGV</strong>",
+					"7" => '<strong>' . number_format($igv, 2) . '</strong>',
+					"8" => "",
+					"9" => "",
+					"10" => "",
+					"11" => "",
+					"12" => "",
+					"13" => "",
+				);
+
+				$data[] = array(
+					"0" => "",
+					"1" => "",
+					"2" => "",
+					"3" => "",
+					"4" => "",
+					"5" => "",
+					"6" => "<strong>TOTAL VENTA</strong>",
+					"7" => '<strong>' . number_format($totalVenta, 2) . '</strong>',
+					"8" => "",
+					"9" => "",
+					"10" => "",
+					"11" => "",
+					"12" => "",
+					"13" => "",
+				);
 
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
@@ -201,6 +238,9 @@ if (!isset($_SESSION["nombre"])) {
 						return '';
 					}
 				}
+
+				$firstIteration = true;
+				$totalPrecioVenta = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -248,13 +288,32 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"6" => $reg->total_venta,
 						"7" => $reg->usuario . ' - ' . $cargo_detalle,
 						"8" => $reg->fecha,
 						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->total_venta;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -376,9 +435,9 @@ if (!isset($_SESSION["nombre"])) {
 						"14" => $reg->stock_minimo,
 						"15" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
 						"16" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"17" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"18" => $reg->usuario . ' - ' . $cargo_detalle,
-						"19" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						// "17" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"17" => $reg->usuario . ' - ' . $cargo_detalle,
+						"18" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 				$results = array(

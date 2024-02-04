@@ -110,14 +110,19 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El número de documento que ha ingresado ya existe.") {
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardar").prop("disabled", false);
+				return;
+			} else if (datos == "El número de documento que ha ingresado ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
+			} else {
+				limpiar();
+				bootbox.alert(datos);
+				tabla.ajax.reload();
 			}
-			limpiar();
-			bootbox.alert(datos);
-			tabla.ajax.reload();
 		}
 	});
 }

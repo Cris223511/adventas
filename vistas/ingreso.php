@@ -21,6 +21,10 @@ if (!isset($_SESSION["nombre"])) {
           width: 100px !important;
         }
       }
+
+      td {
+        height: 30.84px !important;
+      }
     </style>
 
     <!--Contenido-->
@@ -74,7 +78,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Método de pago</th>
                       <th>Documento</th>
                       <th>Número Doc.</th>
-                      <th>Total Compra</th>
+                      <th>Total Compra (S/.)</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
                       <th>Estado</th>
@@ -88,7 +92,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Método de pago</th>
                       <th>Documento</th>
                       <th>Número Doc.</th>
-                      <th>Total Compra</th>
+                      <th>Total Compra (S/.)</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
                       <th>Estado</th>

@@ -38,7 +38,7 @@ function init() {
 function mostrar(idventa) {
 	tabla2 = $('#tbllistado2').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -67,13 +67,8 @@ function mostrar(idventa) {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": [],
-			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(1)').css({
-					"white-space": "nowrap"
-				});
-			}
 		}).DataTable();
 
 	tabla2.on('init.dt', function () {
@@ -93,7 +88,7 @@ function listarventas() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -124,18 +119,9 @@ function listarventas() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
-
-	listarventastotales(fecha_inicio, fecha_fin, idcliente);
-}
-
-function listarventastotales(fecha_inicio, fecha_fin, idcliente) {
-	$.post("../ajax/consultas.php?op=listarventastotalesproducto&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin + "&idcliente=" + idcliente, function (r) {
-		$("#tbllistado tfoot th").eq(7).html(r);
-		console.log(r);
-	});
 }
 
 //Función Listar ventas por fecha
@@ -145,7 +131,7 @@ function listartodasventasfecha() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -176,18 +162,9 @@ function listartodasventasfecha() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
-
-	listartodasventasfechatotales(fecha_inicio, fecha_fin);
-}
-
-function listartodasventasfechatotales(fecha_inicio, fecha_fin) {
-	$.post("../ajax/consultas.php?op=listartodasventasfechatotalesproducto&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin, function (r) {
-		$("#tbllistado tfoot th").eq(7).html(r);
-		console.log(r);
-	});
 }
 
 //Función listar Ventas
@@ -196,7 +173,7 @@ function listartodasventas() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -227,18 +204,9 @@ function listartodasventas() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
-
-	listartodasventastotales(idcliente);
-}
-
-function listartodasventastotales(idcliente) {
-	$.post("../ajax/consultas.php?op=listartodasventastotalesproducto&idcliente=" + idcliente, function (r) {
-		$("#tbllistado tfoot th").eq(7).html(r);
-		console.log(r);
-	});
 }
 
 //Función listar Ventas y Clientes
@@ -246,7 +214,7 @@ function listartodasventasclientes() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -277,18 +245,9 @@ function listartodasventasclientes() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
-
-	listartodasventasclientestotales();
-}
-
-function listartodasventasclientestotales() {
-	$.post("../ajax/consultas.php?op=listartodasventasclientestotalesproducto", function (r) {
-		$("#tbllistado tfoot th").eq(7).html(r);
-		console.log(r);
-	});
 }
 
 //Función Listar
@@ -299,7 +258,7 @@ function listarventasusuario() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -330,18 +289,9 @@ function listarventasusuario() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
-
-	listarventasusuariototales(fecha_inicio, fecha_fin, idusuario);
-}
-
-function listarventasusuariototales(fecha_inicio, fecha_fin, idusuario) {
-	$.post("../ajax/consultas.php?op=listarventasusuariototalesproducto&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin + "&idusuario=" + idusuario, function (r) {
-		$("#tbllistado tfoot th").eq(7).html(r);
-		console.log(r);
-	});
 }
 
 //Función listar Ventas
@@ -350,7 +300,7 @@ function listartodasventasusuario() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -381,18 +331,9 @@ function listartodasventasusuario() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
-
-	listartodasventasusuariototales(idusuario);
-}
-
-function listartodasventasusuariototales(idusuario) {
-	$.post("../ajax/consultas.php?op=listartodasventasusuariototalesproducto&idusuario=" + idusuario, function (r) {
-		$("#tbllistado tfoot th").eq(7).html(r);
-		console.log(r);
-	});
 }
 
 document.addEventListener('DOMContentLoaded', function () {

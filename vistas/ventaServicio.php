@@ -22,6 +22,10 @@ if (!isset($_SESSION["nombre"])) {
           width: 100px !important;
         }
       }
+
+      td {
+        height: 30.84px !important;
+      }
     </style>
 
     <!--Contenido-->
@@ -37,7 +41,7 @@ if (!isset($_SESSION["nombre"])) {
                   <a data-toggle="modal" href="#myModal2">
                     <button type="button" class="btn btn-secondary" style="color: black !important;" onclick="limpiar();"> <span class="fa fa-plus-circle"></span> Agregar</button>
                   </a>
-                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado" || $_SESSION["cargo"] == "vendedor") { ?>
                     <a href="../reportes/rptventasservicio.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte
@@ -75,7 +79,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Método de pago</th>
                       <th>Documento</th>
                       <th>Número Doc.</th>
-                      <th>Total Venta</th>
+                      <th>Total Venta (S/.)</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
                       <th>Estado</th>
@@ -89,7 +93,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Método de pago</th>
                       <th>Documento</th>
                       <th>Número Doc.</th>
-                      <th>Total Venta</th>
+                      <th>Total Venta (S/.)</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
                       <th>Estado</th>
@@ -132,7 +136,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Tipo Comp(*):</label>
                 <select name="tipo_comprobante" id="tipo_comprobante" class="form-control selectpicker" required>
-                  <option value="Nota de venta">Nota de venta</option>
+                  <option value="Nota de venta de servicio">Nota de venta de servicio</option>
                   <option value="Factura">Factura</option>
                   <option value="Ticket">Ticket</option>
                 </select>
@@ -236,7 +240,6 @@ if (!isset($_SESSION["nombre"])) {
                 <th>Opciones</th>
                 <th>IMAGEN</th>
                 <th>NOMBRE</th>
-                <th>CATEGORÍA</th>
                 <th>Ubicación del local</th>
                 <th>C. SERVICIO</th>
                 <th>PRECIO DE VENTA</th>
@@ -249,7 +252,6 @@ if (!isset($_SESSION["nombre"])) {
                 <th>Opciones</th>
                 <th>IMAGEN</th>
                 <th>NOMBRE</th>
-                <th>CATEGORÍA</th>
                 <th>Ubicación del local</th>
                 <th>C. SERVICIO</th>
                 <th>PRECIO DE VENTA</th>

@@ -132,6 +132,9 @@ if (!isset($_SESSION["nombre"])) {
 					}
 				}
 
+				$firstIteration = true;
+				$totalPrecioCompra = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -177,13 +180,32 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_compra</nav>",
+						"6" => $reg->total_compra,
 						"7" => $reg->usuario . ' - ' . $cargo_detalle,
 						"8" => $reg->fecha,
 						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioCompra += $reg->total_compra;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioCompra, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable

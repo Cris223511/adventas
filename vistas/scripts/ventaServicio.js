@@ -47,6 +47,7 @@ function init() {
 	$.post("../ajax/ventaServicio.php?op=getLastNumComprobante", function (e) {
 		console.log(e);
 		lastNumComp = generarSiguienteCorrelativo(e);
+		$("#num_comprobante").val("");
 		$("#num_comprobante").val(lastNumComp);
 	});
 
@@ -132,12 +133,17 @@ function actualizarPersonales(idalmacen) {
 // }
 
 function generarSiguienteCorrelativo(numeros) {
-	numeros = numeros.trim() === "" ? "0000" : numeros;
+    numeros = numeros.trim() === "" ? "0000" : numeros;
 
-	const siguienteNumero = parseInt(numeros, 10) + 1;
-	const longitud = numeros.length;
-	const siguienteCorrelativo = String(siguienteNumero).padStart(longitud, '0');
-	return siguienteCorrelativo;
+    // Convertir a cadena si es un número
+    if (!isNaN(numeros)) {
+        numeros = String(numeros);
+    }
+
+    const siguienteNumero = parseInt(numeros, 10) + 1;
+    const longitud = numeros.length;
+    const siguienteCorrelativo = String(siguienteNumero).padStart(longitud, '0');
+    return siguienteCorrelativo;
 }
 
 
@@ -150,11 +156,12 @@ function limpiar() {
 	$("#idalmacen").val($("#idalmacen option:first").val());
 	$("#idalmacen").selectpicker('refresh');
 	$("#idmetodopago option:contains('Efectivo')").prop('selected', true);
-		$('#idmetodopago').selectpicker('refresh');
+	$('#idmetodopago').selectpicker('refresh');
 
 	$("#idservicio").val("");
 	$("#cliente").val("");
 	$("#serie_comprobante").val(lastNumSerie);
+	$("#num_comprobante").val("");
 	$("#num_comprobante").val(lastNumComp);
 	$("#impuesto").val("0");
 	$("#impuesto").selectpicker('refresh');
@@ -348,16 +355,21 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El número correlativo que ha ingresado ya existe en el local seleccionado." || datos == "La venta de servicio no se pudo registrar." || datos == "El subtotal de uno de los artículos no puede ser menor a 0.") {
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardar").prop("disabled", false);
+				return;
+			} else if (datos == "El número correlativo que ha ingresado ya existe en el local seleccionado." || datos == "La venta de servicio no se pudo registrar." || datos == "El subtotal de uno de los artículos no puede ser menor a 0.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
+			} else {
+				bootbox.alert(datos);
+				limpiar();
+				setTimeout(() => {
+					location.reload();
+				}, 1500);
 			}
-			bootbox.alert(datos);
-			limpiar();
-			setTimeout(() => {
-				location.reload();
-			}, 1500);
 		}
 	});
 }
@@ -458,9 +470,9 @@ function agregarDetalle(idservicio, servicio, precio_venta) {
 		var fila = '<tr class="filas" id="fila' + cont + '">' +
 			'<td class="nowrap-cell"><button type="button" class="btn btn-danger" onclick="eliminarDetalle(' + cont + ', ' + idservicio + ')">X</button></td>' +
 			'<td class="nowrap-cell"><input type="hidden" name="idservicio[]" value="' + idservicio + '">' + servicio + '</td>' +
-			'<td class="nowrap-cell"><input type="number" name="cantidad[]" id="cantidad[]" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></td>' +
-			'<td class="nowrap-cell"><input type="number" step="any" name="precio_venta[]" id="precio_venta[]" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
-			'<td class="nowrap-cell"><input type="number" step="any" name="descuento[]" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></td>' +
+			'<td class="nowrap-cell"><input type="number" name="cantidad[]" id="cantidad[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></td>' +
+			'<td class="nowrap-cell"><input type="number" step="any" name="precio_venta[]" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
+			'<td class="nowrap-cell"><input type="number" step="any" name="descuento[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></td>' +
 			'<td class="nowrap-cell"><span name="subtotal" id="subtotal' + cont + '">' + subtotal + '</span></td>' +
 			'<td class="nowrap-cell"><button type="button" onclick="modificarSubototales()" class="btn btn-info"><i class="fa fa-refresh"></i></button></td>' +
 			'</tr>';

@@ -6,7 +6,7 @@ if (strlen(session_id()) < 1) {
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
-	if ($_SESSION['reporte'] == 1) {
+	if ($_SESSION['reporte'] == 1 || $_SESSION['reporteP'] == 1) {
 		require_once "../modelos/Consultas.php";
 
 		$consulta = new Consultas();
@@ -23,9 +23,90 @@ if (!isset($_SESSION["nombre"])) {
 				$idcliente = $_REQUEST["idcliente"];
 
 				$rspta = $consulta->listarventas($fecha_inicio, $fecha_fin, $idcliente);
+				$rspta2 = $consulta->listarventasservicio($fecha_inicio, $fecha_fin, $idcliente);
+				// $rspta3 = $consulta->listarventascuotas($fecha_inicio, $fecha_fin, $idcliente);
 				$data = array();
 
+				$totalPrecioVenta = 0;
+				$hayDatos = true;
+
 				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+						);
+					}
+
+					$hayDatos = false;
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->usuario . ' - ' . $cargo_detalle,
+						"2" => '<strong>' . $reg->cliente . '</strong>',
+						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta += $reg->total_venta;
+				}
+
+				$totalPrecioVenta2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
 					$cargo_detalle = "";
 
 					switch ($reg->cargo) {
@@ -58,12 +139,129 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta2 += $reg->total_venta;
 				}
+
+				// $totalPrecioVenta3 = 0;
+
+				// if (!empty($data)) {
+				// 	$data[] = array(
+				// 		"0" => "<strong>VENTAS A CRÉDITO</strong>",
+				// 		"1" => "",
+				// 		"2" => "",
+				// 		"3" => "",
+				// 		"4" => "",
+				// 		"5" => "",
+				// 		"6" => "",
+				// 		"7" => "",
+				// 		"8" => "",
+				// 		"9" => "",
+				// 	);
+				// }
+
+				// while ($reg = $rspta3->fetch_object()) {
+				// 	$cargo_detalle = "";
+
+				// 	switch ($reg->cargo) {
+				// 		case 'superadmin':
+				// 			$cargo_detalle = "Superadministrador";
+				// 			break;
+				// 		case 'admin':
+				// 			$cargo_detalle = "Administrador";
+				// 			break;
+				// 		case 'cliente':
+				// 			$cargo_detalle = "Cliente";
+				// 			break;
+				// 		case 'vendedor':
+				// 			$cargo_detalle = "Vendedor";
+				// 			break;
+				// 		case 'almacenero':
+				// 			$cargo_detalle = "Almacenero";
+				// 			break;
+				// 		case 'encargado':
+				// 			$cargo_detalle = "Encargado";
+				// 			break;
+				// 		default:
+				// 			break;
+				// 	}
+
+				// 	$data[] = array(
+				// 		"0" => $reg->fecha,
+				// 		"1" => $reg->usuario . ' - ' . $cargo_detalle,
+				// 		"2" => '<strong>' . $reg->cliente . '</strong>',
+				// 		"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+				// 		"4" => $reg->tipo_comprobante,
+				// 		"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+				// 		"6" => $reg->total_venta,
+				// 		"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+				// 		"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+				// 			'<span class="label bg-red">Anulado</span>'
+				// 	);
+
+				// 	$totalPrecioVenta3 += $reg->total_venta;
+				// }
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					// $data[] = array(
+					// 	"0" => "",
+					// 	"1" => "",
+					// 	"2" => "",
+					// 	"3" => "",
+					// 	"4" => "",
+					// 	"5" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+					// 	"6" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+					// 	"7" => "",
+					// 	"8" => "",
+					// 	"9" => "",
+					// );
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -72,20 +270,6 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
-				break;
-
-			case 'listarventastotales':
-				$fecha_inicio = $_GET["fecha_inicio"];
-				$fecha_fin = $_GET["fecha_fin"];
-				$idcliente = $_GET["idcliente"];
-
-				$rspta = $consulta->listarventas($fecha_inicio, $fecha_fin, $idcliente);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
 				break;
 
 			case 'listartodasventasfecha':
@@ -94,9 +278,90 @@ if (!isset($_SESSION["nombre"])) {
 				$fecha_fin = $_REQUEST["fecha_fin"];
 
 				$rspta = $consulta->listartodasventasfecha($fecha_inicio, $fecha_fin);
+				$rspta2 = $consulta->listartodasventasfechaservicio($fecha_inicio, $fecha_fin);
+				$rspta3 = $consulta->listartodasventasfechacuotas($fecha_inicio, $fecha_fin);
 				$data = array();
 
+				$totalPrecioVenta = 0;
+				$hayDatos = true;
+
 				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+						);
+					}
+
+					$hayDatos = false;
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->usuario . ' - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta += $reg->total_venta;
+				}
+
+				$totalPrecioVenta2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
 					$cargo_detalle = "";
 
 					switch ($reg->cargo) {
@@ -129,12 +394,129 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta2 += $reg->total_venta;
 				}
+
+				$totalPrecioVenta3 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS A CRÉDITO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta3->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->usuario . ' - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta3 += $reg->total_venta;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -145,27 +527,95 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
-			case 'listartodasventasfechatotales':
-				$fecha_inicio = $_GET["fecha_inicio"];
-				$fecha_fin = $_GET["fecha_fin"];
-
-				$rspta = $consulta->listartodasventasfecha($fecha_inicio, $fecha_fin);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
-				break;
-
 			case 'listartodasventas':
 
 				$idcliente = $_REQUEST["idcliente"];
 
 				$rspta = $consulta->listartodasventas($idcliente);
+				$rspta2 = $consulta->listartodasventasservicio($idcliente);
+				// $rspta3 = $consulta->listartodasventascuotas($idcliente);
 				$data = array();
 
+				$totalPrecioVenta = 0;
+				$hayDatos = true;
+
 				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+						);
+					}
+
+					$hayDatos = false;
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->usuario . ' - ' . $cargo_detalle,
+						"2" => '<strong>' . $reg->cliente . '</strong>',
+						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta += $reg->total_venta;
+				}
+
+				$totalPrecioVenta2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
 					$cargo_detalle = "";
 
 					switch ($reg->cargo) {
@@ -198,12 +648,129 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta2 += $reg->total_venta;
 				}
+
+				// $totalPrecioVenta3 = 0;
+
+				// if (!empty($data)) {
+				// 	$data[] = array(
+				// 		"0" => "<strong>VENTAS A CRÉDITO</strong>",
+				// 		"1" => "",
+				// 		"2" => "",
+				// 		"3" => "",
+				// 		"4" => "",
+				// 		"5" => "",
+				// 		"6" => "",
+				// 		"7" => "",
+				// 		"8" => "",
+				// 		"9" => "",
+				// 	);
+				// }
+
+				// while ($reg = $rspta3->fetch_object()) {
+				// 	$cargo_detalle = "";
+
+				// 	switch ($reg->cargo) {
+				// 		case 'superadmin':
+				// 			$cargo_detalle = "Superadministrador";
+				// 			break;
+				// 		case 'admin':
+				// 			$cargo_detalle = "Administrador";
+				// 			break;
+				// 		case 'cliente':
+				// 			$cargo_detalle = "Cliente";
+				// 			break;
+				// 		case 'vendedor':
+				// 			$cargo_detalle = "Vendedor";
+				// 			break;
+				// 		case 'almacenero':
+				// 			$cargo_detalle = "Almacenero";
+				// 			break;
+				// 		case 'encargado':
+				// 			$cargo_detalle = "Encargado";
+				// 			break;
+				// 		default:
+				// 			break;
+				// 	}
+
+				// 	$data[] = array(
+				// 		"0" => $reg->fecha,
+				// 		"1" => $reg->usuario . ' - ' . $cargo_detalle,
+				// 		"2" => '<strong>' . $reg->cliente . '</strong>',
+				// 		"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+				// 		"4" => $reg->tipo_comprobante,
+				// 		"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+				// 		"6" => $reg->total_venta,
+				// 		"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+				// 		"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+				// 			'<span class="label bg-red">Anulado</span>'
+				// 	);
+
+				// 	$totalPrecioVenta3 += $reg->total_venta;
+				// }
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					// $data[] = array(
+					// 	"0" => "",
+					// 	"1" => "",
+					// 	"2" => "",
+					// 	"3" => "",
+					// 	"4" => "",
+					// 	"5" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+					// 	"6" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+					// 	"7" => "",
+					// 	"8" => "",
+					// 	"9" => "",
+					// );
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta2 + $totalPrecioVenta2, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -214,24 +781,93 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
-			case 'listartodasventastotales':
-				$idcliente = $_REQUEST["idcliente"];
-
-				$rspta = $consulta->listartodasventas($idcliente);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
-				break;
-
 			case 'listartodasventasclientes':
 
 				$rspta = $consulta->listartodasventasclientes();
+				$rspta2 = $consulta->listartodasventasclientesservicio();
+				$rspta3 = $consulta->listartodasventasclientescuotas();
 				$data = array();
 
+				$totalPrecioVenta = 0;
+				$hayDatos = true;
+
 				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+						);
+					}
+
+					$hayDatos = false;
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->usuario . ' - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta += $reg->total_venta;
+				}
+
+				$totalPrecioVenta2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
 					$cargo_detalle = "";
 
 					switch ($reg->cargo) {
@@ -264,12 +900,129 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta2 += $reg->total_venta;
 				}
+
+				$totalPrecioVenta3 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS A CRÉDITO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta3->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->usuario . ' - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta3 += $reg->total_venta;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -278,17 +1031,6 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
-				break;
-
-			case 'listartodasventasclientestotales':
-
-				$rspta = $consulta->listartodasventasclientes();
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
 				break;
 
 				// ventas por usuario
@@ -300,9 +1042,90 @@ if (!isset($_SESSION["nombre"])) {
 				$idusuario = $_REQUEST["idusuario"];
 
 				$rspta = $consulta->listarventasusuario($fecha_inicio, $fecha_fin, $idusuario);
+				$rspta2 = $consulta->listarventasusuarioservicio($fecha_inicio, $fecha_fin, $idusuario);
+				$rspta3 = $consulta->listarventasusuariocuotas($fecha_inicio, $fecha_fin, $idusuario);
 				$data = array();
 
+				$totalPrecioVenta = 0;
+				$hayDatos = true;
+
 				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+						);
+					}
+
+					$hayDatos = false;
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta += $reg->total_venta;
+				}
+
+				$totalPrecioVenta2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
 					$cargo_detalle = "";
 
 					switch ($reg->cargo) {
@@ -335,12 +1158,129 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta2 += $reg->total_venta;
 				}
+
+				$totalPrecioVenta3 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS A CRÉDITO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta3->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta3 += $reg->total_venta;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -349,20 +1289,6 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
-				break;
-
-			case 'listarventasusuariototales':
-				$fecha_inicio = $_GET["fecha_inicio"];
-				$fecha_fin = $_GET["fecha_fin"];
-				$idusuario = $_GET["idusuario"];
-
-				$rspta = $consulta->listarventasusuario($fecha_inicio, $fecha_fin, $idusuario);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
 				break;
 
 			case 'listartodasventasusuariofecha':
@@ -371,9 +1297,90 @@ if (!isset($_SESSION["nombre"])) {
 				$fecha_fin = $_REQUEST["fecha_fin"];
 
 				$rspta = $consulta->listartodasventasusuariofecha($fecha_inicio, $fecha_fin);
+				$rspta2 = $consulta->listartodasventasusuariofechaservicio($fecha_inicio, $fecha_fin);
+				$rspta3 = $consulta->listartodasventasusuariofechacuotas($fecha_inicio, $fecha_fin);
 				$data = array();
 
+				$totalPrecioVenta = 0;
+				$hayDatos = true;
+
 				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+						);
+					}
+
+					$hayDatos = false;
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->usuario . ' - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta += $reg->total_venta;
+				}
+
+				$totalPrecioVenta2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
 					$cargo_detalle = "";
 
 					switch ($reg->cargo) {
@@ -406,12 +1413,129 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta2 += $reg->total_venta;
 				}
+
+				$totalPrecioVenta3 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS A CRÉDITO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta3->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->usuario . ' - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta3 += $reg->total_venta;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -422,27 +1546,95 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
-			case 'listartodasventasusuariofechatotales':
-				$fecha_inicio = $_GET["fecha_inicio"];
-				$fecha_fin = $_GET["fecha_fin"];
-
-				$rspta = $consulta->listartodasventasusuariofecha($fecha_inicio, $fecha_fin);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
-				break;
-
 			case 'listartodasventasusuario':
 
 				$idusuario = $_REQUEST["idusuario"];
 
 				$rspta = $consulta->listartodasventasusuario($idusuario);
+				$rspta2 = $consulta->listartodasventasusuarioservicio($idusuario);
+				$rspta3 = $consulta->listartodasventasusuariocuotas($idusuario);
 				$data = array();
 
+				$totalPrecioVenta = 0;
+				$hayDatos = true;
+
 				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+						);
+					}
+
+					$hayDatos = false;
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta += $reg->total_venta;
+				}
+
+				$totalPrecioVenta2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
 					$cargo_detalle = "";
 
 					switch ($reg->cargo) {
@@ -475,12 +1667,129 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta2 += $reg->total_venta;
 				}
+
+				$totalPrecioVenta3 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS A CRÉDITO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta3->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta3 += $reg->total_venta;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -491,24 +1800,93 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
-			case 'listartodasventasusuariototales':
-				$idusuario = $_REQUEST["idusuario"];
-
-				$rspta = $consulta->listartodasventasusuario($idusuario);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
-				break;
-
 			case 'listartodasventasusuariousuarios':
 
 				$rspta = $consulta->listartodasventasusuariousuarios();
+				$rspta2 = $consulta->listartodasventasusuariousuariosservicio();
+				$rspta3 = $consulta->listartodasventasusuariousuarioscuotas();
 				$data = array();
 
+				$totalPrecioVenta = 0;
+				$hayDatos = true;
+
 				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+						);
+					}
+
+					$hayDatos = false;
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->usuario . ' - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta += $reg->total_venta;
+				}
+
+				$totalPrecioVenta2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
 					$cargo_detalle = "";
 
 					switch ($reg->cargo) {
@@ -541,12 +1919,129 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_venta</nav>",
+						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta2 += $reg->total_venta;
 				}
+
+				$totalPrecioVenta3 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS A CRÉDITO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				while ($reg = $rspta3->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->usuario . ' - ' . $cargo_detalle,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago,
+						"4" => $reg->tipo_comprobante,
+						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"6" => $reg->total_venta,
+						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
+						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta3 += $reg->total_venta;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -555,17 +2050,6 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
-				break;
-
-			case 'listartodasventasusuariousuariostotales':
-
-				$rspta = $consulta->listartodasventasusuariousuarios();
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
 				break;
 
 				// ventas por productos
@@ -579,6 +2063,9 @@ if (!isset($_SESSION["nombre"])) {
 				$rspta = $consulta->listarventas($fecha_inicio, $fecha_fin, $idcliente);
 				$data = array();
 
+				$firstIteration = true;
+				$totalPrecioVenta = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -615,12 +2102,32 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"5" => $reg->tipo_comprobante,
 						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"7" => $reg->total_venta,
 						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->total_venta;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array_fill(0, 10, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -629,20 +2136,6 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
-				break;
-
-			case 'listarventastotalesproducto':
-				$fecha_inicio = $_GET["fecha_inicio"];
-				$fecha_fin = $_GET["fecha_fin"];
-				$idcliente = $_GET["idcliente"];
-
-				$rspta = $consulta->listarventas($fecha_inicio, $fecha_fin, $idcliente);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
 				break;
 
 			case 'listartodasventasfechaproducto':
@@ -653,6 +2146,9 @@ if (!isset($_SESSION["nombre"])) {
 				$rspta = $consulta->listartodasventasfecha($fecha_inicio, $fecha_fin);
 				$data = array();
 
+				$firstIteration = true;
+				$totalPrecioVenta = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -689,12 +2185,32 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"5" => $reg->tipo_comprobante,
 						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"7" => $reg->total_venta,
 						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->total_venta;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array_fill(0, 10, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -705,25 +2221,15 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
-			case 'listartodasventasfechatotalesproducto':
-				$fecha_inicio = $_GET["fecha_inicio"];
-				$fecha_fin = $_GET["fecha_fin"];
-
-				$rspta = $consulta->listartodasventasfecha($fecha_inicio, $fecha_fin);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
-				break;
-
 			case 'listartodasventasproducto':
 
 				$idcliente = $_REQUEST["idcliente"];
 
 				$rspta = $consulta->listartodasventas($idcliente);
 				$data = array();
+
+				$firstIteration = true;
+				$totalPrecioVenta = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -761,12 +2267,32 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"5" => $reg->tipo_comprobante,
 						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"7" => $reg->total_venta,
 						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->total_venta;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array_fill(0, 10, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -777,22 +2303,13 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
-			case 'listartodasventastotalesproducto':
-				$idcliente = $_REQUEST["idcliente"];
-
-				$rspta = $consulta->listartodasventas($idcliente);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
-				break;
-
 			case 'listartodasventasclientesproducto':
 
 				$rspta = $consulta->listartodasventasclientes();
 				$data = array();
+
+				$firstIteration = true;
+				$totalPrecioVenta = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -830,12 +2347,32 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"5" => $reg->tipo_comprobante,
 						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"7" => $reg->total_venta,
 						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->total_venta;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array_fill(0, 10, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -844,17 +2381,6 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
-				break;
-
-			case 'listartodasventasclientestotalesproducto':
-
-				$rspta = $consulta->listartodasventasclientes();
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
 				break;
 
 			case 'listarventasusuarioproducto':
@@ -866,6 +2392,9 @@ if (!isset($_SESSION["nombre"])) {
 				$rspta = $consulta->listarventasusuario($fecha_inicio, $fecha_fin, $idusuario);
 				$data = array();
 
+				$firstIteration = true;
+				$totalPrecioVenta = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -902,12 +2431,32 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->metodo_pago,
 						"5" => $reg->tipo_comprobante,
 						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"7" => $reg->total_venta,
 						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->total_venta;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array_fill(0, 10, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -918,19 +2467,6 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
-			case 'listarventasusuariototalesproducto':
-				$fecha_inicio = $_GET["fecha_inicio"];
-				$fecha_fin = $_GET["fecha_fin"];
-				$idusuario = $_GET["idusuario"];
-
-				$rspta = $consulta->listarventasusuario($fecha_inicio, $fecha_fin, $idusuario);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
-				break;
 			case 'listartodasventasusuarioproducto':
 
 				$idusuario = $_REQUEST["idusuario"];
@@ -938,6 +2474,9 @@ if (!isset($_SESSION["nombre"])) {
 				$rspta = $consulta->listartodasventasusuario($idusuario);
 				$data = array();
 
+				$firstIteration = true;
+				$totalPrecioVenta = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -974,12 +2513,32 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->metodo_pago,
 						"5" => $reg->tipo_comprobante,
 						"6" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"7" => "<nav>S/. $reg->total_venta</nav>",
+						"7" => $reg->total_venta,
 						"8" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->total_venta;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array_fill(0, 10, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -988,18 +2547,6 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
-				break;
-
-			case 'listartodasventasusuariototalesproducto':
-				$idusuario = $_REQUEST["idusuario"];
-
-				$rspta = $consulta->listartodasventasusuario($idusuario);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_venta;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
 				break;
 
 				// ventas y productos
@@ -1011,12 +2558,111 @@ if (!isset($_SESSION["nombre"])) {
 				$idcliente = $_REQUEST["idcliente"];
 
 				$rspta = $consulta->listarventasyproducto($fecha_inicio, $fecha_fin, $idcliente);
+				$rspta2 = $consulta->listarventasyproductoservicio($fecha_inicio, $fecha_fin, $idcliente);
+				// $rspta3 = $consulta->listarventasyproductocuotas($fecha_inicio, $fecha_fin, $idcliente);
 				$data = array();
 
 				$lastIdVenta = null;
 				$firstIteration = true;
+				$totalPrecioVenta = 0;
+				$totalSubtotal = 0;
+				$hayDatos = true;
 
 				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+							"10" => "",
+						);
+					}
+
+					$hayDatos = false;
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => $reg->usuario . ' - ' . $cargo_detalle,
+						"5" => '<strong>' . $reg->cliente . '</strong>',
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta += $reg->precio_venta;
+					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta = $reg->idventa;
+				}
+
+				$lastIdVenta2 = null;
+				$firstIteration = true;
+				$totalPrecioVenta2 = 0;
+				$totalSubtotal2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
 					$cargo_detalle = "";
 
 					switch ($reg->cargo) {
@@ -1044,9 +2690,9 @@ if (!isset($_SESSION["nombre"])) {
 
 					// Verificar si el idventa actual es diferente al idventa del registro anterior
 					// Verificar si es la primera iteración
-					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
+					if (!$firstIteration && $reg->idventa_servicio != $lastIdVenta2) {
 						// Agregar una fila vacía al array antes de agregar el nuevo registro
-						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
 					}
 
 					$data[] = array(
@@ -1056,16 +2702,155 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->almacen,
 						"4" => $reg->usuario . ' - ' . $cargo_detalle,
 						"5" => '<strong>' . $reg->cliente . '</strong>',
-						"6" => $reg->cantidad,
-						"7" => $reg->nombre,
-						"8" => "<nav>S/. $reg->total_venta</nav>",
-						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
 
+					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
+
 					$firstIteration = false; // Marcar que ya no es la primera iteración
-					$lastIdVenta = $reg->idventa;
+					$lastIdVenta2 = $reg->idventa_servicio;
 				}
+
+				// $lastIdVenta3 = null;
+				// $firstIteration = true;
+				// $totalPrecioVenta3 = 0;
+				// $totalSubtotal3 = 0;
+
+				// if (!empty($data)) {
+				// 	$data[] = array(
+				// 		"0" => "<strong>VENTAS A CRÉDITO</strong>",
+				// 		"1" => "",
+				// 		"2" => "",
+				// 		"3" => "",
+				// 		"4" => "",
+				// 		"5" => "",
+				// 		"6" => "",
+				// 		"7" => "",
+				// 		"8" => "",
+				// 		"9" => "",
+				// 		"10" => "",
+				// 	);
+				// }
+
+				// while ($reg = $rspta3->fetch_object()) {
+				// 	$cargo_detalle = "";
+
+				// 	switch ($reg->cargo) {
+				// 		case 'superadmin':
+				// 			$cargo_detalle = "Superadministrador";
+				// 			break;
+				// 		case 'admin':
+				// 			$cargo_detalle = "Administrador";
+				// 			break;
+				// 		case 'cliente':
+				// 			$cargo_detalle = "Cliente";
+				// 			break;
+				// 		case 'vendedor':
+				// 			$cargo_detalle = "Vendedor";
+				// 			break;
+				// 		case 'almacenero':
+				// 			$cargo_detalle = "Almacenero";
+				// 			break;
+				// 		case 'encargado':
+				// 			$cargo_detalle = "Encargado";
+				// 			break;
+				// 		default:
+				// 			break;
+				// 	}
+
+				// 	// Verificar si el idventa actual es diferente al idventa del registro anterior
+				// 	// Verificar si es la primera iteración
+				// 	if (!$firstIteration && $reg->idcuotas != $lastIdVenta3) {
+				// 		// Agregar una fila vacía al array antes de agregar el nuevo registro
+				// 		$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+				// 	}
+
+				// 	$data[] = array(
+				// 		"0" => $reg->fecha,
+				// 		"1" => $reg->tipo_comprobante,
+				// 		"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+				// 		"3" => $reg->almacen,
+				// 		"4" => $reg->usuario . ' - ' . $cargo_detalle,
+				// 		"5" => '<strong>' . $reg->cliente . '</strong>',
+				// 		"6" => $reg->nombre,
+				// 		"7" => $reg->cantidad,
+				// 		"8" => $reg->precio_venta,
+				// 		"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+				// 		"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
+				// 	);
+
+				// 	$totalPrecioVenta3 += $reg->precio_venta;
+				// 	$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
+
+				// 	$firstIteration = false; // Marcar que ya no es la primera iteración
+				// 	$lastIdVenta3 = $reg->idcuotas;
+				// }
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
+						"10" => "",
+					);
+
+					// $data[] = array(
+					// 	"0" => "",
+					// 	"1" => "",
+					// 	"2" => "",
+					// 	"3" => "",
+					// 	"4" => "",
+					// 	"5" => "",
+					// 	"6" => "",
+					// 	"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+					// 	"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+					// 	"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
+					// 	"10" => "",
+					// );
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2, 2) . '</strong>',
+						"10" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -1082,10 +2867,15 @@ if (!isset($_SESSION["nombre"])) {
 				$fecha_fin = $_REQUEST["fecha_fin"];
 
 				$rspta = $consulta->listartodasventasfechayproducto($fecha_inicio, $fecha_fin);
+				$rspta2 = $consulta->listartodasventasfechayproductoservicio($fecha_inicio, $fecha_fin);
+				$rspta3 = $consulta->listartodasventasfechayproductocuotas($fecha_inicio, $fecha_fin);
 				$data = array();
 
 				$lastIdVenta = null;
 				$firstIteration = true;
+				$totalPrecioVenta = 0;
+				$totalSubtotal = 0;
+				$hayDatos = true;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -1113,11 +2903,29 @@ if (!isset($_SESSION["nombre"])) {
 							break;
 					}
 
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+							"10" => "",
+						);
+					}
+
+					$hayDatos = false;
+
 					// Verificar si el idventa actual es diferente al idventa del registro anterior
 					// Verificar si es la primera iteración
 					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
 						// Agregar una fila vacía al array antes de agregar el nuevo registro
-						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
 					}
 
 					$data[] = array(
@@ -1127,16 +2935,231 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->almacen,
 						"4" => $reg->usuario . ' - ' . $cargo_detalle,
 						"5" => $reg->cliente,
-						"6" => $reg->cantidad,
-						"7" => $reg->nombre,
-						"8" => "<nav>S/. $reg->total_venta</nav>",
-						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->precio_venta;
+					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 					$lastIdVenta = $reg->idventa;
 				}
+
+				$lastIdVenta2 = null;
+				$firstIteration = true;
+				$totalPrecioVenta2 = 0;
+				$totalSubtotal2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa_servicio != $lastIdVenta2) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => $reg->usuario . ' - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta2 = $reg->idventa_servicio;
+				}
+
+				$lastIdVenta3 = null;
+				$firstIteration = true;
+				$totalPrecioVenta3 = 0;
+				$totalSubtotal3 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS A CRÉDITO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				while ($reg = $rspta3->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idcuotas != $lastIdVenta3) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => $reg->usuario . ' - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
+					);
+
+					$totalPrecioVenta3 += $reg->precio_venta;
+					$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta3 = $reg->idcuotas;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2 + $totalSubtotal3, 2) . '</strong>',
+						"10" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -1152,10 +3175,15 @@ if (!isset($_SESSION["nombre"])) {
 				$idcliente = $_REQUEST["idcliente"];
 
 				$rspta = $consulta->listartodasventasyproducto($idcliente);
+				$rspta2 = $consulta->listartodasventasyproductoservicio($idcliente);
+				// $rspta3 = $consulta->listartodasventasyproductocuotas($idcliente);
 				$data = array();
 
 				$lastIdVenta = null;
 				$firstIteration = true;
+				$totalPrecioVenta = 0;
+				$totalSubtotal = 0;
+				$hayDatos = true;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -1183,11 +3211,29 @@ if (!isset($_SESSION["nombre"])) {
 							break;
 					}
 
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+							"10" => "",
+						);
+					}
+
+					$hayDatos = false;
+
 					// Verificar si el idventa actual es diferente al idventa del registro anterior
 					// Verificar si es la primera iteración
 					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
 						// Agregar una fila vacía al array antes de agregar el nuevo registro
-						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
 					}
 
 					$data[] = array(
@@ -1197,16 +3243,231 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->almacen,
 						"4" => $reg->usuario . ' - ' . $cargo_detalle,
 						"5" => '<strong>' . $reg->cliente . '</strong>',
-						"6" => $reg->cantidad,
-						"7" => $reg->nombre,
-						"8" => "<nav>S/. $reg->total_venta</nav>",
-						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->precio_venta;
+					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 					$lastIdVenta = $reg->idventa;
 				}
+
+				$lastIdVenta2 = null;
+				$firstIteration = true;
+				$totalPrecioVenta2 = 0;
+				$totalSubtotal2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa_servicio != $lastIdVenta2) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => $reg->usuario . ' - ' . $cargo_detalle,
+						"5" => '<strong>' . $reg->cliente . '</strong>',
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta2 = $reg->idventa_servicio;
+				}
+
+				// $lastIdVenta3 = null;
+				// $firstIteration = true;
+				// $totalPrecioVenta3 = 0;
+				// $totalSubtotal3 = 0;
+
+				// if (!empty($data)) {
+				// 	$data[] = array(
+				// 		"0" => "<strong>VENTAS A CRÉDITO</strong>",
+				// 		"1" => "",
+				// 		"2" => "",
+				// 		"3" => "",
+				// 		"4" => "",
+				// 		"5" => "",
+				// 		"6" => "",
+				// 		"7" => "",
+				// 		"8" => "",
+				// 		"9" => "",
+				// 		"10" => "",
+				// 	);
+				// }
+
+				// while ($reg = $rspta3->fetch_object()) {
+				// 	$cargo_detalle = "";
+
+				// 	switch ($reg->cargo) {
+				// 		case 'superadmin':
+				// 			$cargo_detalle = "Superadministrador";
+				// 			break;
+				// 		case 'admin':
+				// 			$cargo_detalle = "Administrador";
+				// 			break;
+				// 		case 'cliente':
+				// 			$cargo_detalle = "Cliente";
+				// 			break;
+				// 		case 'vendedor':
+				// 			$cargo_detalle = "Vendedor";
+				// 			break;
+				// 		case 'almacenero':
+				// 			$cargo_detalle = "Almacenero";
+				// 			break;
+				// 		case 'encargado':
+				// 			$cargo_detalle = "Encargado";
+				// 			break;
+				// 		default:
+				// 			break;
+				// 	}
+
+				// 	// Verificar si el idventa actual es diferente al idventa del registro anterior
+				// 	// Verificar si es la primera iteración
+				// 	if (!$firstIteration && $reg->idcuotas != $lastIdVenta3) {
+				// 		// Agregar una fila vacía al array antes de agregar el nuevo registro
+				// 		$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+				// 	}
+
+				// 	$data[] = array(
+				// 		"0" => $reg->fecha,
+				// 		"1" => $reg->tipo_comprobante,
+				// 		"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+				// 		"3" => $reg->almacen,
+				// 		"4" => $reg->usuario . ' - ' . $cargo_detalle,
+				// 		"5" => '<strong>' . $reg->cliente . '</strong>',
+				// 		"6" => $reg->nombre,
+				// 		"7" => $reg->cantidad,
+				// 		"8" => $reg->precio_venta,
+				// 		"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+				// 		"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
+				// 	);
+
+				// 	$totalPrecioVenta3 += $reg->precio_venta;
+				// 	$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
+
+				// 	$firstIteration = false; // Marcar que ya no es la primera iteración
+				// 	$lastIdVenta3 = $reg->idcuotas;
+				// }
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
+						"10" => "",
+					);
+
+					// $data[] = array(
+					// 	"0" => "",
+					// 	"1" => "",
+					// 	"2" => "",
+					// 	"3" => "",
+					// 	"4" => "",
+					// 	"5" => "",
+					// 	"6" => "",
+					// 	"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+					// 	"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+					// 	"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
+					// 	"10" => "",
+					// );
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2, 2) . '</strong>',
+						"10" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -1220,10 +3481,15 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listartodasventasclientesyproducto':
 
 				$rspta = $consulta->listartodasventasclientesyproducto();
+				$rspta2 = $consulta->listartodasventasclientesyproductoservicio();
+				$rspta3 = $consulta->listartodasventasclientesyproductocuotas();
 				$data = array();
 
 				$lastIdVenta = null;
 				$firstIteration = true;
+				$totalPrecioVenta = 0;
+				$totalSubtotal = 0;
+				$hayDatos = true;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -1251,11 +3517,29 @@ if (!isset($_SESSION["nombre"])) {
 							break;
 					}
 
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+							"10" => "",
+						);
+					}
+
+					$hayDatos = false;
+
 					// Verificar si el idventa actual es diferente al idventa del registro anterior
 					// Verificar si es la primera iteración
 					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
 						// Agregar una fila vacía al array antes de agregar el nuevo registro
-						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
 					}
 
 					$data[] = array(
@@ -1265,16 +3549,232 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->almacen,
 						"4" => $reg->usuario . ' - ' . $cargo_detalle,
 						"5" => $reg->cliente,
-						"6" => $reg->cantidad,
-						"7" => $reg->nombre,
-						"8" => "<nav>S/. $reg->total_venta</nav>",
-						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->precio_venta;
+					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 					$lastIdVenta = $reg->idventa;
 				}
+
+				$lastIdVenta2 = null;
+				$firstIteration = true;
+				$totalPrecioVenta2 = 0;
+				$totalSubtotal2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa_servicio != $lastIdVenta2) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => $reg->usuario . ' - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta2 = $reg->idventa_servicio;
+				}
+
+				$lastIdVenta3 = null;
+				$firstIteration = true;
+				$totalPrecioVenta3 = 0;
+				$totalSubtotal3 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS A CRÉDITO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				while ($reg = $rspta3->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idcuotas != $lastIdVenta3) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => $reg->usuario . ' - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
+					);
+
+					$totalPrecioVenta3 += $reg->precio_venta;
+					$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta3 = $reg->idcuotas;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2 + $totalSubtotal3, 2) . '</strong>',
+						"10" => "",
+					);
+				}
+
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -1292,10 +3792,15 @@ if (!isset($_SESSION["nombre"])) {
 				$idusuario = $_REQUEST["idusuario"];
 
 				$rspta = $consulta->listarventasusuarioyproducto($fecha_inicio, $fecha_fin, $idusuario);
+				$rspta2 = $consulta->listarventasusuarioyproductoservicio($fecha_inicio, $fecha_fin, $idusuario);
+				$rspta3 = $consulta->listarventasusuarioyproductocuotas($fecha_inicio, $fecha_fin, $idusuario);
 				$data = array();
 
 				$lastIdVenta = null;
 				$firstIteration = true;
+				$totalPrecioVenta = 0;
+				$totalSubtotal = 0;
+				$hayDatos = true;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -1323,11 +3828,29 @@ if (!isset($_SESSION["nombre"])) {
 							break;
 					}
 
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+							"10" => "",
+						);
+					}
+
+					$hayDatos = false;
+
 					// Verificar si el idventa actual es diferente al idventa del registro anterior
 					// Verificar si es la primera iteración
 					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
 						// Agregar una fila vacía al array antes de agregar el nuevo registro
-						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
 					}
 
 					$data[] = array(
@@ -1337,16 +3860,231 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->almacen,
 						"4" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
 						"5" => $reg->cliente,
-						"6" => $reg->cantidad,
-						"7" => $reg->nombre,
-						"8" => "<nav>S/. $reg->total_venta</nav>",
-						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->precio_venta;
+					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 					$lastIdVenta = $reg->idventa;
 				}
+
+				$lastIdVenta2 = null;
+				$firstIteration = true;
+				$totalPrecioVenta2 = 0;
+				$totalSubtotal2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa_servicio != $lastIdVenta2) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta2 = $reg->idventa_servicio;
+				}
+
+				$lastIdVenta3 = null;
+				$firstIteration = true;
+				$totalPrecioVenta3 = 0;
+				$totalSubtotal3 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS A CRÉDITO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				while ($reg = $rspta3->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idcuotas != $lastIdVenta3) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
+					);
+
+					$totalPrecioVenta3 += $reg->precio_venta;
+					$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta3 = $reg->idcuotas;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2 + $totalSubtotal3, 2) . '</strong>',
+						"10" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -1362,10 +4100,15 @@ if (!isset($_SESSION["nombre"])) {
 				$idusuario = $_REQUEST["idusuario"];
 
 				$rspta = $consulta->listartodasventasusuarioyproducto($idusuario);
+				$rspta2 = $consulta->listartodasventasusuarioyproductoservicio($idusuario);
+				$rspta3 = $consulta->listartodasventasusuarioyproductocuotas($idusuario);
 				$data = array();
 
 				$lastIdVenta = null;
 				$firstIteration = true;
+				$totalPrecioVenta = 0;
+				$totalSubtotal = 0;
+				$hayDatos = true;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -1393,11 +4136,29 @@ if (!isset($_SESSION["nombre"])) {
 							break;
 					}
 
+					if ($hayDatos) {
+						$data[] = array(
+							"0" => "<strong>VENTAS AL CONTADO</strong>",
+							"1" => "",
+							"2" => "",
+							"3" => "",
+							"4" => "",
+							"5" => "",
+							"6" => "",
+							"7" => "",
+							"8" => "",
+							"9" => "",
+							"10" => "",
+						);
+					}
+
+					$hayDatos = false;
+
 					// Verificar si el idventa actual es diferente al idventa del registro anterior
 					// Verificar si es la primera iteración
 					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
 						// Agregar una fila vacía al array antes de agregar el nuevo registro
-						$data[] = array_fill(0, 10, ''); // Esto crea una fila vacía con 9 celdas
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
 					}
 
 					$data[] = array(
@@ -1407,16 +4168,231 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->almacen,
 						"4" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
 						"5" => $reg->cliente,
-						"6" => $reg->cantidad,
-						"7" => $reg->nombre,
-						"8" => "<nav>S/. $reg->total_venta</nav>",
-						"9" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioVenta += $reg->precio_venta;
+					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 					$lastIdVenta = $reg->idventa;
 				}
+
+				$lastIdVenta2 = null;
+				$firstIteration = true;
+				$totalPrecioVenta2 = 0;
+				$totalSubtotal2 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS DE SERVICIO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				while ($reg = $rspta2->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa_servicio != $lastIdVenta2) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>'
+					);
+
+					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta2 = $reg->idventa_servicio;
+				}
+
+				$lastIdVenta3 = null;
+				$firstIteration = true;
+				$totalPrecioVenta3 = 0;
+				$totalSubtotal3 = 0;
+
+				if (!empty($data)) {
+					$data[] = array(
+						"0" => "<strong>VENTAS A CRÉDITO</strong>",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				while ($reg = $rspta3->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idcuotas != $lastIdVenta3) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 11, ''); // Esto crea una fila vacía con 9 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->tipo_comprobante,
+						"2" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"3" => $reg->almacen,
+						"4" => '<strong>' . $reg->usuario . '</strong> - ' . $cargo_detalle,
+						"5" => $reg->cliente,
+						"6" => $reg->nombre,
+						"7" => $reg->cantidad,
+						"8" => $reg->precio_venta,
+						"9" => number_format($reg->precio_venta * $reg->cantidad, 2),
+						"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
+					);
+
+					$totalPrecioVenta3 += $reg->precio_venta;
+					$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta3 = $reg->idcuotas;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 11, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2 + $totalSubtotal3, 2) . '</strong>',
+						"10" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -1630,6 +4606,9 @@ if (!isset($_SESSION["nombre"])) {
 				$rspta = $consulta->listarcompras($fecha_inicio, $fecha_fin, $idproveedor);
 				$data = array();
 
+				$firstIteration = true;
+				$totalPrecioCompra = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -1663,12 +4642,31 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_compra</nav>",
+						"6" => $reg->total_compra,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioCompra += $reg->total_compra;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array_fill(0, 10, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioCompra, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -1677,20 +4675,6 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
-				break;
-
-			case 'listarcomprastotales':
-				$fecha_inicio = $_GET["fecha_inicio"];
-				$fecha_fin = $_GET["fecha_fin"];
-				$idproveedor = $_GET["idproveedor"];
-
-				$rspta = $consulta->listarcompras($fecha_inicio, $fecha_fin, $idproveedor);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_compra;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
 				break;
 
 			case 'listartodascomprasfecha':
@@ -1701,6 +4685,9 @@ if (!isset($_SESSION["nombre"])) {
 				$rspta = $consulta->listartodascomprasfecha($fecha_inicio, $fecha_fin);
 				$data = array();
 
+				$firstIteration = true;
+				$totalPrecioCompra = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -1734,12 +4721,31 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_compra</nav>",
+						"6" => $reg->total_compra,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioCompra += $reg->total_compra;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array_fill(0, 10, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioCompra, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -1750,25 +4756,15 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
-			case 'listartodascomprasfechatotales':
-				$fecha_inicio = $_GET["fecha_inicio"];
-				$fecha_fin = $_GET["fecha_fin"];
-
-				$rspta = $consulta->listartodascomprasfecha($fecha_inicio, $fecha_fin);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_compra;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
-				break;
-
 			case 'listartodascompras':
 
 				$idproveedor = $_REQUEST["idproveedor"];
 
 				$rspta = $consulta->listartodascompras($idproveedor);
 				$data = array();
+
+				$firstIteration = true;
+				$totalPrecioCompra = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -1803,12 +4799,31 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_compra</nav>",
+						"6" => $reg->total_compra,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioCompra += $reg->total_compra;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array_fill(0, 10, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioCompra, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -1819,22 +4834,13 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
-			case 'listartodascomprastotales':
-				$idproveedor = $_REQUEST["idproveedor"];
-
-				$rspta = $consulta->listartodascompras($idproveedor);
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_compra;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
-				break;
-
 			case 'listartodascomprasproveedores':
 
 				$rspta = $consulta->listartodascomprasproveedores();
 				$data = array();
+
+				$firstIteration = true;
+				$totalPrecioCompra = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -1869,12 +4875,31 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => ($reg->metodo_pago == '') ? 'Sin registrar.' : $reg->metodo_pago,
 						"4" => $reg->tipo_comprobante,
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
-						"6" => "<nav>S/. $reg->total_compra</nav>",
+						"6" => $reg->total_compra,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
 						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
 							'<span class="label bg-red">Anulado</span>'
 					);
+
+					$totalPrecioCompra += $reg->total_compra;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
+
+				if (!$firstIteration) {
+					$data[] = array_fill(0, 10, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioCompra, 2) . '</strong>',
+						"7" => "",
+						"8" => "",
+					);
+				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -1883,17 +4908,6 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
-				break;
-
-			case 'listartodascomprasproveedorestotales':
-
-				$rspta = $consulta->listartodascomprasproveedores();
-				$total = 0;
-
-				while ($reg = $rspta->fetch_object()) {
-					$total = $total + $reg->total_compra;
-				}
-				echo 'S/.' . number_format($total, 2, '.', '');
 				break;
 		}
 		//Fin de las validaciones de acceso

@@ -11,6 +11,11 @@ if (!isset($_SESSION["nombre"])) {
 
   if ($_SESSION['cuotas'] == 1) {
 ?>
+    <style>
+      td {
+        height: 30.84px !important;
+      }
+    </style>
     <!--Contenido-->
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -25,7 +30,7 @@ if (!isset($_SESSION["nombre"])) {
                   <button class="btn btn-secondary" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button>
-                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado" || $_SESSION["cargo"] == "vendedor") { ?>
                     <a href="../reportes/rptcuotas.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte
@@ -71,8 +76,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Método de pago</th>
                       <th>Documento</th>
                       <th>Número Doc.</th>
-                      <th>M. de Compra</th>
-                      <th>M. pagado</th>
+                      <th>M. de Compra (S/.)</th>
+                      <th>M. pagado (S/.)</th>
                       <th>Estado</th>
                       <th>Detalles</th>
                     </thead>
@@ -90,8 +95,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Método de pago</th>
                       <th>Documento</th>
                       <th>Número Doc.</th>
-                      <th>M. de Compra</th>
-                      <th>M. pagado</th>
+                      <th>M. de Compra (S/.)</th>
+                      <th>M. pagado (S/.)</th>
                       <th>Estado</th>
                       <th>Detalles</th>
                     </tfoot>
@@ -126,7 +131,7 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Tipo Comprobante(*):</label>
                     <select name="tipo_comprobante" id="tipo_comprobante" class="form-control selectpicker" required>
-                      <option value="Nota de venta">Nota de venta</option>
+                      <option value="Nota de venta a crédito">Nota de venta a crédito</option>
                       <option value="Factura">Factura</option>
                       <option value="Ticket">Ticket</option>
                     </select>
@@ -245,7 +250,6 @@ if (!isset($_SESSION["nombre"])) {
                 <th>STOCK MÍNIMO</th>
                 <th>PRECIO DE COMPRA</th>
                 <th>PRECIO DE VENTA</th>
-                <th>GANANCIA</th>
                 <th>AGREGADO POR</th>
                 <th>ESTADO</th>
               </thead>
@@ -269,7 +273,6 @@ if (!isset($_SESSION["nombre"])) {
                 <th>STOCK MÍNIMO</th>
                 <th>PRECIO DE COMPRA</th>
                 <th>PRECIO DE VENTA</th>
-                <th>GANANCIA</th>
                 <th>AGREGADO POR</th>
                 <th>ESTADO</th>
               </tfoot>

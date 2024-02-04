@@ -56,7 +56,11 @@ function guardaryeditar(e) {
 		contentType: false,
 		processData: false,
 		success: function (datas) {
-			if (datas == "El nombre que ha ingresado ya existe." || datas == "El número de documento que ha ingresado ya existe." || datas == "El email que ha ingresado ya existe." || datas == "El nombre del usuario que ha ingresado ya existe.") {
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardar").prop("disabled", false);
+				return;
+			} else if (datas == "El nombre que ha ingresado ya existe." || datas == "El número de documento que ha ingresado ya existe." || datas == "El email que ha ingresado ya existe." || datas == "El nombre del usuario que ha ingresado ya existe.") {
 				bootbox.alert(datas);
 				$("#btnGuardar").prop("disabled", false);
 				return;

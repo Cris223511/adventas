@@ -232,11 +232,12 @@ function guardaryeditar(e) {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
+			} else {
+				limpiar();
+				bootbox.alert(datos);
+				mostrarform(false);
+				tabla.ajax.reload();
 			}
-			limpiar();
-			bootbox.alert(datos);
-			mostrarform(false);
-			tabla.ajax.reload();
 		}
 	});
 }

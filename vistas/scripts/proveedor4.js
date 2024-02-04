@@ -86,10 +86,16 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
-			$("#btnGuardar").prop("disabled", false);
-			bootbox.alert(datos);
-			limpiar();
-			tabla.ajax.reload();
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardar").prop("disabled", false);
+				return;
+			} else {
+				$("#btnGuardar").prop("disabled", false);
+				bootbox.alert(datos);
+				limpiar();
+				tabla.ajax.reload();
+			}
 		}
 	});
 }

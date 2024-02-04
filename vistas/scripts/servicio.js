@@ -15,7 +15,6 @@ function init() {
 		console.log(obj);
 
 		const selects = {
-			"idcategoria": $("#idcategoria"),
 			"idalmacen": $("#idalmacen"),
 		};
 
@@ -29,9 +28,9 @@ function init() {
 					select.html('<option value="">- Seleccione -</option>');
 					obj[atributo].forEach(function (opcion) {
 						if (atributo != "almacen") {
-							select.append('<option value="' + opcion.id + '">' + opcion.nombre + '</option>');
+							select.append('<option value="' + opcion.id + '">' + opcion.ubicacion + '</option>');
 						} else {
-							select.append('<option value="' + opcion.id + '" data-local-ruc="' + opcion.ruc + '">' + opcion.nombre + '</option>');
+							select.append('<option value="' + opcion.id + '" data-local-ruc="' + opcion.ruc + '">' + opcion.ubicacion + '</option>');
 						}
 					});
 					select.selectpicker('refresh');
@@ -74,8 +73,6 @@ function limpiar() {
 	$("#imagen").val("");
 	$("#idservicio").val("");
 
-	$("#idcategoria").val($("#idcategoria option:first").val());
-	$("#idcategoria").selectpicker('refresh');
 	$("#idalmacen").val($("#idalmacen option:first").val());
 	$("#idalmacen").selectpicker('refresh');
 	actualizarRUC();
@@ -156,15 +153,20 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El código del servicio que ha ingresado ya existe.") {
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardar").prop("disabled", false);
+				return;
+			} else if (datos == "El código del servicio que ha ingresado ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
+			} else {
+				limpiar();
+				bootbox.alert(datos);
+				mostrarform(false);
+				tabla.ajax.reload();
 			}
-			limpiar();
-			bootbox.alert(datos);
-			mostrarform(false);
-			tabla.ajax.reload();
 		}
 	});
 }
@@ -176,8 +178,6 @@ function mostrar(idservicio) {
 
 		console.log(data);
 
-		$("#idcategoria").val(data.idcategoria);
-		$('#idcategoria').selectpicker('refresh');
 		$("#idalmacen").val(data.idalmacen);
 		$('#idalmacen').selectpicker('refresh');
 		$("#codigo_producto").val(data.codigo_producto);
@@ -235,7 +235,7 @@ function eliminar(idservicio) {
 }
 
 function resetear() {
-	const selects = ["idcategoriaBuscar", "estadoBuscar", "fecha_inicio", "fecha_fin"];
+	const selects = ["estadoBuscar", "fecha_inicio", "fecha_fin"];
 
 	for (const selectId of selects) {
 		$("#" + selectId).val("");

@@ -28,6 +28,10 @@ if (!isset($_SESSION["nombre"])) {
           width: 190px !important;
         }
       }
+
+      td {
+        height: 30.84px !important;
+      }
     </style>
 
     <div class="content-wrapper">
@@ -62,7 +66,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Método de pago</th>
                     <th>Documento</th>
                     <th>Número Doc.</th>
-                    <th>Total Venta</th>
+                    <th>Total Venta (S/.)</th>
                     <th>Agregado por</th>
                     <th>Fecha y hora</th>
                     <th>Estado</th>
@@ -76,7 +80,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Método de pago</th>
                     <th>Documento</th>
                     <th>Número Doc.</th>
-                    <th>Total Venta</th>
+                    <th>Total Venta (S/.)</th>
                     <th>Agregado por</th>
                     <th>Fecha y hora</th>
                     <th>Estado</th>
@@ -230,7 +234,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Tipo Comp(*):</label>
                 <select name="tipo_comprobante" id="tipo_comprobante" class="form-control selectpicker" required>
-                  <option value="Nota de venta">Nota de venta</option>
+                  <option value="Nota de venta al contado">Nota de venta al contado</option>
                   <option value="Factura">Factura</option>
                   <option value="Ticket">Ticket</option>
                 </select>

@@ -76,7 +76,6 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Opciones</th>
                     <th>Imagen</th>
                     <th>Nombre</th>
-                    <th>Categoría</th>
                     <th>Ubicación del local</th>
                     <th>C. servicio</th>
                     <th>Precio de venta</th>
@@ -89,7 +88,6 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Opciones</th>
                     <th>Imagen</th>
                     <th>Nombre</th>
-                    <th>Categoría</th>
                     <th>Ubicación del local</th>
                     <th>C. servicio</th>
                     <th>Precio de venta</th>
@@ -124,10 +122,6 @@ if (!isset($_SESSION["nombre"])) {
                       <label style="width: 100px;">RUC local(*):</label>
                       <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Categoría(*):</label>
-                      <select id="idcategoria" name="idcategoria" class="form-control selectpicker" data-live-search="true" required></select>
-                    </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                         <label style="width: 100px;">Código del servicio(*):</label>
@@ -138,7 +132,7 @@ if (!isset($_SESSION["nombre"])) {
                       <label style="width: 100px;">Precio(*):</label>
                       <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio." required>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                    <div class="form-group col-lg-12 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label class="label_input" style="width: 90px;">Imagen:</label>
                       <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">
                       <input type="hidden" name="imagenactual" id="imagenactual">
