@@ -200,8 +200,7 @@ if (!isset($_SESSION["nombre"])) {
 				// 		"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 				// 		"6" => $reg->total_venta,
 				// 		"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
-				// 		"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
-				// 			'<span class="label bg-red">Anulado</span>'
+				// 		"8" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 				// 	);
 
 				// 	$totalPrecioVenta3 += $reg->total_venta;
@@ -455,8 +454,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
-						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
-							'<span class="label bg-red">Anulado</span>'
+						"8" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 					);
 
 					$totalPrecioVenta3 += $reg->total_venta;
@@ -709,8 +707,7 @@ if (!isset($_SESSION["nombre"])) {
 				// 		"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 				// 		"6" => $reg->total_venta,
 				// 		"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
-				// 		"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
-				// 			'<span class="label bg-red">Anulado</span>'
+				// 		"8" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 				// 	);
 
 				// 	$totalPrecioVenta3 += $reg->total_venta;
@@ -961,8 +958,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
-						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
-							'<span class="label bg-red">Anulado</span>'
+						"8" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 					);
 
 					$totalPrecioVenta3 += $reg->total_venta;
@@ -1219,8 +1215,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
-						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
-							'<span class="label bg-red">Anulado</span>'
+						"8" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 					);
 
 					$totalPrecioVenta3 += $reg->total_venta;
@@ -1474,8 +1469,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
-						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
-							'<span class="label bg-red">Anulado</span>'
+						"8" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 					);
 
 					$totalPrecioVenta3 += $reg->total_venta;
@@ -1728,8 +1722,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
-						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
-							'<span class="label bg-red">Anulado</span>'
+						"8" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 					);
 
 					$totalPrecioVenta3 += $reg->total_venta;
@@ -1980,8 +1973,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
 						"6" => $reg->total_venta,
 						"7" => ($reg->impuesto == '18.00') ? 'S/. 0.18' : 'S/. 0.00',
-						"8" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
-							'<span class="label bg-red">Anulado</span>'
+						"8" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 					);
 
 					$totalPrecioVenta3 += $reg->total_venta;

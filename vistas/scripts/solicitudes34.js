@@ -47,17 +47,18 @@ function init() {
 // }
 
 function generarSiguienteCorrelativo(numeros) {
-    numeros = numeros.trim() === "" ? "0000" : numeros;
+	numeros = numeros.trim() === "" ? "0000" : numeros;
 
-    // Convertir a cadena si es un número
-    if (!isNaN(numeros)) {
-        numeros = String(numeros);
-    }
+	let siguienteNumero = parseInt(numeros, 10) + 1;
+	let longitudOriginal = numeros.length;
+	let resultadoFormateado = siguienteNumero.toString();
+	let cerosAgregados = longitudOriginal - resultadoFormateado.length;
 
-    const siguienteNumero = parseInt(numeros, 10) + 1;
-    const longitud = numeros.length;
-    const siguienteCorrelativo = String(siguienteNumero).padStart(longitud, '0');
-    return siguienteCorrelativo;
+	for (let i = 0; i < cerosAgregados; i++) {
+		resultadoFormateado = "0" + resultadoFormateado;
+	}
+
+	return resultadoFormateado;
 }
 
 //Función limpiar

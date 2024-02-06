@@ -133,17 +133,24 @@ function actualizarPersonales(idalmacen) {
 // }
 
 function generarSiguienteCorrelativo(numeros) {
-    numeros = numeros.trim() === "" ? "0000" : numeros;
+	$("#num_proforma").val("");
 
-    // Convertir a cadena si es un número
-    if (!isNaN(numeros)) {
-        numeros = String(numeros);
-    }
+	console.log("verifico =) => ",numeros);
+	numeros = numeros.trim() === "" ? "0000" : numeros;
+	console.log("este es el numero a rellenar =) => ",numeros);
 
-    const siguienteNumero = parseInt(numeros, 10) + 1;
-    const longitud = numeros.length;
-    const siguienteCorrelativo = String(siguienteNumero).padStart(longitud, '0');
-    return siguienteCorrelativo;
+	let siguienteNumero = parseInt(numeros, 10) + 1;
+	let longitudOriginal = numeros.length;
+	let resultadoFormateado = siguienteNumero.toString();
+	let cerosAgregados = longitudOriginal - resultadoFormateado.length;
+
+	for (let i = 0; i < cerosAgregados; i++) {
+		resultadoFormateado = "0" + resultadoFormateado;
+	}
+
+	console.log("este es el numero a setear =) => ",resultadoFormateado);
+
+	return resultadoFormateado;
 }
 
 

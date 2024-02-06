@@ -113,7 +113,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Tipo Comp(*):</label>
                 <select name="tipo_comprobante" id="tipo_comprobante2" class="form-control selectpicker" disabled>
-                  <option value="Boleta">Boleta</option>
+                  <option value="Nota de venta al contado">Nota de venta al contado</option>
                   <option value="Factura">Factura</option>
                   <option value="Ticket">Ticket</option>
                 </select>
