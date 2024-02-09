@@ -58,7 +58,7 @@ function listar() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],
+			"lengthMenu": [15, 25, 50, 100],
 			"aProcessing": true,
 			"aServerSide": true,
 			dom: '<Bl<f>rtip>',
@@ -88,7 +88,7 @@ function listar() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,
+			"iDisplayLength": 15,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
@@ -110,7 +110,7 @@ function listar() {
 
 // 	tabla = $('#tbllistado').dataTable(
 // 		{
-// 			"lengthMenu": [5, 10, 25, 75, 100],
+// 			"lengthMenu": [15, 25, 50, 100],
 // 			"aProcessing": true,
 // 			"aServerSide": true,
 // 			dom: '<Bl<f>rtip>',
@@ -140,7 +140,7 @@ function listar() {
 // 				}
 // 			},
 // 			"bDestroy": true,
-// 			"iDisplayLength": 5,
+// 			"iDisplayLength": 15,
 // 			"order": [],
 // 			"createdRow": function (row, data, dataIndex) {
 // 				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');

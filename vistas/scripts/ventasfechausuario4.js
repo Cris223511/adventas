@@ -36,7 +36,7 @@ function listarventasusuario() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -67,7 +67,7 @@ function listarventasusuario() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 10,//Paginación
+			"iDisplayLength": 15,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 }
@@ -79,7 +79,7 @@ function listartodasventasusuariofecha() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -110,7 +110,7 @@ function listartodasventasusuariofecha() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 10,//Paginación
+			"iDisplayLength": 15,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 }
@@ -121,7 +121,7 @@ function listartodasventasusuario() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -152,7 +152,7 @@ function listartodasventasusuario() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 10,//Paginación
+			"iDisplayLength": 15,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 }
@@ -162,7 +162,7 @@ function listartodasventasusuariousuarios() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -193,7 +193,7 @@ function listartodasventasusuariousuarios() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 10,//Paginación
+			"iDisplayLength": 15,//Paginación
 			"order": []//Ordenar (columna,orden)
 		}).DataTable();
 }

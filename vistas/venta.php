@@ -147,7 +147,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-4 col-md-4 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label class="label_numero" style="width: 80px;">Número(*):</label>
-                <input type="text" class="form-control" name="num_comprobante" id="num_comprobante" oninput="onlyNumbersAndMaxLenght(this)" maxlength="10" placeholder="Número" required />
+                <input type="text" class="form-control" name="num_comprobante" id="num_comprobante" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumero(this)" maxlength="10" placeholder="Número" required />
               </div>
               <div class="form-group col-lg-4 col-md-4 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label class="label_impuesto" style="width: 80px;">Impuesto:</label>

@@ -32,9 +32,8 @@ if (!isset($_SESSION["nombre"])) {
 					$uploadDirectory = "../files/servicios/";
 
 					$tempFile = $_FILES['imagen']['tmp_name'];
-					$fileName = pathinfo($_FILES['imagen']['name'], PATHINFO_FILENAME);
 					$fileExtension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
-					$newFileName = $fileName . '_' . round(microtime(true)) . '.' . $fileExtension;
+					$newFileName = sprintf("%09d", rand(0, 999999999)) . '.' . $fileExtension;
 					$targetFile = $uploadDirectory . $newFileName;
 
 					// Verificar si es una imagen y mover el archivo
@@ -93,11 +92,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'listar':
-				if ($cargo == "superadmin") {
-					$rspta = $servicio->listar();
-				} else {
-					$rspta = $servicio->listarPorUsuario($idalmacenSession);
-				}
+				$rspta = $servicio->listar($idalmacenSession);
 
 				$data = array();
 

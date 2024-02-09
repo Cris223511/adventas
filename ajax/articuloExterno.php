@@ -8,9 +8,9 @@ if (!isset($_SESSION["nombre"])) {
 } else {
 	//Validamos el acceso solo al usuario logueado y autorizado.
 	if ($_SESSION['almacen'] == 1 && $_SESSION["cargo"] == "superadmin") {
-		require_once "../modelos/Articulo.php";
+		require_once "../modelos/ArticuloExterno.php";
 
-		$articulo = new Articulo();
+		$articulo = new ArticuloExterno();
 
 		$idusuario = $_SESSION["idusuario"];
 		$idalmacenSession = $_SESSION["idalmacen"];
@@ -42,13 +42,12 @@ if (!isset($_SESSION["nombre"])) {
 
 				if (!empty($_FILES['imagen']['name'])) {
 					$uploadDirectory = "../files/articulos/";
-
+				
 					$tempFile = $_FILES['imagen']['tmp_name'];
-					$fileName = pathinfo($_FILES['imagen']['name'], PATHINFO_FILENAME);
 					$fileExtension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
-					$newFileName = $fileName . '_' . round(microtime(true)) . '.' . $fileExtension;
+					$newFileName = sprintf("%09d", rand(0, 999999999)) . '.' . $fileExtension;
 					$targetFile = $uploadDirectory . $newFileName;
-
+				
 					// Verificar si es una imagen y mover el archivo
 					$allowedExtensions = array('jpg', 'jpeg', 'png');
 					if (in_array($fileExtension, $allowedExtensions) && move_uploaded_file($tempFile, $targetFile)) {
@@ -108,7 +107,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'listar':
-				$rspta = $articulo->listar();
+				$rspta = $articulo->listar($idalmacenSession);
 
 				$data = array();
 

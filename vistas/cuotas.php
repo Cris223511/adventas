@@ -142,7 +142,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-2 col-md-2 col-sm-2 col-xs-12">
                     <label>Número(*):</label>
-                    <input type="text" class="form-control" name="num_comprobante" id="num_comprobante" maxlength="11" placeholder="Número" oninput="onlyNumbers(this)" required />
+                    <input type="text" class="form-control" name="num_comprobante" id="num_comprobante" maxlength="11" placeholder="Número" oninput="onlyNumbers(this)" onblur="formatearNumero(this)" required />
                   </div>
                   <div class="form-group col-lg-2 col-md-2 col-sm-6 col-xs-12">
                     <label>Impuesto(*):</label>

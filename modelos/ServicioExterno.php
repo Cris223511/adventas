@@ -80,9 +80,9 @@ class ServicioExterno
 	}
 
 	//Implementar un método para listar los registros
-	public function listar()
+	public function listar($idalmacenSession)
 	{
-		$sql = "SELECT a.idservicio,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,al.ubicacion as almacen,a.codigo_producto,a.nombre,a.precio_venta,a.descripcion,a.imagen,a.estado FROM servicio a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen WHERE a.eliminado = '0' ORDER BY a.idservicio DESC";
+		$sql = "SELECT a.idservicio,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,al.ubicacion as almacen,a.codigo_producto,a.nombre,a.precio_venta,a.descripcion,a.imagen,a.estado FROM servicio a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen WHERE a.eliminado = '0' AND a.idalmacen <> '$idalmacenSession' ORDER BY a.idservicio DESC";
 		return ejecutarConsulta($sql);
 	}
 

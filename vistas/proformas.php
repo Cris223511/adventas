@@ -134,7 +134,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-4 col-md-4 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Proforma(*):</label>
-                <input type="text" class="form-control" name="num_proforma" id="num_proforma2" oninput="onlyNumbersAndMaxLenght(this)" maxlength="10" placeholder="proforma" readonly>
+                <input type="text" class="form-control" name="num_proforma" id="num_proforma2" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumero(this)" maxlength="10" placeholder="proforma" readonly>
               </div>
               <div class="form-group col-lg-4 col-md-4 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Impuesto:</label>
@@ -245,7 +245,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-4 col-md-4 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Proforma(*):</label>
-                <input type="text" class="form-control" name="num_proforma" id="num_proforma" oninput="onlyNumbersAndMaxLenght(this)" maxlength="10" placeholder="proforma">
+                <input type="text" class="form-control" name="num_proforma" id="num_proforma" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumero(this)" maxlength="10" placeholder="proforma">
               </div>
               <div class="form-group col-lg-4 col-md-4 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label class="label_impuesto" style="width: 80px;">Impuesto:</label>

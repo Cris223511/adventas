@@ -237,6 +237,32 @@
       aplicarRestrictATodosLosInputs();
     </script>
 
+    <script>
+      function generarSiguienteCorrelativo(numero) {
+        console.log("número recibido por el servidor =): ", numero);
+        let num = parseInt(numero, 10);
+        console.log("número a incrementar =): ", num);
+        num++;
+        let siguienteCorrelativo = num < 10000 ? num.toString().padStart(4, '0') : num.toString();
+        console.log("número a incrementado a setear =): ", siguienteCorrelativo);
+        return siguienteCorrelativo;
+      }
+
+      function formatearNumero() {
+        var campos = ["#num_comprobante", "#num_proforma", "#codigo_pedido"];
+
+        campos.forEach(function(campo) {
+          let numValor = $(campo).val();
+          if (typeof numValor !== 'undefined') {
+            numValor = numValor.trim();
+            let num = parseInt(numValor, 10);
+            let numFormateado = num < 10000 ? num.toString().padStart(4, '0') : num.toString();
+            $(campo).val(numFormateado);
+          }
+        });
+      }
+    </script>
+
     <?php
     if ($_SESSION["cargo"] == "almacenero") {
       echo '<script>

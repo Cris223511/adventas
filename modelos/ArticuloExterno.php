@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-class Articulo
+class ArticuloExterno
 {
 	//Implementamos nuestro constructor
 	public function __construct()
@@ -117,9 +117,9 @@ class Articulo
 	}
 
 	//Implementar un método para listar los registros
-	public function listar()
+	public function listar($idalmacenSession)
 	{
-		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,al.ubicacion as almacen,m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,al.ubicacion as almacen,m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' AND a.idalmacen <> '$idalmacenSession' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 

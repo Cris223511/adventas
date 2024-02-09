@@ -40,7 +40,7 @@ async function cargarDatos(op) {
 
 function pintarTabla(tableId, tabIndex) {
 	$(`#${tableId}`).dataTable({
-		"lengthMenu": [5, 10, 25, 75, 100],
+		"lengthMenu": [15, 25, 50, 100],
 		"aProcessing": true,
 		"aServerSide": true,
 		dom: '<Bl<f>rtip>',
@@ -61,7 +61,7 @@ function pintarTabla(tableId, tabIndex) {
 			}
 		},
 		"bDestroy": true,
-		"iDisplayLength": 5,
+		"iDisplayLength": 15,
 		"order": [],
 		"data": tablas[tabIndex]?.aaData || []
 	});

@@ -2556,7 +2556,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta = null;
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalCantidad = 0;
 				$totalSubtotal = 0;
 				$hayDatos = true;
 
@@ -2626,7 +2626,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta += $reg->precio_venta;
+					$totalCantidad += $reg->cantidad;
 					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -2635,7 +2635,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta2 = null;
 				$firstIteration = true;
-				$totalPrecioVenta2 = 0;
+				$totalCantidad2 = 0;
 				$totalSubtotal2 = 0;
 
 				if (!empty($data)) {
@@ -2702,7 +2702,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalCantidad2 += $reg->cantidad;
 					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -2711,7 +2711,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				// $lastIdVenta3 = null;
 				// $firstIteration = true;
-				// $totalPrecioVenta3 = 0;
+				// $totalCantidad3 = 0;
 				// $totalSubtotal3 = 0;
 
 				// if (!empty($data)) {
@@ -2777,7 +2777,7 @@ if (!isset($_SESSION["nombre"])) {
 				// 		"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 				// 	);
 
-				// 	$totalPrecioVenta3 += $reg->precio_venta;
+				// 	$totalCantidad3 += $reg->cantidad;
 				// 	$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
 
 				// 	$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -2793,9 +2793,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"7" => '<strong>' . ($totalCantidad) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
 						"10" => "",
 					);
@@ -2807,9 +2807,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"7" => '<strong>' . ($totalCantidad2) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
 						"10" => "",
 					);
@@ -2821,9 +2821,9 @@ if (!isset($_SESSION["nombre"])) {
 					// 	"3" => "",
 					// 	"4" => "",
 					// 	"5" => "",
-					// 	"6" => "",
-					// 	"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
-					// 	"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+					// 	"6" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+					// 	"7" => '<strong>' . ($totalCantidad3) . '</strong>',
+					// 	"8" => "",
 					// 	"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
 					// 	"10" => "",
 					// );
@@ -2835,9 +2835,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
 						"7" => "<strong>TOTAL</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2, 2) . '</strong>',
+						"6" => '<strong>' . ($totalCantidad + $totalCantidad2) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2, 2) . '</strong>',
 						"10" => "",
 					);
@@ -2865,7 +2865,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta = null;
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalCantidad = 0;
 				$totalSubtotal = 0;
 				$hayDatos = true;
 
@@ -2935,7 +2935,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta += $reg->precio_venta;
+					$totalCantidad += $reg->cantidad;
 					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -2944,7 +2944,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta2 = null;
 				$firstIteration = true;
-				$totalPrecioVenta2 = 0;
+				$totalCantidad2 = 0;
 				$totalSubtotal2 = 0;
 
 				if (!empty($data)) {
@@ -3011,7 +3011,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalCantidad2 += $reg->cantidad;
 					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -3020,7 +3020,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta3 = null;
 				$firstIteration = true;
-				$totalPrecioVenta3 = 0;
+				$totalCantidad3 = 0;
 				$totalSubtotal3 = 0;
 
 				if (!empty($data)) {
@@ -3086,7 +3086,7 @@ if (!isset($_SESSION["nombre"])) {
 						"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 					);
 
-					$totalPrecioVenta3 += $reg->precio_venta;
+					$totalCantidad3 += $reg->cantidad;
 					$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -3102,9 +3102,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"7" => '<strong>' . ($totalCantidad) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3116,9 +3116,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"7" => '<strong>' . ($totalCantidad2) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3130,9 +3130,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"7" => '<strong>' . ($totalCantidad3) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3144,9 +3144,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . ($totalCantidad + $totalCantidad2 + $totalCantidad3) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2 + $totalSubtotal3, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3173,7 +3173,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta = null;
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalCantidad = 0;
 				$totalSubtotal = 0;
 				$hayDatos = true;
 
@@ -3243,7 +3243,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta += $reg->precio_venta;
+					$totalCantidad += $reg->cantidad;
 					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -3252,7 +3252,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta2 = null;
 				$firstIteration = true;
-				$totalPrecioVenta2 = 0;
+				$totalCantidad2 = 0;
 				$totalSubtotal2 = 0;
 
 				if (!empty($data)) {
@@ -3319,7 +3319,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalCantidad2 += $reg->cantidad;
 					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -3328,7 +3328,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				// $lastIdVenta3 = null;
 				// $firstIteration = true;
-				// $totalPrecioVenta3 = 0;
+				$totalCantidad3 = 0;
 				// $totalSubtotal3 = 0;
 
 				// if (!empty($data)) {
@@ -3394,7 +3394,7 @@ if (!isset($_SESSION["nombre"])) {
 				// 		"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 				// 	);
 
-				// 	$totalPrecioVenta3 += $reg->precio_venta;
+				// 	$totalCantidad3 += $reg->cantidad;
 				// 	$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
 
 				// 	$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -3410,9 +3410,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"7" => '<strong>' . ($totalCantidad) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3424,9 +3424,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"7" => '<strong>' . ($totalCantidad2) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3438,10 +3438,9 @@ if (!isset($_SESSION["nombre"])) {
 					// 	"3" => "",
 					// 	"4" => "",
 					// 	"5" => "",
-					// 	"6" => "",
-					// 	"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
-					// 	"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
-					// 	"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
+					// 	"6" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+					// 	"7" => '<strong>' . ($totalCantidad3) . '</strong>',
+					// 	"8" => ""				// 	"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
 					// 	"10" => "",
 					// );
 
@@ -3452,9 +3451,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2, 2) . '</strong>',
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . ($totalCantidad + $totalCantidad2) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3479,7 +3478,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta = null;
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalCantidad = 0;
 				$totalSubtotal = 0;
 				$hayDatos = true;
 
@@ -3549,7 +3548,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta += $reg->precio_venta;
+					$totalCantidad += $reg->cantidad;
 					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -3558,7 +3557,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta2 = null;
 				$firstIteration = true;
-				$totalPrecioVenta2 = 0;
+				$totalCantidad2 = 0;
 				$totalSubtotal2 = 0;
 
 				if (!empty($data)) {
@@ -3625,7 +3624,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalCantidad2 += $reg->cantidad;
 					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -3634,7 +3633,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta3 = null;
 				$firstIteration = true;
-				$totalPrecioVenta3 = 0;
+				$totalCantidad3 = 0;
 				$totalSubtotal3 = 0;
 
 				if (!empty($data)) {
@@ -3700,7 +3699,7 @@ if (!isset($_SESSION["nombre"])) {
 						"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 					);
 
-					$totalPrecioVenta3 += $reg->precio_venta;
+					$totalCantidad3 += $reg->cantidad;
 					$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -3716,9 +3715,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"7" => '<strong>' . ($totalCantidad) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3730,9 +3729,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"7" => '<strong>' . ($totalCantidad2) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3744,9 +3743,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"7" => '<strong>' . ($totalCantidad3) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3758,9 +3757,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . ($totalCantidad + $totalCantidad2 + $totalCantidad3) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2 + $totalSubtotal3, 2) . '</strong>',
 						"10" => "",
 					);
@@ -3790,7 +3789,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta = null;
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalCantidad = 0;
 				$totalSubtotal = 0;
 				$hayDatos = true;
 
@@ -3860,7 +3859,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta += $reg->precio_venta;
+					$totalCantidad += $reg->cantidad;
 					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -3869,7 +3868,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta2 = null;
 				$firstIteration = true;
-				$totalPrecioVenta2 = 0;
+				$totalCantidad2 = 0;
 				$totalSubtotal2 = 0;
 
 				if (!empty($data)) {
@@ -3936,7 +3935,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalCantidad2 += $reg->cantidad;
 					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -3945,7 +3944,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta3 = null;
 				$firstIteration = true;
-				$totalPrecioVenta3 = 0;
+				$totalCantidad3 = 0;
 				$totalSubtotal3 = 0;
 
 				if (!empty($data)) {
@@ -4011,7 +4010,7 @@ if (!isset($_SESSION["nombre"])) {
 						"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 					);
 
-					$totalPrecioVenta3 += $reg->precio_venta;
+					$totalCantidad3 += $reg->cantidad;
 					$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -4027,9 +4026,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"7" => '<strong>' . ($totalCantidad) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
 						"10" => "",
 					);
@@ -4041,9 +4040,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"7" => '<strong>' . ($totalCantidad2) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
 						"10" => "",
 					);
@@ -4055,9 +4054,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"7" => '<strong>' . ($totalCantidad3) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
 						"10" => "",
 					);
@@ -4069,9 +4068,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . ($totalCantidad + $totalCantidad2 + $totalCantidad3) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2 + $totalSubtotal3, 2) . '</strong>',
 						"10" => "",
 					);
@@ -4098,7 +4097,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta = null;
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalCantidad = 0;
 				$totalSubtotal = 0;
 				$hayDatos = true;
 
@@ -4168,7 +4167,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta += $reg->precio_venta;
+					$totalCantidad += $reg->cantidad;
 					$totalSubtotal += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -4177,7 +4176,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta2 = null;
 				$firstIteration = true;
-				$totalPrecioVenta2 = 0;
+				$totalCantidad2 = 0;
 				$totalSubtotal2 = 0;
 
 				if (!empty($data)) {
@@ -4244,7 +4243,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>'
 					);
 
-					$totalPrecioVenta2 += $reg->precio_venta;
+					$totalCantidad2 += $reg->cantidad;
 					$totalSubtotal2 += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -4253,7 +4252,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta3 = null;
 				$firstIteration = true;
-				$totalPrecioVenta3 = 0;
+				$totalCantidad3 = 0;
 				$totalSubtotal3 = 0;
 
 				if (!empty($data)) {
@@ -4319,7 +4318,7 @@ if (!isset($_SESSION["nombre"])) {
 						"10" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
 					);
 
-					$totalPrecioVenta3 += $reg->precio_venta;
+					$totalCantidad3 += $reg->cantidad;
 					$totalSubtotal3 += ($reg->precio_venta * $reg->cantidad);
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -4335,9 +4334,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA AL CONTADO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA AL CONTADO</strong>",
+						"7" => '<strong>' . ($totalCantidad) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
 						"10" => "",
 					);
@@ -4349,9 +4348,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta2, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA DE SERVICIO</strong>",
+						"7" => '<strong>' . ($totalCantidad2) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal2, 2) . '</strong>',
 						"10" => "",
 					);
@@ -4363,9 +4362,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta3, 2) . '</strong>',
+						"6" => "<strong>TOTAL VENTA A CRÉDITO</strong>",
+						"7" => '<strong>' . ($totalCantidad3) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal3, 2) . '</strong>',
 						"10" => "",
 					);
@@ -4377,9 +4376,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "",
-						"7" => "<strong>TOTAL</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2 + $totalPrecioVenta3, 2) . '</strong>',
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . ($totalCantidad + $totalCantidad2 + $totalCantidad3) . '</strong>',
+						"8" => "",
 						"9" => '<strong>' . number_format($totalSubtotal + $totalSubtotal2 + $totalSubtotal3, 2) . '</strong>',
 						"10" => "",
 					);

@@ -38,18 +38,14 @@ if (!isset($_SESSION["nombre"])) {
 
     $pdf->Ln(10);
     //Comenzamos a crear las filas de los registros según la consulta mysql
-    require_once "../modelos/Servicio.php";
-    $servicio = new Servicio();
+    require_once "../modelos/ServicioExterno.php";
+    $servicio = new ServicioExterno();
 
     $idusuario = $_SESSION["idusuario"];
     $idalmacenSession = $_SESSION["idalmacen"];
     $cargo = $_SESSION["cargo"];
 
-    if ($cargo == "superadmin") {
-      $rspta = $servicio->listar();
-    } else {
-      $rspta = $servicio->listarPorUsuario($idalmacenSession);
-    }
+    $rspta = $servicio->listar($idalmacenSession);
 
     //Table with rows and columns
     $pdf->SetWidths(array(50, 60, 35, 40));

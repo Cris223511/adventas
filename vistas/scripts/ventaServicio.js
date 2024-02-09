@@ -132,26 +132,6 @@ function actualizarPersonales(idalmacen) {
 // 	return siguienteCorrelativo;
 // }
 
-function generarSiguienteCorrelativo(numeros) {
-	$("#num_proforma").val("");
-
-	console.log("verifico =) => ",numeros);
-	numeros = numeros.trim() === "" ? "0000" : numeros;
-	console.log("este es el numero a rellenar =) => ",numeros);
-
-	let siguienteNumero = parseInt(numeros, 10) + 1;
-	let longitudOriginal = numeros.length;
-	let resultadoFormateado = siguienteNumero.toString();
-	let cerosAgregados = longitudOriginal - resultadoFormateado.length;
-
-	for (let i = 0; i < cerosAgregados; i++) {
-		resultadoFormateado = "0" + resultadoFormateado;
-	}
-
-	console.log("este es el numero a setear =) => ",resultadoFormateado);
-
-	return resultadoFormateado;
-}
 
 
 //Función limpiar
@@ -205,7 +185,7 @@ function listar() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -235,7 +215,7 @@ function listar() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 15,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				$(row).find('td:eq(1)').css({
@@ -259,7 +239,7 @@ function buscar() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],
+			"lengthMenu": [15, 25, 50, 100],
 			"aProcessing": true,
 			"aServerSide": true,
 			dom: '<Bl<f>rtip>',
@@ -289,7 +269,7 @@ function buscar() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,
+			"iDisplayLength": 15,
 			"order": []
 		}).DataTable();
 }
@@ -352,6 +332,7 @@ function guardaryeditar(e) {
 	e.preventDefault(); //No se activará la acción predeterminada del evento
 	//$("#btnGuardar").prop("disabled",true);
 	modificarSubototales();
+	formatearNumero();
 	var formData = new FormData($("#formulario")[0]);
 	$("#btnGuardar").prop("disabled", true);
 	$.ajax({

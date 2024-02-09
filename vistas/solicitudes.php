@@ -205,7 +205,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="row" style="padding-left: 15px; padding-right: 15px;">
                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                   <label style="width: 125px;">Código LCL(*):</label>
-                  <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" oninput="onlyNumbersAndMaxLenght(this)" maxlength="10" onpaste="false" ondrop="false" placeholder="Ingrese el código correlativo LCL." required>
+                  <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumero(this)" maxlength="10" onpaste="false" ondrop="false" placeholder="Ingrese el código correlativo LCL." required>
                 </div>
                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                   <label style="width: 125px;">Teléfono(*):</label>

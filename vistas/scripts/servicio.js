@@ -104,7 +104,7 @@ function cancelarform() {
 function listar() {
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -133,7 +133,7 @@ function listar() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 15,//Paginación
 			"order": []
 		}).DataTable();
 }

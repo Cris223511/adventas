@@ -46,21 +46,6 @@ function init() {
 // 	return siguienteCorrelativo;
 // }
 
-function generarSiguienteCorrelativo(numeros) {
-	numeros = numeros.trim() === "" ? "0000" : numeros;
-
-	let siguienteNumero = parseInt(numeros, 10) + 1;
-	let longitudOriginal = numeros.length;
-	let resultadoFormateado = siguienteNumero.toString();
-	let cerosAgregados = longitudOriginal - resultadoFormateado.length;
-
-	for (let i = 0; i < cerosAgregados; i++) {
-		resultadoFormateado = "0" + resultadoFormateado;
-	}
-
-	return resultadoFormateado;
-}
-
 //Función limpiar
 function limpiar() {
 	$(".despachador").hide();
@@ -125,7 +110,7 @@ function cancelarform() {
 function listar() {
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -154,7 +139,7 @@ function listar() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
+			"iDisplayLength": 15,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				$(row).find('td:eq(1)').css({
@@ -234,6 +219,7 @@ function disableButton(button) {
 //Función para guardar o editar
 function guardaryeditar(e) {
 	e.preventDefault();
+	formatearNumero();
 	var formData = new FormData($("#formulario")[0]);
 	$("#btnGuardar").prop("disabled", true);
 	$.ajax({
@@ -262,6 +248,7 @@ function guardaryeditar(e) {
 
 function guardaryeditar2(e) {
 	e.preventDefault();
+	formatearNumero();
 	var formData = new FormData($("#formulario2")[0]);
 	$("#btnGuardar2").prop("disabled", true);
 	$.ajax({
@@ -285,6 +272,7 @@ function guardaryeditar2(e) {
 
 function guardaryeditar3(e) {
 	e.preventDefault();
+	formatearNumero();
 	var formData = new FormData($("#formulario3")[0]);
 	$("#btnGuardar3").prop("disabled", true);
 	$.ajax({
