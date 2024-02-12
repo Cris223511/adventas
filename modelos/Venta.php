@@ -152,6 +152,18 @@ class Venta
 		return ejecutarConsulta($sql);
 	}
 
+	public function listarDetallePorProductoServicio($idventa_servicio)
+	{
+		$sql = "SELECT dv.idventa_servicio,dv.idservicio,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal,a.idservicio,a.codigo_producto,a.descripcion,a.imagen,v.estado FROM detalle_servicio dv LEFT JOIN venta_servicio v ON v.idventa_servicio=dv.idventa_servicio LEFT JOIN persona p ON v.idcliente=p.idpersona LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN servicio a on dv.idservicio=a.idservicio where dv.idventa_servicio='$idventa_servicio'";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarDetallePorProductoCuota($idcuotas)
+	{
+		$sql = "SELECT dv.idcuotas,dv.idarticulo,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal,a.idarticulo,a.idcategoria,a.codigo,a.codigo_producto,a.stock,a.stock_minimo,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,v.estado FROM detalle_cuotas dv LEFT JOIN cuotas v ON v.idcuotas=dv.idcuotas LEFT JOIN usuario p ON v.idcliente=p.idusuario LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN articulo a on dv.idarticulo=a.idarticulo where dv.idcuotas='$idcuotas'";
+		return ejecutarConsulta($sql);
+	}
+
 	//Implementar un método para listar los registros
 	public function listar()
 	{

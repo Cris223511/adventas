@@ -89,6 +89,7 @@ if (!isset($_SESSION["nombre"])) {
                         <th>Fecha</th>
                         <th>Usuario Vendedor</th>
                         <th>Cliente</th>
+                        <th>Ubicación del local</th>
                         <th>Método de pago</th>
                         <th>Comprobante</th>
                         <th>Número Doc.</th>
@@ -103,6 +104,7 @@ if (!isset($_SESSION["nombre"])) {
                         <th>Fecha</th>
                         <th>Usuario Vendedor</th>
                         <th>Cliente</th>
+                        <th>Ubicación del local</th>
                         <th>Método de pago</th>
                         <th>Comprobante</th>
                         <th>Número Doc.</th>
@@ -126,7 +128,7 @@ if (!isset($_SESSION["nombre"])) {
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title infotitulo">Artículos de la venta: <a data-toggle="popover" data-placement="bottom" title="Total de la venta" data-content="El <strong>Total de la venta</strong> es la suma de todos los <strong>subtotales</strong> y el <strong>impuesto</strong> (el 0% o 18% del subtotal)." data-html="true" style="color: #418bb7; cursor: pointer;"><i class="fa fa-question-circle"></i></a></h4>
+            <h4 class="modal-title infotitulo title">Artículos de la venta al contado: <a data-toggle="popover" data-placement="bottom" title="Total de la venta" data-content="El <strong>Total de la venta</strong> es la suma de todos los <strong>subtotales</strong> y el <strong>impuesto</strong> (el 0% o 18% del subtotal)." data-html="true" style="color: #418bb7; cursor: pointer;"><i class="fa fa-question-circle"></i></a></h4>
           </div>
           <div class="panel-body">
             <form name="formulario" id="formulario" method="POST">
@@ -166,8 +168,8 @@ if (!isset($_SESSION["nombre"])) {
                   </tfoot>
                 </table>
               </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cerrar</button>
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 10px; padding-bottom: 0; margin-bottom: 0px;">
+                <button type="button" class="btn btn-secondary" type="button" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Cerrar</button>
               </div>
             </form>
           </div>
@@ -175,6 +177,60 @@ if (!isset($_SESSION["nombre"])) {
       </div>
     </div>
     <!-- Fin modal 2 -->
+
+    <!-- Modal 3 -->
+    <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title infotitulo">Servicios de la venta de servicios: <a data-toggle="popover" data-placement="bottom" title="Total de la venta" data-content="El <strong>Total de la venta</strong> es la suma de todos los <strong>subtotales</strong> y el <strong>impuesto</strong> (el 0% o 18% del subtotal)." data-html="true" style="color: #418bb7; cursor: pointer;"><i class="fa fa-question-circle"></i></a></h4>
+          </div>
+          <div class="panel-body">
+            <form name="formulario" id="formulario2" method="POST">
+              <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
+                <table id="tbllistado3" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+                  <thead>
+                    <th>Usuario Vendedor</th>
+                    <th>Cliente</th>
+                    <th>Foto</th>
+                    <th>Servicio</th>
+                    <th>Cantidad</th>
+                    <th>Precio venta (S/.)</th>
+                    <th>Descuento (S/.)</th>
+                    <th>Subtotal (S/.)</th>
+                    <th>Método de pago</th>
+                    <th>Comprobante</th>
+                    <th>Número Doc.</th>
+                    <th>Estado venta</th>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                  <tfoot>
+                    <th>Usuario Vendedor</th>
+                    <th>Cliente</th>
+                    <th>Foto</th>
+                    <th>Servicio</th>
+                    <th>Cantidad</th>
+                    <th>Precio venta (S/.)</th>
+                    <th>Descuento (S/.)</th>
+                    <th>Subtotal (S/.)</th>
+                    <th>Método de pago</th>
+                    <th>Comprobante</th>
+                    <th>Número Doc.</th>
+                    <th>Estado venta</th>
+                  </tfoot>
+                </table>
+              </div>
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 10px; padding-bottom: 0; margin-bottom: 0px;">
+                <button type="button" class="btn btn-secondary" type="button" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Cerrar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin modal 3 -->
   <?php
   } else {
     require 'noacceso.php';
@@ -183,6 +239,12 @@ if (!isset($_SESSION["nombre"])) {
   require 'footer.php';
   ?>
   <script type="text/javascript" src="scripts/ventasporproducto.js"></script>
+  <script>
+    function cancelarForm() {
+      $('#myModal2').modal('hide');
+      $('#myModal3').modal('hide');
+    }
+  </script>
 <?php
 }
 ob_end_flush();

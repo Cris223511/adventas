@@ -109,6 +109,7 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listarDetalleproductoventa':
 				$id = $_GET['id'];
 				$rspta = $venta->listarDetallePorProducto($id);
+				$rspta2 = $venta->mostrar($id);
 
 				$igv = 0;
 				$totalVenta = 0;
@@ -159,7 +160,219 @@ if (!isset($_SESSION["nombre"])) {
 							'<span class="label bg-red">Anulado</span>',
 					);
 
-					$igv = $reg->impuesto;
+					$igv = $igv + ($rspta2["impuesto"] == 18 ? $reg->subtotal * 0.18 : $reg->subtotal * 0);
+					$totalVenta = $reg->total_venta;
+				}
+
+				$data[] = array(
+					"0" => "",
+					"1" => "",
+					"2" => "",
+					"3" => "",
+					"4" => "",
+					"5" => "",
+					"6" => "<strong>IGV</strong>",
+					"7" => '<strong>' . number_format($igv, 2) . '</strong>',
+					"8" => "",
+					"9" => "",
+					"10" => "",
+					"11" => "",
+					"12" => "",
+					"13" => "",
+				);
+
+				$data[] = array(
+					"0" => "",
+					"1" => "",
+					"2" => "",
+					"3" => "",
+					"4" => "",
+					"5" => "",
+					"6" => "<strong>TOTAL VENTA</strong>",
+					"7" => '<strong>' . number_format($totalVenta, 2) . '</strong>',
+					"8" => "",
+					"9" => "",
+					"10" => "",
+					"11" => "",
+					"12" => "",
+					"13" => "",
+				);
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+
+				echo json_encode($results);
+
+				break;
+
+			case 'listarDetalleproductoservicio':
+
+				require_once "../modelos/VentaServicio.php";
+				$venta_servicio = new VentaServicio();
+
+				$id = $_GET['id'];
+				$rspta = $venta->listarDetallePorProductoServicio($id);
+				$rspta2 = $venta_servicio->mostrar($id);
+
+				$igv = 0;
+				$totalVenta = 0;
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->usuario . ' - ' . $cargo_detalle,
+						"1" => $reg->cliente,
+						"2" => '<a href="../files/servicios/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+											<img src="../files/servicios/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+										</a>',
+						"3" => $reg->nombre,
+						"4" => $reg->cantidad,
+						"5" => $reg->precio_venta,
+						"6" => $reg->descuento,
+						"7" => $reg->subtotal,
+						"8" => $reg->metodo_pago,
+						"9" => $reg->tipo_comprobante,
+						"10" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"11" => ($reg->estado == 'Aceptado') ? '<span class="label bg-green">Aceptado</span>' :
+							'<span class="label bg-red">Anulado</span>',
+					);
+
+					$igv = $igv + ($rspta2["impuesto"] == 18 ? $reg->subtotal * 0.18 : $reg->subtotal * 0);
+					$totalVenta = $reg->total_venta;
+				}
+
+				$data[] = array(
+					"0" => "",
+					"1" => "",
+					"2" => "",
+					"3" => "",
+					"4" => "",
+					"5" => "",
+					"6" => "<strong>IGV</strong>",
+					"7" => '<strong>' . number_format($igv, 2) . '</strong>',
+					"8" => "",
+					"9" => "",
+					"10" => "",
+					"11" => "",
+					"12" => "",
+					"13" => "",
+				);
+
+				$data[] = array(
+					"0" => "",
+					"1" => "",
+					"2" => "",
+					"3" => "",
+					"4" => "",
+					"5" => "",
+					"6" => "<strong>TOTAL VENTA</strong>",
+					"7" => '<strong>' . number_format($totalVenta, 2) . '</strong>',
+					"8" => "",
+					"9" => "",
+					"10" => "",
+					"11" => "",
+					"12" => "",
+					"13" => "",
+				);
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+
+				echo json_encode($results);
+
+				break;
+
+			case 'listarDetalleproductocuota':
+
+				require_once "../modelos/Cuotas.php";
+				$cuota = new Cuotas();
+
+				$id = $_GET['id'];
+				$rspta = $venta->listarDetallePorProductoCuota($id);
+				$rspta2 = $cuota->mostrar($id);
+
+				$igv = 0;
+				$totalVenta = 0;
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->usuario . ' - ' . $cargo_detalle,
+						"1" => $reg->cliente,
+						"2" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+										<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+									</a>',
+						"3" => $reg->nombre,
+						"4" => $reg->cantidad,
+						"5" => $reg->precio_venta,
+						"6" => $reg->descuento,
+						"7" => $reg->subtotal,
+						"8" => $reg->metodo_pago,
+						"9" => $reg->tipo_comprobante,
+						"10" => $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
+						"11" => $reg->stock,
+						"12" => ($reg->estado == 'Deuda') ? ('<span class="label bg-red">Deuda</span>') : (($reg->estado == 'Pagado') ? ('<span class="label bg-green">Pagado</span>') : (($reg->estado == 'Anulado') ? ('<span class="label bg-red">Anulado</span>') : ''))
+					);
+
+					$igv = $igv + ($rspta2["impuesto"] == 18 ? $reg->subtotal * 0.18 : $reg->subtotal * 0);
 					$totalVenta = $reg->total_venta;
 				}
 

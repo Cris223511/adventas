@@ -36,6 +36,9 @@ function init() {
 }
 
 function mostrar(idventa) {
+	$(".title").text("Artículos de la venta al contado: ");
+	$(".title").text((_, text) => text.toUpperCase());
+
 	tabla2 = $('#tbllistado2').dataTable(
 		{
 			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
@@ -76,8 +79,89 @@ function mostrar(idventa) {
 	});
 }
 
-function cancelarForm() {
-	$('#myModal2').modal('hide');
+function mostrar2(idventa) {
+	tabla2 = $('#tbllistado3').dataTable(
+		{
+			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
+			"aProcessing": true,//Activamos el procesamiento del datatables
+			"aServerSide": true,//Paginación y filtrado realizados por el servidor
+			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+			buttons: [
+				'copyHtml5',
+				'excelHtml5',
+				'csvHtml5',
+			],
+			"ajax":
+			{
+				url: '../ajax/venta.php?op=listarDetalleproductoservicio&id=' + idventa,
+				type: "get",
+				dataType: "json",
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			},
+			"language": {
+				"lengthMenu": "Mostrar : _MENU_ registros",
+				"buttons": {
+					"copyTitle": "Tabla Copiada",
+					"copySuccess": {
+						_: '%d líneas copiadas',
+						1: '1 línea copiada'
+					}
+				}
+			},
+			"bDestroy": true,
+			"iDisplayLength": 15,//Paginación
+			"order": [],
+		}).DataTable();
+
+	tabla2.on('init.dt', function () {
+		$('[data-toggle="popover"]').popover();
+	});
+}
+
+function mostrar3(idventa) {
+	$(".title").text("Artículos de la venta a crédito: ");
+	$(".title").text((_, text) => text.toUpperCase());
+
+	tabla2 = $('#tbllistado2').dataTable(
+		{
+			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
+			"aProcessing": true,//Activamos el procesamiento del datatables
+			"aServerSide": true,//Paginación y filtrado realizados por el servidor
+			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+			buttons: [
+				'copyHtml5',
+				'excelHtml5',
+				'csvHtml5',
+			],
+			"ajax":
+			{
+				url: '../ajax/venta.php?op=listarDetalleproductocuota&id=' + idventa,
+				type: "get",
+				dataType: "json",
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			},
+			"language": {
+				"lengthMenu": "Mostrar : _MENU_ registros",
+				"buttons": {
+					"copyTitle": "Tabla Copiada",
+					"copySuccess": {
+						_: '%d líneas copiadas',
+						1: '1 línea copiada'
+					}
+				}
+			},
+			"bDestroy": true,
+			"iDisplayLength": 15,//Paginación
+			"order": [],
+		}).DataTable();
+
+	tabla2.on('init.dt', function () {
+		$('[data-toggle="popover"]').popover();
+	});
 }
 
 //Función Listar

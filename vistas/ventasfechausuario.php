@@ -63,6 +63,7 @@ if (!isset($_SESSION["nombre"])) {
                         <th>Fecha</th>
                         <th>Usuario Vendedor</th>
                         <th>Cliente</th>
+                        <th>Ubicación del local</th>
                         <th>Método de pago</th>
                         <th>Comprobante</th>
                         <th>Número Doc.</th>
@@ -76,6 +77,7 @@ if (!isset($_SESSION["nombre"])) {
                         <th>Fecha</th>
                         <th>Usuario Vendedor</th>
                         <th>Cliente</th>
+                        <th>Ubicación del local</th>
                         <th>Método de pago</th>
                         <th>Comprobante</th>
                         <th>Número Doc.</th>
