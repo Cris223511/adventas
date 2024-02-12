@@ -770,7 +770,7 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => "",
 						"5" => "",
 						"6" => "<strong>TOTAL</strong>",
-						"7" => '<strong>' . number_format($totalPrecioVenta2 + $totalPrecioVenta2, 2) . '</strong>',
+						"7" => '<strong>' . number_format($totalPrecioVenta + $totalPrecioVenta2, 2) . '</strong>',
 						"8" => "",
 						"9" => "",
 					);
