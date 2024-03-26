@@ -26,6 +26,8 @@ if (!isset($_SESSION["nombre"])) {
 		$impuesto = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";
 		$total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";
 
+		$sunat = isset($_POST["sunat"]) ? limpiarCadena($_POST["sunat"]) : "";
+
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 				if (empty($idventa_servicio)) {
@@ -312,7 +314,7 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$data[] = array(
-						"0" => ($reg->estado == '1') ? '<button class="btn btn-secondary" data-idservicio="' . $reg->idservicio . '" onclick="agregarDetalle(' . $reg->idservicio . ',\'' . $reg->nombre . '\',\'' . $reg->precio_venta . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"0" => ($reg->estado == '1') ? '<button class="btn btn-secondary" data-idservicio="' . $reg->idservicio . '" onclick="agregarDetalle(' . $reg->idservicio . ',\'' . $reg->nombre . '\',\'' . $reg->precio_venta . '\'); bloquearPrecios(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/servicios/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
 						"3" => $reg->almacen,
@@ -367,6 +369,59 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				echo json_encode($data);
+				break;
+
+				/* ======================= SUNAT ======================= */
+
+			case 'consultaSunat':
+				$data = "";
+				$curl = curl_init();
+
+				try {
+					if (strlen($sunat) == 8) {
+						// DNI
+						curl_setopt($curl, CURLOPT_URL, 'https://api.apis.net.pe/v1/dni?numero=' . $sunat);
+					} elseif (strlen($sunat) == 11) {
+						// RUC
+						curl_setopt($curl, CURLOPT_URL, 'https://api.apis.net.pe/v1/ruc?numero=' . $sunat);
+					} elseif (strlen($sunat) < 8) {
+						// Mensaje para DNI no válido
+						$data = "El DNI debe tener 8 caracteres.";
+					} elseif (strlen($sunat) > 8 && strlen($sunat) < 11) {
+						// Mensaje para RUC no válido
+						$data = "El RUC debe tener 11 caracteres.";
+					}
+
+					if (!empty($data)) {
+						echo $data;
+						break;
+					}
+
+					// Configurar opciones de cURL
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+					// Ejecutar la solicitud
+					$response = curl_exec($curl);
+
+					if ($response === false) {
+						throw new Exception(curl_error($curl));
+					}
+
+					// Verificar si la respuesta contiene "Not Found" y ajustar el mensaje en consecuencia
+					if (stripos($response, 'Not Found') !== false || stripos($response, '{"error":"RUC invalido"}') !== false) {
+						$data = (strlen($sunat) == 8) ? "DNI no encontrado" : "RUC no encontrado";
+					} else {
+						$data = $response;
+					}
+				} catch (Exception $e) {
+					// Capturar excepción y proporcionar mensaje controlado
+					$data = "Error al procesar la solicitud: " . $e->getMessage();
+				} finally {
+					// Cerrar cURL
+					curl_close($curl);
+				}
+
+				echo $data;
 				break;
 		}
 		//Fin de las validaciones de acceso

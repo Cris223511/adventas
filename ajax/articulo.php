@@ -42,12 +42,12 @@ if (!isset($_SESSION["nombre"])) {
 
 				if (!empty($_FILES['imagen']['name'])) {
 					$uploadDirectory = "../files/articulos/";
-				
+
 					$tempFile = $_FILES['imagen']['tmp_name'];
 					$fileExtension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
 					$newFileName = sprintf("%09d", rand(0, 999999999)) . '.' . $fileExtension;
 					$targetFile = $uploadDirectory . $newFileName;
-				
+
 					// Verificar si es una imagen y mover el archivo
 					$allowedExtensions = array('jpg', 'jpeg', 'png');
 					if (in_array($fileExtension, $allowedExtensions) && move_uploaded_file($tempFile, $targetFile)) {
@@ -154,7 +154,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idarticulo . ')"><i class="fa fa-pencil"></i></button>') .
+							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idarticulo . '); bloquearPrecioCompraVenta();"><i class="fa fa-pencil"></i></button>') .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary "style="height: 35px;" onclick="eliminar(' . $reg->idarticulo . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">

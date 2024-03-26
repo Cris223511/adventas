@@ -27,7 +27,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="box-header with-border">
                 <h1 class="box-title">
                   Pagos por crédito
-                  <button class="btn btn-secondary" id="btnagregar" onclick="mostrarform(true)">
+                  <button class="btn btn-secondary" id="btnagregar" onclick="mostrarform(true); bloquearPrecios(); ocultarPrecioCompra();">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button>
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado" || $_SESSION["cargo"] == "vendedor") { ?>
@@ -108,23 +108,23 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Usuario Cliente(*):</label>
                     <input type="hidden" name="idcuotas" id="idcuotas">
-                    <select id="idcliente" name="idcliente" class="form-control selectpicker" data-live-search="true" required>
+                    <select id="idcliente" name="idcliente" class="form-control selectpicker" data-live-search="true" data-size="5" required>
                     </select>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Usuario Vendedor(*):</label>
-                    <select id="idvendedor" name="idvendedor" class="form-control selectpicker" data-live-search="true" required>
+                    <select id="idvendedor" name="idvendedor" class="form-control selectpicker" data-live-search="true" data-size="5" required>
                     </select>
                   </div>
 
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Ubicación del local(*):</label>
-                    <select id="idalmacen" name="idalmacen" class="form-control selectpicker" data-live-search="true" required>
+                    <select id="idalmacen" name="idalmacen" class="form-control selectpicker" data-live-search="true" data-size="5" required>
                     </select>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Zona de entrega(*):</label>
-                    <select id="idzona" name="idzona" class="form-control selectpicker" data-live-search="true" required>
+                    <select id="idzona" name="idzona" class="form-control selectpicker" data-live-search="true" data-size="5" required>
                     </select>
                   </div>
 
@@ -219,7 +219,6 @@ if (!isset($_SESSION["nombre"])) {
           </div>
         </div>
       </section>
-
     </div>
 
     <!-- Modal -->

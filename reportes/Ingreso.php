@@ -166,7 +166,7 @@ class PDF_Invoice extends FPDF
 		$mid = ($r1 + $r2) / 2;
 
 		$texte  = $libelle  . $num;
-		$szfont = 12;
+		$szfont = 10;
 		$loop   = 0;
 
 		while ($loop == 0) {

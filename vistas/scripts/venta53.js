@@ -22,12 +22,25 @@ function init() {
 		guardaryeditar(e);
 	});
 
+	$("#formulario2").on("submit", function (e) {
+		guardaryeditar2(e);
+	});
+
+	$("#formulario3").on("submit", function (e) {
+		guardaryeditar3(e);
+	});
+
+	$("#formSunat").on("submit", function (e) {
+		buscarSunat(e);
+	});
+
 	$('[data-toggle="popover"]').popover();
 
 	//Cargamos los items al select cliente
 	$.post("../ajax/venta.php?op=selectCliente", function (r) {
 		$("#idcliente").html(r);
 		$('#idcliente').selectpicker('refresh');
+		$('#idcliente').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 	});
 
 	//Cargamos los items al select cliente
@@ -39,7 +52,13 @@ function init() {
 	$.post("../ajax/locales.php?op=selectAlmacen", function (r) {
 		$("#idalmacen").html(r);
 		$('#idalmacen').selectpicker('refresh');
+		$("#idalmacen2").html(r);
+		$('#idalmacen2').selectpicker('refresh');
+		$("#idalmacen3").html(r);
+		$('#idalmacen3').selectpicker('refresh');
 		actualizarRUC();
+		actualizarRUC2();
+		actualizarRUC3();
 	});
 
 	// obtenemos el último número de comprobante
@@ -82,6 +101,290 @@ function actualizarRUC() {
 	}
 }
 
+function actualizarRUC2() {
+	const selectLocal = document.getElementById("idalmacen2");
+	const localRUCInput = document.getElementById("local_ruc2");
+	const selectedOption = selectLocal.options[selectLocal.selectedIndex];
+
+	if (selectedOption.value !== "") {
+		const localRUC = selectedOption.getAttribute('data-local-ruc');
+		localRUCInput.value = localRUC;
+	} else {
+		localRUCInput.value = "";
+	}
+}
+
+function actualizarRUC3() {
+	const selectLocal = document.getElementById("idalmacen3");
+	const localRUCInput = document.getElementById("local_ruc3");
+	const selectedOption = selectLocal.options[selectLocal.selectedIndex];
+
+	if (selectedOption.value !== "") {
+		const localRUC = selectedOption.getAttribute('data-local-ruc');
+		localRUCInput.value = localRUC;
+	} else {
+		localRUCInput.value = "";
+	}
+}
+
+function checkEnter(event) {
+	if (event.key === "Enter") {
+		if ($('.no-results').is(':visible')) {
+			$('#myModal3').modal('show');
+			limpiarModalClientes();
+			$("#sunat").val("");
+			console.log("di enter en idcliente =)");
+		}
+	}
+}
+
+// CLIENTES NUEVOS (POR SUNAT)
+
+function listarClientes() {
+	$.post("../ajax/venta.php?op=selectCliente", function (r) {
+		$("#idcliente").empty();
+		$("#idcliente").html(r);
+		$('#idcliente').selectpicker('refresh');
+		$('#idcliente').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
+
+		actualizarRUC();
+		actualizarRUC2();
+	});
+}
+
+function limpiarModalClientes() {
+	$("#idcliente2").val("");
+	$("#nombre").val("");
+	$("#tipo_documento").val("");
+	$("#num_documento").val("");
+	$("#direccion").val("");
+	$("#telefono").val("");
+	$("#email").val("");
+	$("#descripcion").val("");
+
+	habilitarTodoModalCliente();
+
+	$("#idalmacen2").val($("#idalmacen2 option:first").val());
+	$("#idalmacen2").selectpicker('refresh');
+
+	$("#btnSunat").prop("disabled", false);
+	$("#btnGuardarCliente").prop("disabled", true);
+
+	actualizarRUC2();
+}
+
+function guardaryeditar2(e) {
+	e.preventDefault();
+	$("#btnGuardarCliente").prop("disabled", true);
+
+	deshabilitarTodoModalCliente();
+	var formData = new FormData($("#formulario2")[0]);
+	formData.append('tipo_persona', 'Cliente');
+	habilitarTodoModalCliente();
+
+	$.ajax({
+		url: "../ajax/persona.php?op=guardaryeditar",
+		type: "POST",
+		data: formData,
+		contentType: false,
+		processData: false,
+
+		success: function (datos) {
+			datos = limpiarCadena(datos);
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardarCliente").prop("disabled", false);
+				return;
+			} else if (datos == "El número de documento que ha ingresado ya existe.") {
+				bootbox.alert(datos);
+				$("#btnGuardarCliente").prop("disabled", false);
+				return;
+			} else {
+				bootbox.alert(datos);
+				$('#myModal3').modal('hide');
+				let idalmacen = $("#idalmacen").val();
+				actualizarPersonales(idalmacen);
+				limpiarModalClientes();
+				$("#sunat").val("");
+
+				$("#idalmacen").val($("#idalmacen option:first").val());
+				$("#idalmacen").selectpicker('refresh');
+				$("#idalmacen").trigger('change');
+			}
+		}
+	});
+}
+
+function buscarSunat(e) {
+	e.preventDefault();
+	var formData = new FormData($("#formSunat")[0]);
+	limpiarModalClientes();
+	$("#btnSunat").prop("disabled", true);
+
+	$.ajax({
+		url: "../ajax/venta.php?op=consultaSunat",
+		type: "POST",
+		data: formData,
+		contentType: false,
+		processData: false,
+
+		success: function (datos) {
+			datos = limpiarCadena(datos);
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				limpiarModalClientes();
+				return;
+			} else if (datos == "DNI no encontrado" || datos == "RUC no encontrado") {
+				limpiarModalClientes();
+				bootbox.confirm({
+					message: datos + ", ¿deseas crear un cliente manualmente?",
+					buttons: {
+						cancel: {
+							label: 'Cancelar',
+						},
+						confirm: {
+							label: 'Aceptar',
+						}
+					},
+					callback: function (result) {
+						if (result) {
+							(datos == "DNI no encontrado") ? $("#tipo_documento2").val("DNI") : $("#tipo_documento2").val("RUC");
+
+							$("#tipo_documento2").trigger("change");
+
+							let inputValue = $('#sunat').val();
+							$("#num_documento2").val(inputValue);
+
+							$('#myModal3').modal('hide');
+							$('#myModal4').modal('show');
+						}
+					}
+				});
+			} else if (datos == "El DNI debe tener 8 caracteres." || datos == "El RUC debe tener 11 caracteres.") {
+				bootbox.alert(datos);
+				limpiarModalClientes();
+			} else {
+				// console.log(datos);
+				const obj = JSON.parse(datos);
+				console.log(obj);
+
+				$("#nombre").val(obj.nombre);
+				$("#tipo_documento").val(obj.tipoDocumento == "1" ? "DNI" : "RUC");
+				$("#num_documento").val(obj.numeroDocumento);
+				$("#direccion").val(obj.direccion);
+				$("#telefono").val(obj.telefono);
+				$("#email").val(obj.email);
+
+				// Deshabilitar los campos solo si están vacíos
+				$("#nombre").prop("disabled", obj.hasOwnProperty("nombre") && obj.nombre !== "" ? true : false);
+				$("#direccion").prop("disabled", obj.hasOwnProperty("direccion") && obj.direccion !== "" ? true : false);
+				$("#telefono").prop("disabled", obj.hasOwnProperty("telefono") && obj.telefono !== "" ? true : false);
+				$("#email").prop("disabled", obj.hasOwnProperty("email") && obj.email !== "" ? true : false);
+
+				$("#idalmacen2").prop("disabled", false);
+				$("#descripcion").prop("disabled", false);
+
+				$("#idalmacen2").val($("#idalmacen2 option:first").val());
+				$("#idalmacen2").selectpicker('refresh');
+
+				$("#sunat").val("");
+
+				$("#btnSunat").prop("disabled", false);
+				$("#btnGuardarCliente").prop("disabled", false);
+			}
+		}
+	});
+}
+
+function agregarClienteManual() {
+	limpiarModalClientes();
+	$("#sunat").val("");
+	$('#myModal3').modal('hide');
+	$('#myModal4').modal('show');
+}
+
+function habilitarTodoModalCliente() {
+	$("#tipo_documento").prop("disabled", true);
+	$("#num_documento").prop("disabled", true);
+	$("#nombre").prop("disabled", true);
+	$("#direccion").prop("disabled", true);
+	$("#telefono").prop("disabled", true);
+	$("#email").prop("disabled", true);
+	$("#idalmacen2").prop("disabled", true);
+	$("#local_ruc2").prop("disabled", true);
+	$("#descripcion").prop("disabled", true);
+}
+
+function deshabilitarTodoModalCliente() {
+	$("#tipo_documento").prop("disabled", false);
+	$("#num_documento").prop("disabled", false);
+	$("#nombre").prop("disabled", false);
+	$("#direccion").prop("disabled", false);
+	$("#telefono").prop("disabled", false);
+	$("#email").prop("disabled", false);
+	$("#idalmacen2").prop("disabled", false);
+	$("#local_ruc2").prop("disabled", false);
+	$("#descripcion").prop("disabled", false);
+}
+
+// CLIENTES NUEVOS (POR SI NO ENCUENTRA LA SUNAT)
+
+function limpiarModalClientes2() {
+	$("#idcliente3").val("");
+	$("#nombre2").val("");
+	$("#tipo_documento2").val("");
+	$("#num_documento2").val("");
+	$("#direccion2").val("");
+	$("#telefono2").val("");
+	$("#email2").val("");
+	$("#descripcion2").val("");
+
+	$("#idalmacen3").val($("#idalmacen3 option:first").val());
+	$("#idalmacen3").selectpicker('refresh');
+
+	$("#btnGuardarCliente2").prop("disabled", false);
+
+	actualizarRUC3();
+}
+
+function guardaryeditar3(e) {
+	e.preventDefault();
+	$("#btnGuardarCliente2").prop("disabled", true);
+	var formData = new FormData($("#formulario3")[0]);
+	formData.append('tipo_persona', 'Cliente');
+
+	$.ajax({
+		url: "../ajax/persona.php?op=guardaryeditar",
+		type: "POST",
+		data: formData,
+		contentType: false,
+		processData: false,
+
+		success: function (datos) {
+			datos = limpiarCadena(datos);
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardarCliente2").prop("disabled", false);
+				return;
+			} else if (datos == "El número de documento que ha ingresado ya existe.") {
+				bootbox.alert(datos);
+				$("#btnGuardarCliente2").prop("disabled", false);
+				return;
+			} else {
+				bootbox.alert(datos);
+				$('#myModal4').modal('hide');
+				let idalmacen = $("#idalmacen").val();
+				actualizarPersonales(idalmacen);
+				limpiarModalClientes2();
+
+				$("#idalmacen").val($("#idalmacen option:first").val());
+				$("#idalmacen").selectpicker('refresh');
+				$("#idalmacen").trigger('change');
+			}
+		}
+	});
+}
+
 function actualizarPersonales(idalmacen) {
 	return new Promise((resolve, reject) => {
 		habilitarPersonales();
@@ -106,16 +409,19 @@ function actualizarPersonales(idalmacen) {
 							select.append('<option value="' + opcion.id + '">' + opcion.nombre + '</option>');
 						});
 						select.selectpicker('refresh');
+						select.closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 					} else if (idalmacen == 0) {
 						select.empty();
 						select.html('<option value="">- Seleccione -</option>');
 						select.selectpicker('refresh');
 						deshabilitarPersonales();
 						select.selectpicker('refresh');
+						select.closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 					} else {
 						select.empty();
 						select.html('<option value="">- Seleccione -</option>');
 						select.selectpicker('refresh');
+						select.closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 					}
 				}
 			}
@@ -166,6 +472,8 @@ function limpiar() {
 
 	$('#tblarticulos button').removeAttr('disabled');
 	actualizarRUC();
+	actualizarRUC2();
+	actualizarRUC3();
 }
 
 //Función cancelarform
@@ -331,6 +639,7 @@ function guardaryeditar(e) {
 	//$("#btnGuardar").prop("disabled",true);
 	modificarSubototales();
 	formatearNumero();
+	desbloquearPrecios();
 	var formData = new FormData($("#formulario")[0]);
 	$("#btnGuardar").prop("disabled", true);
 	$.ajax({
@@ -341,6 +650,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (!datos) {
 				console.log("No se recibieron datos del servidor.");
 				$("#btnGuardar").prop("disabled", false);
@@ -391,6 +701,7 @@ function mostrar(idventa) {
 
 			$.post("../ajax/venta.php?op=listarDetalle&id=" + idventa, function (r) {
 				$("#detalles").html(r);
+				ocultarPrecioCompra();
 			});
 		})
 	});
@@ -457,8 +768,8 @@ function agregarDetalle(idarticulo, articulo, precio_compra, precio_venta) {
 			'<td class="nowrap-cell"><input type="hidden" name="idarticulo[]" value="' + idarticulo + '">' + articulo + '</td>' +
 			'<td class="nowrap-cell"><input type="number" name="cantidad[]" id="cantidad[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></td>' +
 			// '<td class="nowrap-cell"><input type="text" name="cantidad[]" onblur="verificar_stock(' + idarticulo + ', \'' + articulo + '\')" id="cantidad[]" value="' + cantidad + '"></td>' +
-			'<td class="nowrap-cell"><input type="hidden" name="precio_compra[]" value="' + precio_compra + '"><span> S/. ' + precio_compra + '</span></td>' +
-			'<td class="nowrap-cell"><input type="number" step="any" name="precio_venta[]" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
+			'<td class="nowrap-cell precio_compra"><input type="hidden" step="any" class="precios" name="precio_compra[]" value="' + precio_compra + '"><span> S/. ' + precio_compra + '</span></td>' +
+			'<td class="nowrap-cell"><input type="number" step="any" class="precios" name="precio_venta[]" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
 			'<td class="nowrap-cell"><input type="number" step="any" name="descuento[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></td>' +
 			'<td class="nowrap-cell"><span name="subtotal" id="subtotal' + cont + '">' + subtotal + '</span></td>' +
 			'<td class="nowrap-cell"><button type="button" onclick="modificarSubototales()" class="btn btn-info"><i class="fa fa-refresh"></i></button></td>' +
@@ -562,13 +873,13 @@ function llenarTabla() {
 			success: function (e) {
 				console.log(e);
 				$('#idproducto').prop("disabled", false);
-				console.log("Envío esto al servidor =>", e[0].idarticulo, e[0].articulo, parseFloat(e[0].precio_venta).toFixed(2));
+				console.log("Envío esto al servidor =>", e[0].idarticulo, e[0].articulo, parseFloat(e[0].precio_compra).toFixed(2), parseFloat(e[0].precio_venta).toFixed(2));
 
 				// Resetear el valor del select
 				$('#idproducto').val($("#idproducto option:first").val());
 				$("#idproducto").selectpicker('refresh');
 
-				agregarDetalle(e[0].idarticulo, e[0].articulo, parseFloat(e[0].precio_venta).toFixed(2));
+				agregarDetalle(e[0].idarticulo, e[0].articulo, parseFloat(e[0].precio_compra).toFixed(2), parseFloat(e[0].precio_venta).toFixed(2));
 
 				$('#tblarticulos button[data-idarticulo="' + idarticulo + '"]').attr('disabled', 'disabled');
 				console.log("Deshabilito a: " + idarticulo + " =)");

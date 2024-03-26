@@ -7,7 +7,7 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 	//Validamos el acceso solo al usuario logueado y autorizado.
-	if ($_SESSION['cuotas'] == 1) {
+	if ($_SESSION['cuotas'] == 1 || !empty($_SESSION['cargo'])) {
 		require_once "../modelos/Zonas.php";
 
 		$zonas = new Zonas();
@@ -107,8 +107,7 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idzona . ')"><i class="fa fa-pencil"></i></button>') .
 							(($reg->estado == 'Activado') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idzona . ')"><i class="fa fa-close"></i></button>')) :
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idzona . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idzona . ')"><i class="fa fa-close"></i></button>')) : (mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idzona . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" style="height: 35px;" onclick="eliminar(' . $reg->idzona . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => $reg->ubicacion,

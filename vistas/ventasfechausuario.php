@@ -43,7 +43,7 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
                 <div class="form-inline col-lg-6 col-md-6 col-sm-6 col-xs-12">
                   <label>Usuario Vendedor:</label>
-                  <select name="idusuario" id="idusuario" class="form-control selectpicker" data-live-search="true" required></select>
+                  <select name="idusuario" id="idusuario" class="form-control selectpicker" data-live-search="true" data-size="5"required></select>
                 </div>
                 <div class="row">
                   <div class="col-12"></div>

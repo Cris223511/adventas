@@ -99,7 +99,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 5 -->
     <div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -110,7 +110,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Responsable despacho(*):</label>
                 <input type="hidden" name="iddevolucion" id="iddevolucion3">
-                <select id="idalmacenero3" name="idalmacenero" class="form-control selectpicker" data-live-search="true" disabled>
+                <select id="idalmacenero3" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5"disabled>
                   <option value="">- Seleccione -</option>
                 </select>
               </div>
@@ -170,7 +170,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 4 -->
     <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -181,7 +181,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Responsable despacho(*):</label>
                 <input type="hidden" name="iddevolucion" id="iddevolucion2">
-                <select id="idalmacenero2" name="idalmacenero" class="form-control selectpicker" data-live-search="true" disabled>
+                <select id="idalmacenero2" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5"disabled>
                   <option value="">- Sin registrar -</option>
                 </select>
               </div>
@@ -230,7 +230,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 3 -->
     <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -256,7 +256,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 2 -->
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -267,7 +267,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Responsable despacho(*):</label>
                 <input type="hidden" name="iddevolucion" id="iddevolucion">
-                <select id="idalmacenero" name="idalmacenero" class="form-control selectpicker" data-live-search="true" disabled>
+                <select id="idalmacenero" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5"disabled>
                   <option value="">- Seleccione -</option>
                 </select>
               </div>

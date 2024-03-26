@@ -34,12 +34,17 @@ if (!isset($_SESSION["nombre"])) {
       //Recorremos todos los valores obtenidos
       $reg = $rspta->fetch_object();
 
+      require_once "../modelos/Perfiles.php";
+      $perfil = new Perfiles();
+      $rspta2 = $perfil->mostrarReporte();
+
       //Establecemos los datos de la empresa
-      $empresa = "Soluciones Innovadoras Perú S.A.C.";
-      $documento = "20477157772";
-      $direccion = "Mz l Lt 100 Av. 18 de junio al costado de campo fe puente piedra";
-      $telefono = "931742904";
-      $email = "jcarlos.ad7@gmail.com";
+      $logo = $rspta2["imagen"];
+      $empresa = $rspta2["titulo"];
+      $documento = ($rspta2["ruc"] == '') ? 'Sin registrar' : $rspta2["ruc"];
+      $direccion = ($rspta2["direccion"] == '') ? 'Sin registrar' : $rspta2["direccion"];
+      $telefono = ($rspta2["telefono"] == '') ? 'Sin registrar' : number_format($rspta2["telefono"], 0, '', ' ');
+      $email = ($rspta2["email"] == '') ? 'Sin registrar' : $rspta2["email"];
 
       ?>
       <div class="zona_impresion">
@@ -48,7 +53,7 @@ if (!isset($_SESSION["nombre"])) {
         <table border="0" align="center" width="370px">
           <tr>
             <td align="center">
-              <img width="100px" src="./logo.jpeg">
+              <img width="100px" src="../files/logo_reportes/<?php echo $logo ?>">
             </td>
           </tr>
           <tr>
@@ -136,8 +141,13 @@ if (!isset($_SESSION["nombre"])) {
             <td colspan="3">====================================================</td>
           </tr>
           <?php
+          $id = $_GET['id'];
+
           $rsptad = $venta_servicio->ventadetalle($_GET["id"]);
+          $rspta3 = $venta_servicio->mostrar($id);
           $cantidad = 0;
+          $igv = 0;
+
           while ($regd = $rsptad->fetch_object()) {
             echo "<tr>";
             echo "<td>" . $regd->cantidad . "</td>";
@@ -145,13 +155,19 @@ if (!isset($_SESSION["nombre"])) {
             echo "<td align='right'>S/ " . $regd->subtotal . "</td>";
             echo "</tr>";
             $cantidad += $regd->cantidad;
+            $igv = $igv + ($rspta3["impuesto"] == 18 ? $regd->subtotal * 0.18 : $regd->subtotal * 0);
           }
           ?>
           <!-- Mostramos los totales de la venta en el documento HTML -->
           <tr>
             <td>&nbsp;</td>
+            <td align="right"><b>IGV:</b></td>
+            <td align="right"><b>S/ <?php echo number_format($igv, 2, '.', ''); ?></b></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
             <td align="right"><b>TOTAL:</b></td>
-            <td align="right"><b>S/ <?php echo $reg->total_venta;  ?></b></td>
+            <td align="right"><b>S/ <?php echo number_format($rspta3["total_venta"], 2, '.', '') ?></b></td>
           </tr>
           <tr>
             <td colspan="3">Nº de artículos: <?php echo $cantidad; ?></td>

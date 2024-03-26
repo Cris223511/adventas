@@ -344,6 +344,7 @@ function guardaryeditar(e) {
 	e.preventDefault();
 	modificarSubototales();
 	formatearNumero();
+	desbloquearPrecios();
 	var formData = new FormData($("#formulario")[0]);
 
 	$("#btnGuardar2").prop("disabled", true);
@@ -354,6 +355,7 @@ function guardaryeditar(e) {
 		contentType: false,
 		processData: false,
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (!datos) {
 				console.log("No se recibieron datos del servidor.");
 				$("#btnGuardar2").prop("disabled", false);
@@ -395,6 +397,7 @@ function guardaryeditar2(e) {
 		contentType: false,
 		processData: false,
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (!datos) {
 				console.log("No se recibieron datos del servidor.");
 				$("#btnGuardar3").prop("disabled", false);
@@ -445,6 +448,7 @@ function mostrar(idproforma) {
 			$.post("../ajax/proformas.php?op=listarDetalle&id=" + idproforma, function (r) {
 				$("#detalles").html(r);
 				$('[data-toggle="popover"]').popover();
+				ocultarPrecioCompra();
 			});
 		})
 	});
@@ -566,8 +570,8 @@ function agregarDetalle(idarticulo, articulo, precio_compra, precio_venta) {
 			'<td class="nowrap-cell"><input type="hidden" name="idarticulo[]" value="' + idarticulo + '">' + articulo + '</td>' +
 			'<td class="nowrap-cell"><input type="number" name="cantidad[]" id="cantidad[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></td>' +
 			// '<td class="nowrap-cell"><input type="text" name="cantidad[]" onblur="verificar_stock(' + idarticulo + ', \'' + articulo + '\')" id="cantidad[]" value="' + cantidad + '"></td>' +
-			'<td class="nowrap-cell"><input type="hidden" name="precio_compra[]" value="' + precio_compra + '"><span> S/. ' + precio_compra + '</span></td>' +
-			'<td class="nowrap-cell"><input type="number" step="any" name="precio_venta[]" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
+			'<td class="nowrap-cell precio_compra"><input type="hidden" step="any" class="precios" name="precio_compra[]" value="' + precio_compra + '"><span> S/. ' + precio_compra + '</span></td>' +
+			'<td class="nowrap-cell"><input type="number" step="any" class="precios" name="precio_venta[]" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
 			'<td class="nowrap-cell"><input type="number" step="any" name="descuento[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></td>' +
 			'<td class="nowrap-cell"><span name="subtotal" id="subtotal' + cont + '">' + subtotal + '</span></td>' +
 			'<td class="nowrap-cell"><button type="button" onclick="modificarSubototales()" class="btn btn-info"><i class="fa fa-refresh"></i></button></td>' +
@@ -672,13 +676,13 @@ function llenarTabla() {
 			success: function (e) {
 				console.log(e);
 				$('#idproducto').prop("disabled", false);
-				console.log("Envío esto al servidor =>", e[0].idarticulo, e[0].articulo, parseFloat(e[0].precio_venta).toFixed(2));
+				console.log("Envío esto al servidor =>", e[0].idarticulo, e[0].articulo, parseFloat(e[0].precio_compra).toFixed(2), parseFloat(e[0].precio_venta).toFixed(2));
 
 				// Resetear el valor del select
 				$('#idproducto').val($("#idproducto option:first").val());
 				$("#idproducto").selectpicker('refresh');
 
-				agregarDetalle(e[0].idarticulo, e[0].articulo, parseFloat(e[0].precio_venta).toFixed(2));
+				agregarDetalle(e[0].idarticulo, e[0].articulo, parseFloat(e[0].precio_compra).toFixed(2), parseFloat(e[0].precio_venta).toFixed(2));
 
 				$('#tblarticulos button[data-idarticulo="' + idarticulo + '"]').attr('disabled', 'disabled');
 				console.log("Deshabilito a: " + idarticulo + " =)");

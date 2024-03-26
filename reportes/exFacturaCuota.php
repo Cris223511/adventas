@@ -11,14 +11,18 @@ if (!isset($_SESSION["nombre"])) {
     //Incluímos el archivo Factura.php
     require('FacturaCuota.php');
 
+    require_once "../modelos/Perfiles.php";
+    $perfil = new Perfiles();
+    $rspta = $perfil->mostrarReporte();
+
     //Establecemos los datos de la empresa
-    $logo = "logo.jpeg";
-    $ext_logo = "jpg";
-    $empresa = "Arena San Andrés Perú S.A.C.";
-    $documento = "20477157772";
-    $direccion = "Av Gerardo Unger 5689 - Los Olivos - Lima";
-    $telefono = "998 393 220";
-    $email = "jcarlos.ad7@gmail.com";
+    $logo = $rspta["imagen"];
+    $ext_logo = strtolower(end(explode('.', $rspta["imagen"])));
+    $empresa = $rspta["titulo"];
+    $documento = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
+    $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"];
+    $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
+    $email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
 
     //Obtenemos los datos de la cabecera de la cuota actual
     require_once "../modelos/Cuotas.php";
@@ -39,10 +43,10 @@ if (!isset($_SESSION["nombre"])) {
         utf8_decode("Teléfono: ") . $telefono . "\n" .
         "Email: " . $email . "\n" .
         utf8_decode("Local: ") . utf8_decode($regv->almacen) . "\n",
-      $logo,
+      '../files/logo_reportes/' . $logo,
       $ext_logo
     );
-    $pdf->fact_dev("$regv->tipo_comprobante ", "$regv->serie_comprobante-$regv->num_comprobante");
+    $pdf->fact_dev(utf8_decode($regv->tipo_comprobante), ' ' . $regv->serie_comprobante . ' - ' . $regv->num_comprobante);
     $pdf->temporaire("");
     $pdf->addDate($regv->fecha);
     $pdf->addStatus($regv->estado);

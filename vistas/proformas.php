@@ -42,7 +42,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="box-header with-border">
                 <h1 class="box-title">Registro de proformas
                   <a data-toggle="modal" href="#myModal2">
-                    <button type="button" class="btn btn-secondary" style="color: black !important;" onclick="limpiar();">
+                    <button type="button" class="btn btn-secondary" style="color: black !important;" onclick="limpiar(); bloquearPrecios(); ocultarPrecioCompra();">
                       <span class="fa fa-plus-circle"></span> Agregar
                     </button>
                   </a>
@@ -95,7 +95,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 3 -->
     <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -106,7 +106,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Cliente(*):</label>
                 <input type="hidden" name="idproforma" id="idproforma2">
-                <select id="idcliente2" name="idcliente" class="form-control selectpicker" data-live-search="true" disabled>
+                <select id="idcliente2" name="idcliente" class="form-control selectpicker" data-live-search="true" data-size="5" disabled>
                   <option value="">- Seleccione -</option>
                 </select>
               </div>
@@ -207,7 +207,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 2 -->
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -228,7 +228,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Cliente(*):</label>
                 <input type="hidden" name="idproforma" id="idproforma">
-                <select id="idcliente" name="idcliente" class="form-control selectpicker" data-live-search="true" required>
+                <select id="idcliente" name="idcliente" class="form-control selectpicker" data-live-search="true" data-size="5" required>
                 </select>
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">

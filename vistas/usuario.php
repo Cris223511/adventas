@@ -113,7 +113,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Cargo(*):</label>
-                    <select name="cargo" id="cargo" class="form-control selectpicker" required>
+                    <select name="cargo" id="cargo" class="form-control selectpicker" required onchange="marcarCheckboxPorRol(this)">
                       <option value="admin">Administrador</option>
                       <option value="cliente">Cliente</option>
                       <option value="vendedor">Vendedor</option>

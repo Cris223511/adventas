@@ -146,6 +146,7 @@ function guardaryeditar(e) {
 	e.preventDefault(); //No se activará la acción predeterminada del evento
 
 	$("#btnGuardar").prop("disabled", true);
+	desbloquearPrecioCompraVenta();
 	var formData = new FormData($("#formulario")[0]);
 
 	$.ajax({
@@ -156,6 +157,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (datos == "El código del servicio que ha ingresado ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);

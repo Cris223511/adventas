@@ -8,7 +8,7 @@ if (strlen(session_id()) < 1) {
 if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
 	// opciones a las que NO pueden tener acceso... si no colocamos ninguno, quiere decir
 	// que tiene acceso a todas las opciones si es que está logeado o tiene un cargo.
-	if (($_GET["op"] == 'selectLocal' || $_GET["op"] == 'selectLocalUsuario' || $_GET["op"] == 'selectLocalDisponible')) {
+	if (($_GET["op"] == 'selectAlmacen')) {
 		echo 'No está autorizado para realizar esta acción.';
 		exit();
 	}
@@ -17,7 +17,7 @@ if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
-	if ($_SESSION['almacen'] == 1) {
+	if ($_SESSION['almacen'] == 1 || !empty($_SESSION['cargo'])) {
 		require_once "../modelos/Locales.php";
 
 		$almacenes = new Local();

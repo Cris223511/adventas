@@ -11,14 +11,18 @@ if (!isset($_SESSION["nombre"])) {
     //Incluímos el archivo FacturaSolicitud.php
     require('FacturaSolicitud.php');
 
+    require_once "../modelos/Perfiles.php";
+    $perfil = new Perfiles();
+    $rspta = $perfil->mostrarReporte();
+
     //Establecemos los datos de la empresa
-    $logo = "logo.jpeg";
-    $ext_logo = "jpg";
-    $empresa = "Arena San Andrés Perú S.A.C.";
-    $documento = "20477157772";
-    $direccion = "Av Gerardo Unger 5689 - Los Olivos - Lima";
-    $telefono = "998 393 220";
-    $email = "jcarlos.ad7@gmail.com";
+    $logo = $rspta["imagen"];
+    $ext_logo = strtolower(end(explode('.', $rspta["imagen"])));
+    $empresa = $rspta["titulo"];
+    $documento = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
+    $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"];
+    $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
+    $email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
 
     //Obtenemos los datos de la cabecera de la solicitud actual
     require_once "../modelos/Solicitudes.php";
@@ -38,7 +42,7 @@ if (!isset($_SESSION["nombre"])) {
         utf8_decode("Dirección: ") . utf8_decode($direccion) . "\n" .
         utf8_decode("Teléfono: ") . $telefono . "\n" .
         "Email: " . $email,
-      $logo,
+      '../files/logo_reportes/' . $logo,
       $ext_logo
     );
 

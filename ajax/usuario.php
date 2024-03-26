@@ -34,12 +34,12 @@ switch ($_GET["op"]) {
 			if ($_SESSION['acceso'] == 1) {
 				if (!empty($_FILES['imagen']['name'])) {
 					$uploadDirectory = "../files/usuarios/";
-				
+
 					$tempFile = $_FILES['imagen']['tmp_name'];
 					$fileExtension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
 					$newFileName = sprintf("%09d", rand(0, 999999999)) . '.' . $fileExtension;
 					$targetFile = $uploadDirectory . $newFileName;
-				
+
 					// Verificar si es una imagen y mover el archivo
 					$allowedExtensions = array('jpg', 'jpeg', 'png');
 					if (in_array($fileExtension, $allowedExtensions) && move_uploaded_file($tempFile, $targetFile)) {
@@ -168,9 +168,9 @@ switch ($_GET["op"]) {
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							((($reg->estado) ?
-								(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-secondary" style="margin-right: 3px;" onclick="mostrar(' . $reg->idusuario . ')"><i class="fa fa-pencil"></i></button>') : '') .
+								(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-secondary" style="margin-right: 3px;" onclick="mostrar(' . $reg->idusuario . '); verificarCargo(\'' . $reg->cargo . '\');"><i class="fa fa-pencil"></i></button>') : '') .
 								(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idusuario . ')"><i class="fa fa-close"></i></button>') : '') .
-								(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-secondary" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '') : (($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idusuario . ')"><i class="fa fa-pencil"></i></button>') : '') .
+								(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-secondary" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '') : (($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idusuario . '); verificarCargo(\'' . $reg->cargo . '\');"><i class="fa fa-pencil"></i></button>') : '') .
 								(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-secondary" style="margin-right: 3px; width: 35px; height: 35px; padding: 0;" onclick="activar(' . $reg->idusuario . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : '') .
 								(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-secondary" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '')) . '</div>'),
 						"1" => $reg->login,
@@ -284,9 +284,13 @@ switch ($_GET["op"]) {
 		}
 
 		while ($reg = $rspta->fetch_object()) {
+			$esPermisoEspecial = ($reg->nombre === 'Escritorio' || $reg->nombre === 'Perfil Usuario');
 			$sw = in_array($reg->idpermiso, $valores) ? 'checked' : '';
-			echo '<li> <input type="checkbox" ' . $sw . '  name="permiso[]" value="' . $reg->idpermiso . '">' . $reg->nombre . '</li>';
+			$disabled = $esPermisoEspecial ? 'disabled' : '';
+
+			echo '<li> <input type="checkbox" ' . $sw . ' ' . $disabled . ' name="permiso[]" value="' . $reg->idpermiso . '">' . $reg->nombre . '</li>';
 		}
+
 		break;
 
 	case 'getSessionId':
@@ -314,6 +318,12 @@ switch ($_GET["op"]) {
 
 			if ($fetch->estado == "0") {
 				echo 0;
+				return;
+			}
+
+			$almacenExiste = $usuario->almacenExiste($fetch->idalmacen);
+			if ($almacenExiste == 0) {
+				echo 3;
 				return;
 			}
 

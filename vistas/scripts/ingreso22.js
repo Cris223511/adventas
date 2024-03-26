@@ -263,6 +263,7 @@ function guardaryeditar(e) {
 	//$("#btnGuardar").prop("disabled",true);
 	modificarSubototales();
 	formatearNumero();
+	desbloquearPrecios();
 	var formData = new FormData($("#formulario")[0]);
 	$("#btnGuardar").prop("disabled", true);
 	$.ajax({
@@ -272,6 +273,7 @@ function guardaryeditar(e) {
 		contentType: false,
 		processData: false,
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (!datos) {
 				console.log("No se recibieron datos del servidor.");
 				$("#btnGuardar").prop("disabled", false);
@@ -317,6 +319,7 @@ function mostrar(idingreso) {
 
 	$.post("../ajax/ingreso.php?op=listarDetalle&id=" + idingreso, function (r) {
 		$("#detalles").html(r);
+		ocultarPrecioCompra();
 	});
 }
 
@@ -379,8 +382,8 @@ function agregarDetalle(idarticulo, articulo, precio_compra, precio_venta) {
 			'<td class="nowrap-cell"><button type="button" class="btn btn-danger" onclick="eliminarDetalle(' + cont + ', ' + idarticulo + ')">X</button></td>' +
 			'<td class="nowrap-cell"><input type="hidden" name="idarticulo[]" value="' + idarticulo + '">' + articulo + '</td>' +
 			'<td class="nowrap-cell"><input type="number" name="cantidad[]" id="cantidad[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></td>' +
-			'<td class="nowrap-cell"><input type="number" step="any" name="precio_compra[]" id="precio_compra[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_compra == '' ? parseFloat(0).toFixed(2) : precio_compra) + '"></td>' +
-			'<td class="nowrap-cell"><input type="number" step="any" name="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
+			'<td class="nowrap-cell precio_compra"><input type="number" step="any" class="precios" name="precio_compra[]" id="precio_compra[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_compra == '' ? parseFloat(0).toFixed(2) : precio_compra) + '"></td>' +
+			'<td class="nowrap-cell"><input type="number" step="any" class="precios" name="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
 			'<td class="nowrap-cell"><span name="subtotal" id="subtotal' + cont + '">' + subtotal + '</span></td>' +
 			'<td class="nowrap-cell"><button type="button" onclick="modificarSubototales()" class="btn btn-info"><i class="fa fa-refresh"></i></button></td>' +
 			'</tr>';

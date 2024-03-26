@@ -7,7 +7,7 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 	//Validamos el acceso solo al usuario logueado y autorizado.
-	if ($_SESSION['pagos'] == 1) {
+	if ($_SESSION['pagos'] == 1 || !empty($_SESSION['cargo'])) {
 		require_once "../modelos/Metodo_pago.php";
 
 		$metodo_pago = new MetodoPago();

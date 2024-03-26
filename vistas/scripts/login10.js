@@ -15,12 +15,15 @@ $("#frmAcceso").on('submit', function (e) {
                 bootbox.alert("El usuario no se encuentra disponible, comuníquese con el administrador.");
             } else if (data == 2) {
                 bootbox.alert("El local en donde usted está trabajando está desactivado, comuníquese con el administrador.");
+            } else if (data == 3) {
+                bootbox.alert("El almacén del usuario no existe, comuníquese con el administrador.");
             } else if (data != "null") {
                 $(location).attr("href", "escritorio.php");
             } else {
                 bootbox.alert("Usuario y/o Contraseña incorrectos");
             }
         });
+
 })
 
 function mostrarClave() {
@@ -36,3 +39,19 @@ function mostrarClave() {
         ojitoIcon.removeClass('fa-eye-slash').addClass('fa-eye');
     }
 }
+
+function mostrar() {
+    $.post("../ajax/verPortada.php?op=mostrar", function (datas, status) {
+        data = JSON.parse(datas);
+        if (data != null) {
+            console.log(data.imagen);
+            $("#imagenmuestra").attr("src", "../files/portadas/" + data.imagen);
+            $("body").css("background-image", "url('../files/portadas/" + data.imagen + "')");
+        } else {
+            $("#imagenmuestra").attr("src", "../files/portadas/default.jpg");
+            $("body").css("background-image", "url('../files/portadas/default.jpg')");
+        }
+    });
+}
+
+mostrar();

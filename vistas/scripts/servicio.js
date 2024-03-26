@@ -143,6 +143,7 @@ function guardaryeditar(e) {
 	e.preventDefault(); //No se activará la acción predeterminada del evento
 
 	$("#btnGuardar").prop("disabled", true);
+	desbloquearPrecioCompraVenta();
 	var formData = new FormData($("#formulario")[0]);
 
 	$.ajax({
@@ -153,6 +154,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (!datos) {
 				console.log("No se recibieron datos del servidor.");
 				$("#btnGuardar").prop("disabled", false);

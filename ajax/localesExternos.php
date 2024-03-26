@@ -24,6 +24,7 @@ if (!isset($_SESSION["nombre"])) {
 
 		// Variables de sesión a utilizar.
 		$idusuario = $_SESSION["idusuario"];
+		$idalmacenSession = $_SESSION["idalmacen"];
 		$cargo = $_SESSION["cargo"];
 
 		$idalmacen = isset($_POST["idalmacen"]) ? limpiarCadena($_POST["idalmacen"]) : "";
@@ -78,7 +79,7 @@ if (!isset($_SESSION["nombre"])) {
 				// $fecha_fin = $_GET["fecha_fin"];
 
 				// if ($fecha_inicio == "" && $fecha_fin == "") {
-					$rspta = $almacenes->listar();
+					$rspta = $almacenes->listar($idalmacenSession);
 				// } else {
 					// $rspta = $almacenes->listarPorFecha($fecha_inicio, $fecha_fin);
 				// }

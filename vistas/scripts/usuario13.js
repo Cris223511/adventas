@@ -14,18 +14,23 @@ function init() {
 	//Mostramos los permisos
 	$.post("../ajax/usuario.php?op=permisos&id=", function (r) {
 		$("#permisos").html(r);
+		marcarCheckboxPorRol($("#cargo")[0]);
 	});
 
 	$('#mAcceso').addClass("treeview active");
 	$('#lUsuarios').addClass("active");
 
-	$("#checkAll").prop("checked", false);
+	$("#checkAll").prop("checked", true);
 }
 
 function toggleCheckboxes(checkbox) {
 	var checkboxes = document.querySelectorAll('#permisos input[type="checkbox"]');
 
 	checkboxes.forEach(function (cb) {
+		if ((cb.value === '1' || cb.value === '11') && cb.disabled) {
+			return;
+		}
+
 		cb.checked = checkbox.checked;
 	});
 }
@@ -76,6 +81,7 @@ function limpiar() {
 	$("#email").val("");
 	$("#local_ruc").val("");
 	$("#cargo").val("admin");
+	$('#cargo option[value="superadmin"]').remove();
 	$("#cargo").selectpicker('refresh');
 	$("#login").val("");
 	$("#clave").val("");
@@ -86,6 +92,7 @@ function limpiar() {
 	$("#idusuario").val("");
 
 	$("#checkAll").prop("checked", false);
+
 }
 
 //Función mostrar formulario
@@ -101,11 +108,6 @@ function mostrarform(flag) {
 		$("#formularioregistros").hide();
 		$("#btnagregar").show();
 		cargarLocalDisponible();
-
-		// desenmarcamos los selects
-		$("#permisos input[type='checkbox']").each(function () {
-			$(this).prop('checked', false);
-		});
 	}
 }
 
@@ -113,6 +115,67 @@ function mostrarform(flag) {
 function cancelarform() {
 	limpiar();
 	mostrarform(false);
+}
+
+function marcarCheckboxPorRol(selectElement) {
+	var checkboxes = document.getElementsByName("permiso[]");
+
+	checkboxes.forEach(function (checkbox) {
+		checkbox.checked = false;
+	});
+
+	$("#checkAll").prop("checked", false);
+
+	var selectedValue = selectElement.value;
+
+	switch (selectedValue) {
+		case "vendedor":
+			checkboxes[0].checked = true; // Escritorio
+			checkboxes[1].checked = true; // Almacen
+			checkboxes[2].checked = true; // Servicios
+			checkboxes[4].checked = true; // Ventas
+			checkboxes[6].checked = true; // Cuotas
+			checkboxes[9].checked = true; // Proforma
+			checkboxes[10].checked = true; // Perfil Usuario
+			checkboxes[11].checked = true; // Método de Pago
+			break;
+		case "cliente":
+			checkboxes[0].checked = true; // Escritorio
+			checkboxes[3].checked = true; // Compras
+			checkboxes[11].checked = true; // Método de Pago
+			checkboxes[10].checked = true; // Perfil Usuario
+			break;
+		case "almacenero":
+			checkboxes[0].checked = true; // Escritorio
+			checkboxes[1].checked = true; // Almacen
+			checkboxes[10].checked = true; // Perfil Usuario
+			checkboxes[11].checked = true; // Método de Pago
+			break;
+		case "encargado":
+			checkboxes[0].checked = true; // Escritorio
+			checkboxes[1].checked = true; // Almacen
+			checkboxes[8].checked = true; // Solicitudes
+			checkboxes[9].checked = true; // Devoluciones
+			checkboxes[10].checked = true; // Perfil Usuario
+			checkboxes[11].checked = true; // Método de Pago
+			break;
+		case "admin":
+			checkboxes.forEach(function (checkbox) {
+				checkbox.checked = true;
+			});
+			$("#checkAll").prop("checked", true);
+			break;
+	}
+}
+
+function verificarCargo(cargo) {
+	console.log(cargo);
+	$('#cargo option[value="superadmin"]').remove();
+
+	if (cargo == "superadmin") {
+		$('#cargo').prepend('<option value="superadmin">Superadministrador</option>');
+		$('#cargo').selectpicker('refresh');
+	}
 }
 
 //Función Listar
@@ -155,9 +218,17 @@ function listar() {
 //Función para guardar o editar
 
 function guardaryeditar(e) {
-	e.preventDefault(); //No se activará la acción predeterminada del evento
+	e.preventDefault(); // No se activará la acción predeterminada del evento
+
+	$("input[name='permiso[]'][value='1']").prop("disabled", false); // Escritorio
+	$("input[name='permiso[]'][value='11']").prop("disabled", false); // Perfil Usuario
+
 	$("#btnGuardar").prop("disabled", true);
+
 	var formData = new FormData($("#formulario")[0]);
+
+	$("input[name='permiso[]'][value='1']").prop("disabled", true); // Escritorio
+	$("input[name='permiso[]'][value='11']").prop("disabled", true); // Perfil Usuario
 
 	$.ajax({
 		url: "../ajax/usuario.php?op=guardaryeditar",
@@ -167,6 +238,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (!datos) {
 				console.log("No se recibieron datos del servidor.");
 				$("#btnGuardar").prop("disabled", false);
@@ -184,6 +256,7 @@ function guardaryeditar(e) {
 		}
 	});
 }
+
 
 function mostrar(idusuario) {
 	$.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {

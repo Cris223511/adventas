@@ -42,11 +42,11 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
                   <label>Cliente:</label>
-                  <select name="idcliente" id="idcliente" class="form-control selectpicker" data-live-search="true" required></select>
+                  <select name="idcliente" id="idcliente" class="form-control selectpicker" data-live-search="true" data-size="5"required></select>
                 </div>
                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
                   <label>Usuario Vendedor:</label>
-                  <select name="idusuario" id="idusuario" class="form-control selectpicker" data-live-search="true" required></select>
+                  <select name="idusuario" id="idusuario" class="form-control selectpicker" data-live-search="true" data-size="5"required></select>
                 </div>
                 <div class="row">
                   <div class="col-12"></div>

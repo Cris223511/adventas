@@ -55,19 +55,21 @@ function guardaryeditar(e) {
 		data: formData,
 		contentType: false,
 		processData: false,
-		success: function (datas) {
+		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (!datos) {
 				console.log("No se recibieron datos del servidor.");
 				$("#btnGuardar").prop("disabled", false);
 				return;
-			} else if (datas == "El nombre que ha ingresado ya existe." || datas == "El número de documento que ha ingresado ya existe." || datas == "El email que ha ingresado ya existe." || datas == "El nombre del usuario que ha ingresado ya existe.") {
-				bootbox.alert(datas);
+			} else if (datos == "El nombre del usuario que ha ingresado ya existe." || datos == "El número de documento que ha ingresado ya existe.") {
+				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
+			} else {
+				bootbox.alert(datos);
+				actualizarInfoUsuario();
+				$("#btnGuardar").prop("disabled", false);
 			}
-			bootbox.alert(datas);
-			actualizarInfoUsuario();
-			$("#btnGuardar").prop("disabled", false);
 		}
 	});
 }

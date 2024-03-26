@@ -129,7 +129,7 @@ if (!isset($_SESSION["nombre"])) {
 									<th>Opciones</th>
 									<th>Artículo</th>
 									<th>Cantidad</th>
-									<th>Precio compra</th>
+									<th class="precio_compra">Precio compra</th>
 									<th>Precio venta</th>
 									<th>Descuento</th>
 									<th>Subtotal</th>
@@ -140,7 +140,7 @@ if (!isset($_SESSION["nombre"])) {
 							<td></td>
 							<td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td>
 							<td><input type="number" name="cantidad[]" id="cantidad[]" value="' . $reg->cantidad . '" readonly></td>
-							<td>' . "<nav>S/. $reg->precio_compra</nav>" . '</td>
+							<td class="precio_compra">' . "<nav>S/. $reg->precio_compra</nav>" . '</td>
 							<td><input type="number" name="precio_venta[]" id="precio_venta[]" value="' . $reg->precio_venta . '" readonly></td>
 							<td><input type="number" name="descuento[]" id="descuento[]" value="' . "$reg->descuento" . '" readonly></td>
 							<td>' . "<nav>S/. $reg->subtotal</nav>" . '</td>
@@ -154,7 +154,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th>IGV</th>
 						<th></th>
 						<th></th>
-						<th></th>
+						<th class="precio_compra"></th>
 						<th></th>
 						<th></th>
 						<th><h4 id="igv2">S/.' . number_format($igv, 2, '.', '') . '</h4><input type="hidden" name="total_igv" id="total_igv2" value="' . number_format($igv, 2, '.', '') . '"></th>
@@ -163,7 +163,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th>TOTAL</th>
 						<th></th>
 						<th></th>
-						<th></th>
+						<th class="precio_compra"></th>
 						<th></th>
 						<th></th>
 						<th><h4 id="total2">S/.' . number_format($rspta2["total_venta"], 2, '.', '') . '</h4><input type="hidden" name="total_venta" id="total_venta2" value="' . number_format($rspta2["total_venta"], 2, '.', '') . '"></th>
@@ -219,18 +219,25 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
+
+					if ($reg->tipo_comprobante == 'Ticket') {
+						$url = '../reportes/exTicketProforma.php?id=';
+					} else {
+						$url = '../reportes/exFacturaProforma.php?id=';
+					}
+
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							(($reg->estado == 'Pendiente') ?
-								('<a data-toggle="modal" href="#myModal2" title="Mirar detalles de proforma" style="color: black"><button class="btn btn-secondary" onclick="mostrar(' . $reg->idproforma . ')"><i class="fa fa-eye"></i></button></a>' .
+								('<a data-toggle="modal" href="#myModal2" title="Mirar detalles de proforma" style="color: black"><button class="btn btn-secondary" onclick="mostrar(' . $reg->idproforma . '); ocultarPrecioCompra();"><i class="fa fa-eye"></i></button></a>' .
 									mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" title="Anular proforma" style="color: black" onclick="anular(' . $reg->idproforma . ')"><i class="fa fa-close"></i></button>') .
 									mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" title="Eliminar proforma" onclick="eliminar(' . $reg->idproforma . ')"><i class="fa fa-trash"></i></button>') .
-									('<a target="_blank" href="../reportes/exFacturaProforma.php?id=' . $reg->idproforma . '"> <button class="btn btn-secondary" style="color: black;"><i class="fa fa-file"></i></button></a>')) .
+									('<a target="_blank" href="' . $url . $reg->idproforma . '"> <button class="btn btn-secondary" style="color: black;"><i class="fa fa-file"></i></button></a>')) .
 								('<a data-toggle="modal" href="#myModal3" title="Enviar y aceptar proforma" style="color: black" onclick="enviar(' . $reg->idproforma . ')"><button class="btn btn-secondary"><i class="fa fa-sign-in"></i></button></a>')
 								: (($reg->estado == 'Finalizado') ?
 									('<a data-toggle="modal" href="#myModal2" title="Mirar detalles de proforma" style="color: black"><button class="btn btn-secondary" onclick="mostrar(' . $reg->idproforma . ')"><i class="fa fa-eye"></i></button></a>' .
 										(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" title="Eliminar proforma" onclick="eliminar(' . $reg->idproforma . ')"><i class="fa fa-trash"></i></button>')) .
-										('<a target="_blank" href="../reportes/exFacturaProforma.php?id=' . $reg->idproforma . '"> <button class="btn btn-secondary" style="color: black;"><i class="fa fa-file"></i></button></a>'))
+										('<a target="_blank" href="' . $url . $reg->idproforma . '"> <button class="btn btn-secondary" style="color: black;"><i class="fa fa-file"></i></button></a>'))
 									: ('<button class="btn btn-secondary" title="Mirar detalles de proforma" onclick="mostrar(' . $reg->idproforma . ')"><i class="fa fa-eye"></i></button>' .
 										(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" title="Activar proforma" style="color: black; width: 36px" onclick="activar(' . $reg->idproforma . ')"><i class="fa fa-check"></i></button>')) .
 										(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" title="Eliminar proforma" onclick="eliminar(' . $reg->idproforma . ')"><i class="fa fa-trash"></i></button>'))))) . '</div>',
@@ -321,6 +328,7 @@ if (!isset($_SESSION["nombre"])) {
 					$producto = array(
 						'idarticulo' => $reg->idarticulo,
 						'articulo' => $reg->nombre,
+						'precio_compra' => $reg->precio_compra == '' ? "0" : $reg->precio_compra,
 						'precio_venta' => $reg->precio_venta == '' ? "0" : $reg->precio_venta,
 						'codigo_producto' => $reg->codigo_producto
 					);
@@ -369,7 +377,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						// "0" => ($reg->stock != '0') ? '<div style="display: flex; justify-content: center;"><button class="btn btn-warning" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->codigo . '\'); disableButton(this);"><span class="fa fa-plus"></span></button></div>' : '',
-						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); bloquearPrecios(); ocultarPrecioCompra(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
 						"3" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,

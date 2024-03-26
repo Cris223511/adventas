@@ -43,11 +43,11 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
                   <label>Cliente:</label>
-                  <select name="idcliente" id="idcliente" class="form-control selectpicker" data-live-search="true" required></select>
+                  <select name="idcliente" id="idcliente" class="form-control selectpicker" data-live-search="true" data-size="5"required></select>
                 </div>
                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
                   <label>Usuario Vendedor:</label>
-                  <select name="idusuario" id="idusuario" class="form-control selectpicker" data-live-search="true" required></select>
+                  <select name="idusuario" id="idusuario" class="form-control selectpicker" data-live-search="true" data-size="5"required></select>
                 </div>
                 <div class="row">
                   <div class="col-12"></div>
@@ -124,7 +124,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 2 -->
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -180,7 +180,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 3 -->
     <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

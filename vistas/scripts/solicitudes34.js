@@ -230,6 +230,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (datos == "El número correlativo que ha ingresado ya existe." || datos == "Una de las cantidades superan a la cantidad o stock del artículo.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
@@ -258,6 +259,7 @@ function guardaryeditar2(e) {
 		contentType: false,
 		processData: false,
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			bootbox.alert(datos);
 			$("#btnGuardar2").prop("disabled", false);
 			$("#idsolicitud").val("");
@@ -283,6 +285,7 @@ function guardaryeditar3(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (datos == "El número correlativo que ha ingresado ya existe." || datos == "Una de las cantidades a prestar superan a la cantidad solicitada del artículo.") {
 				bootbox.alert(datos);
 				$("#btnGuardar3").prop("disabled", false);

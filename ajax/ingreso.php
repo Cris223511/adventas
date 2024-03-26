@@ -69,13 +69,13 @@ if (!isset($_SESSION["nombre"])) {
                                     <th>Opciones</th>
                                     <th>Artículo</th>
                                     <th>Cantidad</th>
-                                    <th>Precio compra</th>
+                                    <th class="precio_compra">Precio compra</th>
                                     <th>Precio venta</th>
                                     <th>Subtotal</th>
                                 </thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->precio_compra . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . $reg->precio_compra * $reg->cantidad . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td class="precio_compra">' . $reg->precio_compra . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . $reg->precio_compra * $reg->cantidad . '</td></tr>';
 					$total = $total + ($reg->precio_compra * $reg->cantidad);
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? ($reg->precio_compra * $reg->cantidad) * 0.18 : ($reg->precio_compra * $reg->cantidad) * 0);
 				}
@@ -86,7 +86,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th>IGV</th>
 						<th></th>
 						<th></th>
-						<th></th>
+						<th class="precio_compra"></th>
 						<th></th>
 						<th><h4 id="igv">S/.' . number_format($igv, 2, '.', '') . '</h4><input type="hidden" name="total_igv" id="total_igv"></th>
 						</tr>
@@ -94,7 +94,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th>TOTAL</th>
 						<th></th>
 						<th></th>
-						<th></th>
+						<th class="precio_compra"></th>
 						<th></th>
 						<th><h4 id="total">S/.' . number_format($rspta2["total_compra"], 2, '.', '') . '</h4><input type="hidden" name="total_compra" id="total_compra"></th>
 						</tr>
@@ -168,7 +168,7 @@ if (!isset($_SESSION["nombre"])) {
 					}
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idingreso . ')"><i class="fa fa-eye"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idingreso . '); ocultarPrecioCompra();"><i class="fa fa-eye"></i></button></a>' .
 							(($reg->estado == 'Aceptado') ?
 								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" onclick="desactivar(' . $reg->idingreso . ')"><i class="fa fa-close"></i></button>')) : ('')) .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" onclick="eliminar(' . $reg->idingreso . ')"><i class="fa fa-trash"></i></button>') .
@@ -267,7 +267,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						// "0" => ($reg->stock != '0') ? '<div style="display: flex; justify-content: center;"><button class="btn btn-warning" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->codigo . '\'); disableButton(this);"><span class="fa fa-plus"></span></button></div>' : '',
-						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); bloquearPrecios(); ocultarPrecioCompra(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
 						"3" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,

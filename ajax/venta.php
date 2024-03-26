@@ -26,6 +26,8 @@ if (!isset($_SESSION["nombre"])) {
 		$impuesto = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";
 		$total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";
 
+		$sunat = isset($_POST["sunat"]) ? limpiarCadena($_POST["sunat"]) : "";
+		
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 				if (empty($idventa)) {
@@ -72,14 +74,14 @@ if (!isset($_SESSION["nombre"])) {
                                     <th>Opciones</th>
                                     <th>Artículo</th>
                                     <th>Cantidad</th>
-                                    <th>Precio compra</th>
+                                    <th class="precio_compra">Precio compra</th>
                                     <th>Precio venta</th>
                                     <th>Descuento</th>
                                     <th>Subtotal</th>
                                 </thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_compra</nav>" . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td class="precio_compra">' . "<nav>S/. $reg->precio_compra</nav>" . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? $reg->subtotal * 0.18 : $reg->subtotal * 0);
 				}
 
@@ -89,7 +91,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th>IGV</th>
 						<th></th>
 						<th></th>
-						<th></th>
+						<th class="precio_compra"></th>
 						<th></th>
 						<th></th>
 						<th><h4 id="igv">S/.' . number_format($igv, 2, '.', '') . '</h4><input type="hidden" name="total_igv" id="total_igv"></th>
@@ -98,7 +100,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th>TOTAL</th>
 						<th></th>
 						<th></th>
-						<th></th>
+						<th class="precio_compra"></th>
 						<th></th>
 						<th></th>
 						<th><h4 id="total">S/.' . number_format($rspta2["total_venta"], 2, '.', '') . '</h4><input type="hidden" name="total_venta" id="total_venta"></th>
@@ -489,7 +491,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idventa . '); ocultarPrecioCompra();"><i class="fa fa-eye"></i></button></a>' .
 							(($reg->estado == 'Aceptado') ?
 								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" onclick="anular(' . $reg->idventa . ')"><i class="fa fa-close"></i></button>')) : ('')) .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" onclick="eliminar(' . $reg->idventa . ')"><i class="fa fa-trash"></i></button>') .
@@ -584,6 +586,7 @@ if (!isset($_SESSION["nombre"])) {
 					$producto = array(
 						'idarticulo' => $reg->idarticulo,
 						'articulo' => $reg->nombre,
+						'precio_compra' => $reg->precio_compra == '' ? "0" : $reg->precio_compra,
 						'precio_venta' => $reg->precio_venta == '' ? "0" : $reg->precio_venta,
 						'codigo_producto' => $reg->codigo_producto
 					);
@@ -631,7 +634,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						// "0" => ($reg->stock != '0') ? '<div style="display: flex; justify-content: center;"><button class="btn btn-warning" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->codigo . '\'); disableButton(this);"><span class="fa fa-plus"></span></button></div>' : '',
-						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); bloquearPrecios(); ocultarPrecioCompra(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
 						"3" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,
@@ -717,6 +720,59 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				echo json_encode($data);
+				break;
+
+				/* ======================= SUNAT ======================= */
+
+			case 'consultaSunat':
+				$data = "";
+				$curl = curl_init();
+
+				try {
+					if (strlen($sunat) == 8) {
+						// DNI
+						curl_setopt($curl, CURLOPT_URL, 'https://api.apis.net.pe/v1/dni?numero=' . $sunat);
+					} elseif (strlen($sunat) == 11) {
+						// RUC
+						curl_setopt($curl, CURLOPT_URL, 'https://api.apis.net.pe/v1/ruc?numero=' . $sunat);
+					} elseif (strlen($sunat) < 8) {
+						// Mensaje para DNI no válido
+						$data = "El DNI debe tener 8 caracteres.";
+					} elseif (strlen($sunat) > 8 && strlen($sunat) < 11) {
+						// Mensaje para RUC no válido
+						$data = "El RUC debe tener 11 caracteres.";
+					}
+
+					if (!empty($data)) {
+						echo $data;
+						break;
+					}
+
+					// Configurar opciones de cURL
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+					// Ejecutar la solicitud
+					$response = curl_exec($curl);
+
+					if ($response === false) {
+						throw new Exception(curl_error($curl));
+					}
+
+					// Verificar si la respuesta contiene "Not Found" y ajustar el mensaje en consecuencia
+					if (stripos($response, 'Not Found') !== false || stripos($response, '{"error":"RUC invalido"}') !== false) {
+						$data = (strlen($sunat) == 8) ? "DNI no encontrado" : "RUC no encontrado";
+					} else {
+						$data = $response;
+					}
+				} catch (Exception $e) {
+					// Capturar excepción y proporcionar mensaje controlado
+					$data = "Error al procesar la solicitud: " . $e->getMessage();
+				} finally {
+					// Cerrar cURL
+					curl_close($curl);
+				}
+
+				echo $data;
 				break;
 		}
 		//Fin de las validaciones de acceso

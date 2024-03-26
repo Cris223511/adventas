@@ -135,7 +135,7 @@ class Usuario
 
 		$sql3 = "UPDATE almacen SET idusuario='$idusuario' WHERE idalmacen='$idalmacen'";
 		ejecutarConsulta($sql3);
-		
+
 		return $sw;
 	}
 
@@ -364,5 +364,13 @@ class Usuario
 	{
 		$sql = "SELECT u.idusuario,u.idalmacen,l.ubicacion AS local,l.estado AS estadoLocal,u.nombre, u.apellido,u.tipo_documento,u.num_documento,u.telefono,u.email,u.cargo,u.imagen,u.login,u.clave,u.estado,u.eliminado FROM usuario u LEFT JOIN almacen l ON u.idalmacen = l.idalmacen WHERE login='$login' AND clave='$clave'";
 		return ejecutarConsulta($sql);
+	}
+
+	public function almacenExiste($idalmacen)
+	{
+		$sql = "SELECT COUNT(*) AS existe FROM almacen WHERE idalmacen = '$idalmacen'";
+		$resultado = ejecutarConsultaSimpleFila($sql);
+
+		return $resultado['existe'];
 	}
 }

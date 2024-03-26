@@ -61,7 +61,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Artículos Externos
-                  <button class="btn btn-secondary" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button>
+                  <button class="btn btn-secondary" id="btnagregar" onclick="mostrarform(true); desbloquearPrecioCompraVenta();"><i class="fa fa-plus-circle"></i> Agregar</button>
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
                     <a href="../reportes/rptarticulosExternos.php" target="_blank"><button class="btn btn-secondary" style="color: black !important;"><i class="fa fa-clipboard"></i> Reporte</button></a>
                   <?php } ?>
@@ -148,11 +148,11 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label style="width: 100px;">Categoría(*):</label>
-                      <select id="idcategoria" name="idcategoria" class="form-control selectpicker" data-live-search="true" required></select>
+                      <select id="idcategoria" name="idcategoria" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
                     </div>
                     <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label style="width: 100px;">Marca(*):</label>
-                      <select id="idmarcas" name="idmarcas" class="form-control selectpicker" data-live-search="true" required></select>
+                      <select id="idmarcas" name="idmarcas" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
                     </div>
                     <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label style="width: 100px;">Stock(*):</label>
@@ -250,6 +250,48 @@ if (!isset($_SESSION["nombre"])) {
         </div>
       </section>
     </div>
+
+    <!-- Form categoría -->
+    <form name="formularioCategoria" id="formularioCategoria" method="POST" style="display: none;">
+      <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <label>Nombre(*):</label>
+        <input type="hidden" name="idcategoria" id="idcategoria2">
+        <input type="text" class="form-control" name="nombre" id="nombre2" maxlength="50" placeholder="Nombre" required>
+      </div>
+      <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <label>Descripción:</label>
+        <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="256" placeholder="Descripción">
+      </div>
+    </form>
+    <!-- Fin form categoría -->
+
+    <!-- Form marcas -->
+    <form name="formularioMarcas" id="formularioMarcas" method="POST" style="display: none;">
+      <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <label>Marca(*):</label>
+        <input type="hidden" name="idmarcas" id="idmarcas3">
+        <input type="text" class="form-control" name="nombre" id="nombre3" maxlength="50" placeholder="Nombre de la marca" required>
+      </div>
+      <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <label>Descripción:</label>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="150" rows="4" placeholder="Descripción"></textarea>
+      </div>
+    </form>
+    <!-- Fin form marcas -->
+
+    <!-- Form medidas -->
+    <form name="formularioMedidas" id="formularioMedidas" method="POST" style="display: none;">
+      <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <label>Medida(*):</label>
+        <input type="hidden" name="idmedida" id="idmedida4">
+        <input type="text" class="form-control" name="nombre" id="nombre4" maxlength="50" placeholder="Nombre de la medida" required>
+      </div>
+      <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <label>Descripción:</label>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="150" rows="4" placeholder="Descripción"></textarea>
+      </div>
+    </form>
+    <!-- Fin form medidas -->
   <?php
   } else {
     require 'noacceso.php';

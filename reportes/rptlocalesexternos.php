@@ -34,9 +34,10 @@ if (!isset($_SESSION["nombre"])) {
     $almacenes = new LocalExterno();
 
     $idusuario = $_SESSION["idusuario"];
+    $idalmacenSession = $_SESSION["idalmacen"];
     $cargo = $_SESSION["cargo"];
 
-    $rspta = $almacenes->listar();
+    $rspta = $almacenes->listar($idalmacenSession);
 
     $pdf->SetWidths(array(40, 110, 40));
 
