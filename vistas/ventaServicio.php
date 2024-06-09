@@ -71,7 +71,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="panel-body listadoregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important; height: max-content;">
                 <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
-                  <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+                  <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important; margin: 0 !important;">
                     <thead>
                       <th style="width: 12%;">Opciones</th>
                       <th>Cliente</th>
@@ -179,7 +179,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
 
               <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
-                <table id="detalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+                <table id="detalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important; margin: 0 !important;">
                   <thead style="background-color:#A9D0F5">
                     <th>Opciones</th>
                     <th>Servicio</th>
@@ -215,7 +215,7 @@ if (!isset($_SESSION["nombre"])) {
                   </tbody>
                 </table>
               </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px; margin-bottom: 0px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-secondary" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
               </div>
@@ -235,7 +235,7 @@ if (!isset($_SESSION["nombre"])) {
             <h4 class="modal-title">Seleccione un Servicio</h4>
           </div>
           <div class="modal-body table-responsive">
-            <table id="tblarticulos" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+            <table id="tblarticulos" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important; margin: 0 !important;">
               <thead>
                 <th>Opciones</th>
                 <th>IMAGEN</th>

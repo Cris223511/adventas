@@ -60,65 +60,9 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Artículos
-                  <!-- <button class="btn btn-secondary" id="btnagregar" onclick="mostrarform(true); desbloquearPrecioCompraVenta();"><i class="fa fa-plus-circle"></i> Agregar</button> -->
-                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
-                    <a href="../reportes/rptarticulos.php" target="_blank"><button class="btn btn-secondary" style="color: black !important;"><i class="fa fa-clipboard"></i> Reporte</button></a>
-                  <?php } ?>
-                </h1>
+                <h1 class="box-title">Agregar Artículos</h1>
+                <button class="btn btn-secondary" type="button" onclick="window.history.back()"><i class="fa fa-arrow-circle-left"></i> Volver</button>
                 <div class="box-tools pull-right"></div>
-              </div>
-              <!-- /.box-header -->
-              <!-- centro -->
-              <div class="panel-body table-responsive" id="listadoregistros">
-                <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
-                  <thead>
-                    <th>Opciones</th>
-                    <th>Imagen</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Ubicación del local</th>
-                    <th>Marca</th>
-                    <th>C. producto</th>
-                    <th>C. barra</th>
-                    <th>Stock normal</th>
-                    <th>Stock mínimo</th>
-                    <th>Precio de compra</th>
-                    <th>Precio de venta</th>
-                    <th>Ganancia</th>
-                    <th>Talla</th>
-                    <th>Color</th>
-                    <th>Peso</th>
-                    <th>U. medida</th>
-                    <th>Posición</th>
-                    <th>Agregado por</th>
-                    <th>Estado</th>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                  <tfoot>
-                    <th>Opciones</th>
-                    <th>Imagen</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Ubicación del local</th>
-                    <th>Marca</th>
-                    <th>C. producto</th>
-                    <th>C. barra</th>
-                    <th>Stock normal</th>
-                    <th>Stock mínimo</th>
-                    <th>Precio de compra</th>
-                    <th>Precio de venta</th>
-                    <th>Ganancia</th>
-                    <th>Talla</th>
-                    <th>Color</th>
-                    <th>Peso</th>
-                    <th>U. medida</th>
-                    <th>Posición</th>
-                    <th>Agregado por</th>
-                    <th>Estado</th>
-                  </tfoot>
-                </table>
               </div>
               <div class="panel-body" id="formularioregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important;">
                 <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
@@ -239,7 +183,6 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-10 col-md-8 col-sm-12 botones" style="background-color: white !important; padding: 10px 10px 10px 0 !important; float: right;">
                     <div style="float: right;">
-                      <button class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                       <button class="btn btn-secondary" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
                     </div>
                   </div>
@@ -300,7 +243,7 @@ if (!isset($_SESSION["nombre"])) {
   ?>
   <script type="text/javascript" src="../public/js/JsBarcode.all.min.js"></script>
   <script type="text/javascript" src="../public/js/jquery.PrintArea.js"></script>
-  <script type="text/javascript" src="scripts/articulo34.js"></script>
+  <script type="text/javascript" src="scripts/articulo_form.js"></script>
 
 <?php
 }

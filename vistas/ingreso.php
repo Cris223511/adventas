@@ -38,7 +38,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="box-header with-border">
                 <h1 class="box-title">Ingresos
                   <a data-toggle="modal" href="#myModal2">
-                    <button type="button" class="btn btn-secondary" style="color: black !important;" onclick="limpiar(); bloquearPrecios(); ocultarPrecioCompra();"> <span class="fa fa-plus-circle"></span> Agregar</button>
+                    <button type="button" class="btn btn-secondary" style="color: black !important;" onclick="limpiar(); bloquearPrecios();"> <span class="fa fa-plus-circle"></span> Agregar</button>
                   </a>
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
                     <a href="../reportes/rptingresos.php" target="_blank">
@@ -47,6 +47,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
+                  <a href="articulo_form.php"><button style="color: black !important;" class="btn btn-secondary" id="btnagregar"><i class="fa fa-cart-plus"></i> Agregar artículos</button></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -70,7 +71,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="panel-body listadoregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important; height: max-content;">
                 <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
-                  <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+                  <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important; margin: 0 !important;">
                     <thead>
                       <th style="width: 12%;">Opciones</th>
                       <th>Proveedor</th>
@@ -173,12 +174,13 @@ if (!isset($_SESSION["nombre"])) {
               </div>
 
               <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
-                <table id="detalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+                <table id="detalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important; margin: 0 !important;">
                   <thead style="background-color:#A9D0F5">
                     <th>Opciones</th>
                     <th>Artículo</th>
+                    <th>Stock</th>
                     <th>Cantidad</th>
-                    <th class="precio_compra">Precio compra</th>
+                    <th>Precio compra</th>
                     <th>Precio venta</th>
                     <th>Subtotal</th>
                   </thead>
@@ -187,7 +189,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>IGV</th>
                       <th></th>
                       <th></th>
-                      <th class="precio_compra"></th>
+                      <th></th>
+                      <th></th>
                       <th></th>
                       <th>
                         <h4 id="igv">S/. 0.00</h4><input type="hidden" name="total_igv" id="total_igv">
@@ -197,7 +200,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>TOTAL</th>
                       <th></th>
                       <th></th>
-                      <th class="precio_compra"></th>
+                      <th></th>
+                      <th></th>
                       <th></th>
                       <th>
                         <h4 id="total">S/. 0.00</h4><input type="hidden" name="total_compra" id="total_compra">
@@ -208,7 +212,7 @@ if (!isset($_SESSION["nombre"])) {
                   </tbody>
                 </table>
               </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 15px; margin-bottom: 0px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-secondary" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
               </div>
@@ -228,26 +232,26 @@ if (!isset($_SESSION["nombre"])) {
             <h4 class="modal-title infotitulo">Seleccione un Artículo</h4>
           </div>
           <div class="modal-body table-responsive">
-            <table id="tblarticulos" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+            <table id="tblarticulos" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important; margin: 0 !important;">
               <thead>
                 <th>Opciones</th>
                 <th>IMAGEN</th>
                 <th>NOMBRE</th>
+                <th>STOCK NORMAL</th>
+                <th>STOCK MÍNIMO</th>
+                <th>UBICACIÓN DEL LOCAL</th>
+                <th>PRECIO DE COMPRA</th>
+                <th>PRECIO DE VENTA</th>
+                <th>GANANCIA</th>
+                <th>C. PRODUCTO</th>
+                <th>C. BARRA</th>
                 <th>U. MEDIDA</th>
                 <th>CATEGORÍA</th>
                 <th>MARCA</th>
-                <th>UBICACIÓN DEL LOCAL</th>
                 <th>PESO</th>
                 <th>TALLA</th>
                 <th>COLOR</th>
                 <th>POSICIÓN DE OBJETO</th>
-                <th>C. PRODUCTO</th>
-                <th>C. BARRA</th>
-                <th>STOCK NORMAL</th>
-                <th>STOCK MÍNIMO</th>
-                <th>PRECIO DE COMPRA</th>
-                <th>PRECIO DE VENTA</th>
-                <th>GANANCIA</th>
                 <th>AGREGADO POR</th>
                 <th>ESTADO</th>
               </thead>
@@ -257,21 +261,21 @@ if (!isset($_SESSION["nombre"])) {
                 <th>Opciones</th>
                 <th>IMAGEN</th>
                 <th>NOMBRE</th>
+                <th>STOCK NORMAL</th>
+                <th>STOCK MÍNIMO</th>
+                <th>UBICACIÓN DEL LOCAL</th>
+                <th>PRECIO DE COMPRA</th>
+                <th>PRECIO DE VENTA</th>
+                <th>GANANCIA</th>
+                <th>C. PRODUCTO</th>
+                <th>C. BARRA</th>
                 <th>U. MEDIDA</th>
                 <th>CATEGORÍA</th>
                 <th>MARCA</th>
-                <th>UBICACIÓN DEL LOCAL</th>
                 <th>PESO</th>
                 <th>TALLA</th>
                 <th>COLOR</th>
                 <th>POSICIÓN DE OBJETO</th>
-                <th>C. PRODUCTO</th>
-                <th>C. BARRA</th>
-                <th>STOCK NORMAL</th>
-                <th>STOCK MÍNIMO</th>
-                <th>PRECIO DE COMPRA</th>
-                <th>PRECIO DE VENTA</th>
-                <th>GANANCIA</th>
                 <th>AGREGADO POR</th>
                 <th>ESTADO</th>
               </tfoot>

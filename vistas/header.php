@@ -340,7 +340,7 @@ $local_login = $_SESSION['local'];
                 <li id="lReportePV"><a href="ventasyproductos.php"><i class="fa fa-circle-o"></i> Reporte Ventas y Productos</a></li>  
                 <li id="lConsultaP"><a href="productosmasvendido.php"><i class="fa fa-circle-o"></i> Productos más Vendidos</a></li>
                 <li id="lGraficoVP"><a href="graficoconsultasvp.php"><i class="fa fa-circle-o"></i> Gráfico Ventas y Productos</a></li>
-                <li id="lConsultaD"><a href="productosmasdevuelto.php"><i class="fa fa-circle-o"></i> Productos más Devueltos</a></li>
+                <!-- <li id="lConsultaD"><a href="productosmasdevuelto.php"><i class="fa fa-circle-o"></i> Productos más Devueltos</a></li> -->
               </ul>
             </li>';
           }

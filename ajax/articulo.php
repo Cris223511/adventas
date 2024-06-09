@@ -193,11 +193,11 @@ if (!isset($_SESSION["nombre"])) {
 				/* ======================= SELECTS ======================= */
 
 			case 'listarTodosActivos':
-				// if ($cargo == "superadmin") {
-				// $rspta = $articulo->listarTodosActivos();
-				// } else {
-				$rspta = $articulo->listarTodosActivosPorUsuario($idusuario, $idalmacenSession);
-				// }
+				if ($cargo == "superadmin") {
+					$rspta = $articulo->listarTodosActivos();
+				} else {
+					$rspta = $articulo->listarTodosActivosPorUsuario($idusuario, $idalmacenSession);
+				}
 
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
 

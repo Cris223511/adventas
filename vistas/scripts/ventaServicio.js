@@ -229,9 +229,9 @@ function buscarSunat(e) {
 			datos = limpiarCadena(datos);
 			if (!datos) {
 				console.log("No se recibieron datos del servidor.");
-				limpiarModalClientes(); F
+				limpiarModalClientes();
 				return;
-			} else if (datos == "DNI no encontrado" || datos == "RUC no encontrado") {
+			} else if (datos == "DNI no valido" || datos == "RUC no valido") {
 				limpiarModalClientes();
 				bootbox.confirm({
 					message: datos + ", ¿deseas crear un cliente manualmente?",
@@ -245,7 +245,7 @@ function buscarSunat(e) {
 					},
 					callback: function (result) {
 						if (result) {
-							(datos == "DNI no encontrado") ? $("#tipo_documento2").val("DNI") : $("#tipo_documento2").val("RUC");
+							(datos == "DNI no valido") ? $("#tipo_documento2").val("DNI") : $("#tipo_documento2").val("RUC");
 
 							$("#tipo_documento2").trigger("change");
 
@@ -257,24 +257,36 @@ function buscarSunat(e) {
 						}
 					}
 				});
+				$("#btnSunat").prop("disabled", false);
 			} else if (datos == "El DNI debe tener 8 caracteres." || datos == "El RUC debe tener 11 caracteres.") {
 				bootbox.alert(datos);
 				limpiarModalClientes();
+				$("#btnSunat").prop("disabled", false);
 			} else {
-				// console.log(datos);
 				const obj = JSON.parse(datos);
 				console.log(obj);
 
-				$("#nombre").val(obj.nombre);
+				if (obj.tipoDocumento == "1") {
+					var nombreCompleto = capitalizarTodasLasPalabras(obj.nombres + " " + obj.apellidoPaterno + " " + obj.apellidoMaterno);
+					var direccionCompleta = "";
+				} else {
+					var nombreCompleto = capitalizarTodasLasPalabras(obj.razonSocial);
+					var direccionCompleta = capitalizarTodasLasPalabras(obj.provincia + ", " + obj.distrito + ", " + obj.direccion);
+				}
+
+				console.log("Nombre completo es =) =>" + nombreCompleto);
+				console.log("Direccion completa es =) =>" + direccionCompleta);
+
+				$("#nombre").val(nombreCompleto);
 				$("#tipo_documento").val(obj.tipoDocumento == "1" ? "DNI" : "RUC");
 				$("#num_documento").val(obj.numeroDocumento);
-				$("#direccion").val(obj.direccion);
+				$("#direccion").val(direccionCompleta);
 				$("#telefono").val(obj.telefono);
 				$("#email").val(obj.email);
 
 				// Deshabilitar los campos solo si están vacíos
-				$("#nombre").prop("disabled", obj.hasOwnProperty("nombre") && obj.nombre !== "" ? true : false);
-				$("#direccion").prop("disabled", obj.hasOwnProperty("direccion") && obj.direccion !== "" ? true : false);
+				$("#nombre").prop("disabled", (obj.hasOwnProperty("nombres") || obj.hasOwnProperty("razonSocial")) && nombreCompleto !== "" ? true : false);
+				$("#direccion").prop("disabled", obj.hasOwnProperty("direccion") && direccionCompleta !== "" ? true : false);
 				$("#telefono").prop("disabled", obj.hasOwnProperty("telefono") && obj.telefono !== "" ? true : false);
 				$("#email").prop("disabled", obj.hasOwnProperty("email") && obj.email !== "" ? true : false);
 
@@ -788,7 +800,7 @@ function modificarSubototales() {
 		var inpS = sub[i];
 
 		inpS.value = (inpC.value * inpP.value) - inpD.value;
-		document.getElementsByName("subtotal")[i].innerHTML = inpS.value;
+		document.getElementsByName("subtotal")[i].innerHTML = inpS.value.toFixed(2);
 	}
 	calcularTotales();
 }

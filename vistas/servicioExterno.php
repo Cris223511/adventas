@@ -101,14 +101,14 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body" id="formularioregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important;">
                 <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
                   <div class="form-group col-lg-2 col-md-4 col-sm-12 caja1" style="padding-left: 0 !important; padding-right: 20px;">
-                    <div class="contenedor" style="background-color: white; border-top: 3px #3686b4 solid; padding: 10px 20px 20px 20px;">
+                    <div class="contenedor" style="background-color: white; border-top: 3px #3d3f3f solid; padding: 10px 20px 20px 20px;">
                       <label>Imagen de muestra:</label>
                       <div>
-                        <img src="" width="100%" id="imagenmuestra">
+                        <img src="" width="100%" id="imagenmuestra" style="display: none;">
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #3686b4 solid; padding: 20px;">
+                  <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #3d3f3f solid; padding: 20px;">
                     <div class="form-group col-lg-12 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label class="label_input" style="width: 90px;">Nombre(*):</label>
                       <input type="hidden" name="idservicio" id="idservicio">
@@ -136,7 +136,7 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label style="width: 100px;">Precio(*):</label>
-                      <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio." required>
+                      <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese el precio." required>
                     </div>
                     <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label class="label_input" style="width: 90px;">Imagen:</label>

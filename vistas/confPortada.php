@@ -13,7 +13,7 @@ if (!isset($_SESSION["nombre"])) {
     <style>
       .marco {
         background-color: white;
-        border-top: 3px #3686b4 solid;
+        border-top: 3px #3d3f3f solid;
       }
 
       .imagenActual {
@@ -65,7 +65,7 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="panel-body marco" id="formularioregistros">
                     <label>Imagen actual:</label>
                     <div class="imgContenido">
-                      <img src="" width="100%" id="imagenmuestra">
+                      <img src="" width="100%" id="imagenmuestra" style="display: none;">
                     </div>
                   </div>
                 </div>

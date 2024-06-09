@@ -169,7 +169,7 @@ class Proforma
 
 	public function listarDetalle($idproforma)
 	{
-		$sql = "SELECT dp.idproforma,dp.idarticulo,a.nombre,dp.cantidad,dp.precio_venta,a.precio_compra,dp.descuento,(dp.cantidad*dp.precio_venta-dp.descuento) as subtotal FROM detalle_proforma dp LEFT JOIN articulo a on dp.idarticulo=a.idarticulo WHERE dp.idproforma='$idproforma'";
+		$sql = "SELECT dp.idproforma,dp.idarticulo,a.nombre,a.stock,dp.cantidad,dp.precio_venta,a.precio_compra,dp.descuento,(dp.cantidad*dp.precio_venta-dp.descuento) as subtotal FROM detalle_proforma dp LEFT JOIN articulo a on dp.idarticulo=a.idarticulo WHERE dp.idproforma='$idproforma'";
 		return ejecutarConsulta($sql);
 	}
 

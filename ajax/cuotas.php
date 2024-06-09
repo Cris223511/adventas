@@ -125,7 +125,7 @@ if (!isset($_SESSION["nombre"])) {
 			</thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td class="precio_compra">' . "<nav>S/. $reg->precio_compra</nav>" . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_compra</nav>" . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? ($reg->subtotal) * 0.18 : ($reg->subtotal) * 0);
 				}
 
@@ -135,7 +135,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th>IGV</th>
 						<th></th>
 						<th></th>
-						<th class="precio_compra"></th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th><h4 id="igv">S/.' . number_format($igv, 2, '.', '') . '</h4><input type="hidden" name="total_igv" id="total_igv"></th>
@@ -144,7 +144,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th>TOTAL</th>
 						<th></th>
 						<th></th>
-						<th class="precio_compra"></th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th><h4 id="total">S/.' . number_format($rspta2["total_venta"], 2, '.', '') . '</h4><input type="hidden" name="total_venta" id="total_venta"></th>
@@ -312,7 +312,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idcuotas . '); ocultarPrecioCompra();P"><i class="fa fa-eye"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-secondary" style="color: black !important;" onclick="mostrar(' . $reg->idcuotas . ');"><i class="fa fa-eye"></i></button></a>' .
 							(($reg->estado == 'Deuda' || $reg->estado == 'Pagado') ?
 								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" onclick="anular(' . $reg->idcuotas . ')"><i class="fa fa-close"></i></button>')) : ('')) .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" onclick="eliminar(' . $reg->idcuotas . ')"><i class="fa fa-trash"></i></button>') .
@@ -444,24 +444,24 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						// "0" => ($reg->stock != '0') ? '<div style="display: flex; justify-content: center;"><button class="btn btn-warning" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->codigo . '\'); disableButton(this);"><span class="fa fa-plus"></span></button></div>' : '',
-						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); bloquearPrecios(); ocultarPrecioCompra(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); bloquearPrecios(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
-						"3" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,
-						"4" => $reg->categoria,
-						"5" => $reg->marca,
-						"6" => $reg->almacen,
-						"7" => ($reg->peso == '0.00') ? 'Sin registrar.' : $reg->peso,
-						"8" => ($reg->talla == '') ? 'Sin registrar.' : $reg->talla,
-						"9" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
-						"10" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
-						"11" => $reg->codigo_producto,
-						"12" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
-						"13" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
-						"14" => $reg->stock_minimo,
-						"15" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
-						"16" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						// "17" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"3" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
+						"4" => $reg->stock_minimo,
+						"5" => $reg->almacen,
+						"6" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
+						"7" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						// "8" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"8" => $reg->codigo_producto,
+						"9" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
+						"10" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,
+						"11" => $reg->categoria,
+						"12" => $reg->marca,
+						"13" => ($reg->peso == '0.00') ? 'Sin registrar.' : $reg->peso,
+						"14" => ($reg->talla == '') ? 'Sin registrar.' : $reg->talla,
+						"15" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
+						"16" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
 						"17" => $reg->usuario . ' - ' . $cargo_detalle,
 						"18" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);

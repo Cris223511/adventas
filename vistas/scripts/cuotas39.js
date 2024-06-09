@@ -2,6 +2,19 @@ var tabla;
 let lastNumComp = 0;
 let lastNumSerie = "";
 
+// Nombres de las columnas a ocultar
+var columnasAocultar = [
+	"Precio compra",
+	"PRECIO DE COMPRA",
+	"precio de compra",
+	"PRECIO COMPRA",
+	"Precio compra",
+	"precio compra",
+	"Ganancia",
+	"GANANCIA",
+	"ganancia"
+];
+
 //Función que se ejecuta al inicio
 function init() {
 	mostrarform(false);
@@ -61,6 +74,9 @@ function init() {
 
 	$('#mCuotas').addClass("treeview active");
 	$('#lCuotas').addClass("active");
+
+	ocultarColumnasPorNombre("detalles", columnasAocultar);
+	ocultarColumnasPorNombre("tblarticulos", columnasAocultar);
 }
 
 // function generarSiguienteCorrelativo(correlativoActual) {
@@ -354,7 +370,9 @@ function mostrar(idcuotas) {
 
 	$.post("../ajax/cuotas.php?op=listarDetalle&id=" + idcuotas, function (r) {
 		$("#detalles").html(r);
-		ocultarPrecioCompra();
+
+		ocultarColumnasPorNombre("detalles", columnasAocultar);
+		ocultarColumnasPorNombre("tblarticulos", columnasAocultar);
 	});
 }
 
@@ -408,7 +426,7 @@ function marcarImpuesto() {
 	modificarSubototales();
 }
 
-function agregarDetalle(idarticulo, articulo, precio_compra, precio_venta) {
+function agregarDetalle(idarticulo, articulo, stock, precio_compra, precio_venta) {
 	var cantidad = 1;
 	var descuento = '0.00';
 
@@ -417,9 +435,10 @@ function agregarDetalle(idarticulo, articulo, precio_compra, precio_venta) {
 		var fila = '<tr class="filas" id="fila' + cont + '">' +
 			'<td class="nowrap-cell"><button type="button" class="btn btn-danger" onclick="eliminarDetalle(' + cont + ', ' + idarticulo + ')">X</button></td>' +
 			'<td class="nowrap-cell"><input type="hidden" name="idarticulo[]" value="' + idarticulo + '">' + articulo + '</td>' +
+			'<td class="nowrap-cell">' + stock + '</td>' +
 			'<td class="nowrap-cell"><input type="number" name="cantidad[]" id="cantidad[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></td>' +
 			// '<td class="nowrap-cell"><input type="text" name="cantidad[]" onblur="verificar_stock(' + idarticulo + ', \'' + articulo + '\')" id="cantidad[]" value="' + cantidad + '"></td>' +
-			'<td class="nowrap-cell precio_compra"><input type="hidden" step="any" class="precios" name="precio_compra[]" value="' + precio_compra + '"><span> S/. ' + precio_compra + '</span></td>' +
+			'<td class="nowrap-cell"><input type="hidden" step="any" class="precios" name="precio_compra[]" value="' + precio_compra + '"><span> S/. ' + precio_compra + '</span></td>' +
 			'<td class="nowrap-cell"><input type="number" step="any" class="precios" name="precio_venta[]" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
 			'<td class="nowrap-cell"><input type="number" step="any" name="descuento[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></td>' +
 			'<td class="nowrap-cell"><span name="subtotal" id="subtotal' + cont + '">' + subtotal + '</span></td>' +
@@ -432,6 +451,9 @@ function agregarDetalle(idarticulo, articulo, precio_compra, precio_venta) {
 		evitarCaracteresEspecialesCamposNumericos();
 		aplicarRestrictATodosLosInputs();
 		console.log("Deshabilito a: " + idarticulo + " =)");
+
+		ocultarColumnasPorNombre("detalles", columnasAocultar);
+		ocultarColumnasPorNombre("tblarticulos", columnasAocultar);
 	}
 	else {
 		alert("Error al ingresar el detalle, revisar los datos del artículo");
@@ -468,7 +490,7 @@ function modificarSubototales() {
 		var inpS = sub[i];
 
 		inpS.value = (inpC.value * inpP.value) - inpD.value;
-		document.getElementsByName("subtotal")[i].innerHTML = inpS.value;
+		document.getElementsByName("subtotal")[i].innerHTML = inpS.value.toFixed(2);
 	}
 	calcularTotales();
 

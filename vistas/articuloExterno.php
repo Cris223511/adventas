@@ -61,7 +61,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Artículos Externos
-                  <button class="btn btn-secondary" id="btnagregar" onclick="mostrarform(true); desbloquearPrecioCompraVenta();"><i class="fa fa-plus-circle"></i> Agregar</button>
+                  <!-- <button class="btn btn-secondary" id="btnagregar" onclick="mostrarform(true); desbloquearPrecioCompraVenta();"><i class="fa fa-plus-circle"></i> Agregar</button> -->
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
                     <a href="../reportes/rptarticulosExternos.php" target="_blank"><button class="btn btn-secondary" style="color: black !important;"><i class="fa fa-clipboard"></i> Reporte</button></a>
                   <?php } ?>
@@ -123,14 +123,14 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body" id="formularioregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important;">
                 <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
                   <div class="form-group col-lg-2 col-md-4 col-sm-12 caja1" style="padding-left: 0 !important; padding-right: 20px;">
-                    <div class="contenedor" style="background-color: white; border-top: 3px #3686b4 solid; padding: 10px 20px 20px 20px;">
+                    <div class="contenedor" style="background-color: white; border-top: 3px #3d3f3f solid; padding: 10px 20px 20px 20px;">
                       <label>Imagen de muestra:</label>
                       <div>
-                        <img src="" width="100%" id="imagenmuestra">
+                        <img src="" width="100%" id="imagenmuestra" style="display: none;">
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #3686b4 solid; padding: 20px;">
+                  <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #3d3f3f solid; padding: 20px;">
                     <div class="form-group col-lg-12 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label class="label_input" style="width: 90px;">Nombre(*):</label>
                       <input type="hidden" name="idarticulo" id="idarticulo">
@@ -156,7 +156,7 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label style="width: 100px;">Stock(*):</label>
-                      <input type="number" class="form-control" name="stock" id="stock" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="1" placeholder="Stock" required>
+                      <input type="number" class="form-control" name="stock" id="stock" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Stock" required>
                     </div>
                     <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label style="width: 100px;">Stock mínimo(*):</label>

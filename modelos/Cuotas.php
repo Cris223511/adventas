@@ -344,7 +344,7 @@ class Cuotas
 
 	public function listarDetalle($idcuotas)
 	{
-		$sql = "SELECT dc.idcuotas,dc.idarticulo,a.nombre,dc.cantidad,dc.precio_venta,a.precio_compra,dc.descuento,(dc.cantidad*dc.precio_venta-dc.descuento) as subtotal FROM detalle_cuotas dc LEFT JOIN articulo a on dc.idarticulo=a.idarticulo where dc.idcuotas='$idcuotas'";
+		$sql = "SELECT dc.idcuotas,dc.idarticulo,a.nombre,a.stock,dc.cantidad,dc.precio_venta,a.precio_compra,dc.descuento,(dc.cantidad*dc.precio_venta-dc.descuento) as subtotal FROM detalle_cuotas dc LEFT JOIN articulo a on dc.idarticulo=a.idarticulo where dc.idcuotas='$idcuotas'";
 		return ejecutarConsulta($sql);
 	}
 

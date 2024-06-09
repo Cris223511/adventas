@@ -5,6 +5,20 @@ let lastNumSerie = ""; // proforma
 let lastNumCompV = 0; // venta
 let lastNumSerieV = ""; // venta
 
+
+// Nombres de las columnas a ocultar
+var columnasAocultar = [
+	"Precio compra",
+	"PRECIO DE COMPRA",
+	"precio de compra",
+	"PRECIO COMPRA",
+	"Precio compra",
+	"precio compra",
+	"Ganancia",
+	"GANANCIA",
+	"ganancia"
+];
+
 function habilitarPersonales() {
 	$("#idcliente").prop("disabled", false);
 }
@@ -29,14 +43,22 @@ function init() {
 		guardaryeditar2(e);
 	});
 
+	$("#formSunat").on("submit", function (e) {
+		buscarSunat(e);
+	});
+
 	$('[data-toggle="popover"]').popover();
 
 	//Cargamos los items al select cliente
 	$.post("../ajax/proformas.php?op=selectCliente", function (r) {
 		$("#idcliente").html(r);
 		$('#idcliente').selectpicker('refresh');
+		$('#idcliente').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
+
 		$("#idcliente2").html(r);
 		$('#idcliente2').selectpicker('refresh');
+		$("#idcliente3").html(r);
+		$('#idcliente3').selectpicker('refresh');
 	});
 
 	//Cargamos los items al select cliente
@@ -49,10 +71,16 @@ function init() {
 		console.log(r)
 		$("#idalmacen").html(r);
 		$('#idalmacen').selectpicker('refresh');
-		$("#idalmacen2").html(r);
-		$('#idalmacen2').selectpicker('refresh');
+		$("#idalmacen3").html(r);
+		$('#idalmacen3').selectpicker('refresh');
+		$("#idalmacen4").html(r);
+		$('#idalmacen4').selectpicker('refresh');
+		$("#idalmacen5").html(r);
+		$('#idalmacen5').selectpicker('refresh');
 		actualizarRUC();
-		actualizarRUC2();
+		actualizarRUC3();
+		actualizarRUC4();
+		actualizarRUC5();
 	});
 
 	// obtenemos el último número de proforma (PROFORMA)
@@ -94,6 +122,9 @@ function init() {
 
 	$('#mProformas').addClass("treeview active");
 	$('#lProformas').addClass("active");
+
+	ocultarColumnasPorNombre("detalles", columnasAocultar);
+	ocultarColumnasPorNombre("tblarticulos", columnasAocultar);
 }
 
 function actualizarRUC() {
@@ -109,9 +140,9 @@ function actualizarRUC() {
 	}
 }
 
-function actualizarRUC2() {
-	const selectLocal = document.getElementById("idalmacen2");
-	const localRUCInput = document.getElementById("local_ruc2");
+function actualizarRUC3() {
+	const selectLocal = document.getElementById("idalmacen3");
+	const localRUCInput = document.getElementById("local_ruc3");
 	const selectedOption = selectLocal.options[selectLocal.selectedIndex];
 
 	if (selectedOption.value !== "") {
@@ -120,6 +151,294 @@ function actualizarRUC2() {
 	} else {
 		localRUCInput.value = "";
 	}
+}
+
+function actualizarRUC4() {
+	const selectLocal = document.getElementById("idalmacen4");
+	const localRUCInput = document.getElementById("local_ruc4");
+	const selectedOption = selectLocal.options[selectLocal.selectedIndex];
+
+	if (selectedOption.value !== "") {
+		const localRUC = selectedOption.getAttribute('data-local-ruc');
+		localRUCInput.value = localRUC;
+	} else {
+		localRUCInput.value = "";
+	}
+}
+
+function actualizarRUC5() {
+	const selectLocal = document.getElementById("idalmacen5");
+	const localRUCInput = document.getElementById("local_ruc5");
+	const selectedOption = selectLocal.options[selectLocal.selectedIndex];
+
+	if (selectedOption.value !== "") {
+		const localRUC = selectedOption.getAttribute('data-local-ruc');
+		localRUCInput.value = localRUC;
+	} else {
+		localRUCInput.value = "";
+	}
+}
+
+function checkEnter(event) {
+	if (event.key === "Enter") {
+		if ($('.no-results').is(':visible')) {
+			$('#myModal5').modal('show');
+			limpiarModalClientes();
+			$("#sunat").val("");
+			console.log("di enter en idcliente =)");
+		}
+	}
+}
+
+// CLIENTES NUEVOS (POR SUNAT)
+
+function listarClientes() {
+	$.post("../ajax/proformas.php?op=selectCliente", function (r) {
+		$("#idcliente").empty();
+		$("#idcliente").html(r);
+		$('#idcliente').selectpicker('refresh');
+		$('#idcliente').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
+
+		actualizarRUC4();
+		actualizarRUC5();
+	});
+}
+
+function limpiarModalClientes() {
+	$("#idcliente3").val("");
+	$("#nombre").val("");
+	$("#tipo_documento").val("");
+	$("#num_documento").val("");
+	$("#direccion").val("");
+	$("#telefono").val("");
+	$("#email").val("");
+	$("#descripcion").val("");
+
+	habilitarTodoModalCliente();
+
+	$("#idalmacen4").val($("#idalmacen4 option:first").val());
+	$("#idalmacen4").selectpicker('refresh');
+
+	$("#btnSunat").prop("disabled", false);
+	$("#btnGuardarCliente").prop("disabled", true);
+
+	actualizarRUC5();
+}
+
+function guardaryeditar2(e) {
+	e.preventDefault();
+	$("#btnGuardarCliente").prop("disabled", true);
+
+	deshabilitarTodoModalCliente();
+	var formData = new FormData($("#formulario2")[0]);
+	formData.append('tipo_persona', 'Cliente');
+	habilitarTodoModalCliente();
+
+	$.ajax({
+		url: "../ajax/persona.php?op=guardaryeditar",
+		type: "POST",
+		data: formData,
+		contentType: false,
+		processData: false,
+
+		success: function (datos) {
+			datos = limpiarCadena(datos);
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardarCliente").prop("disabled", false);
+				return;
+			} else if (datos == "El número de documento que ha ingresado ya existe.") {
+				bootbox.alert(datos);
+				$("#btnGuardarCliente").prop("disabled", false);
+				return;
+			} else {
+				bootbox.alert(datos);
+				$('#myModal5').modal('hide');
+				let idalmacen = $("#idalmacen").val();
+				actualizarPersonales(idalmacen);
+				limpiarModalClientes();
+				$("#sunat").val("");
+			}
+		}
+	});
+}
+
+function buscarSunat(e) {
+	e.preventDefault();
+	var formData = new FormData($("#formSunat")[0]);
+	limpiarModalClientes();
+	$("#btnSunat").prop("disabled", true);
+
+	$.ajax({
+		url: "../ajax/proformas.php?op=consultaSunat",
+		type: "POST",
+		data: formData,
+		contentType: false,
+		processData: false,
+
+		success: function (datos) {
+			datos = limpiarCadena(datos);
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				limpiarModalClientes();
+				return;
+			} else if (datos == "DNI no valido" || datos == "RUC no valido") {
+				limpiarModalClientes();
+				bootbox.confirm({
+					message: datos + ", ¿deseas crear un cliente manualmente?",
+					buttons: {
+						cancel: {
+							label: 'Cancelar',
+						},
+						confirm: {
+							label: 'Aceptar',
+						}
+					},
+					callback: function (result) {
+						if (result) {
+							(datos == "DNI no valido") ? $("#tipo_documento2").val("DNI") : $("#tipo_documento2").val("RUC");
+
+							$("#tipo_documento2").trigger("change");
+
+							let inputValue = $('#sunat').val();
+							$("#num_documento2").val(inputValue);
+
+							$('#myModal5').modal('hide');
+							$('#myModal4').modal('show');
+						}
+					}
+				});
+				$("#btnSunat").prop("disabled", false);
+			} else if (datos == "El DNI debe tener 8 caracteres." || datos == "El RUC debe tener 11 caracteres.") {
+				bootbox.alert(datos);
+				limpiarModalClientes();
+				$("#btnSunat").prop("disabled", false);
+			} else {
+				const obj = JSON.parse(datos);
+				console.log(obj);
+
+				if (obj.tipoDocumento == "1") {
+					var nombreCompleto = capitalizarTodasLasPalabras(obj.nombres + " " + obj.apellidoPaterno + " " + obj.apellidoMaterno);
+					var direccionCompleta = "";
+				} else {
+					var nombreCompleto = capitalizarTodasLasPalabras(obj.razonSocial);
+					var direccionCompleta = capitalizarTodasLasPalabras(obj.provincia + ", " + obj.distrito + ", " + obj.direccion);
+				}
+
+				console.log("Nombre completo es =) =>" + nombreCompleto);
+				console.log("Direccion completa es =) =>" + direccionCompleta);
+
+				$("#nombre").val(nombreCompleto);
+				$("#tipo_documento").val(obj.tipoDocumento == "1" ? "DNI" : "RUC");
+				$("#num_documento").val(obj.numeroDocumento);
+				$("#direccion").val(direccionCompleta);
+				$("#telefono").val(obj.telefono);
+				$("#email").val(obj.email);
+
+				// Deshabilitar los campos solo si están vacíos
+				$("#nombre").prop("disabled", (obj.hasOwnProperty("nombres") || obj.hasOwnProperty("razonSocial")) && nombreCompleto !== "" ? true : false);
+				$("#direccion").prop("disabled", obj.hasOwnProperty("direccion") && direccionCompleta !== "" ? true : false);
+				$("#telefono").prop("disabled", obj.hasOwnProperty("telefono") && obj.telefono !== "" ? true : false);
+				$("#email").prop("disabled", obj.hasOwnProperty("email") && obj.email !== "" ? true : false);
+
+				$("#idalmacen4").prop("disabled", false);
+				$("#descripcion").prop("disabled", false);
+
+				$("#idalmacen4").val($("#idalmacen4 option:first").val());
+				$("#idalmacen4").selectpicker('refresh');
+
+				$("#sunat").val("");
+
+				$("#btnSunat").prop("disabled", false);
+				$("#btnGuardarCliente").prop("disabled", false);
+			}
+		}
+	});
+}
+
+function agregarClienteManual() {
+	limpiarModalClientes();
+	$("#sunat").val("");
+	$('#myModal5').modal('hide');
+	$('#myModal4').modal('show');
+}
+
+function habilitarTodoModalCliente() {
+	$("#tipo_documento").prop("disabled", true);
+	$("#num_documento").prop("disabled", true);
+	$("#nombre").prop("disabled", true);
+	$("#direccion").prop("disabled", true);
+	$("#telefono").prop("disabled", true);
+	$("#email").prop("disabled", true);
+	$("#idalmacen4").prop("disabled", true);
+	$("#local_ruc4").prop("disabled", true);
+	$("#descripcion").prop("disabled", true);
+}
+
+function deshabilitarTodoModalCliente() {
+	$("#tipo_documento").prop("disabled", false);
+	$("#num_documento").prop("disabled", false);
+	$("#nombre").prop("disabled", false);
+	$("#direccion").prop("disabled", false);
+	$("#telefono").prop("disabled", false);
+	$("#email").prop("disabled", false);
+	$("#idalmacen4").prop("disabled", false);
+	$("#local_ruc4").prop("disabled", false);
+	$("#descripcion").prop("disabled", false);
+}
+
+// CLIENTES NUEVOS (POR SI NO ENCUENTRA LA SUNAT)
+
+function limpiarModalClientes2() {
+	$("#idcliente3").val("");
+	$("#nombre2").val("");
+	$("#tipo_documento2").val("");
+	$("#num_documento2").val("");
+	$("#direccion2").val("");
+	$("#telefono2").val("");
+	$("#email2").val("");
+	$("#descripcion2").val("");
+
+	$("#idalmacen5").val($("#idalmacen5 option:first").val());
+	$("#idalmacen5").selectpicker('refresh');
+
+	$("#btnGuardarCliente2").prop("disabled", false);
+
+	actualizarRUC4();
+}
+
+function guardaryeditar3(e) {
+	e.preventDefault();
+	$("#btnGuardarCliente2").prop("disabled", true);
+	var formData = new FormData($("#formulario3")[0]);
+	formData.append('tipo_persona', 'Cliente');
+
+	$.ajax({
+		url: "../ajax/persona.php?op=guardaryeditar",
+		type: "POST",
+		data: formData,
+		contentType: false,
+		processData: false,
+
+		success: function (datos) {
+			datos = limpiarCadena(datos);
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardarCliente2").prop("disabled", false);
+				return;
+			} else if (datos == "El número de documento que ha ingresado ya existe.") {
+				bootbox.alert(datos);
+				$("#btnGuardarCliente2").prop("disabled", false);
+				return;
+			} else {
+				bootbox.alert(datos);
+				$('#myModal4').modal('hide');
+				let idalmacen = $("#idalmacen").val();
+				actualizarPersonales(idalmacen);
+				limpiarModalClientes2();
+			}
+		}
+	});
 }
 
 function actualizarPersonales(idalmacen) {
@@ -146,16 +465,19 @@ function actualizarPersonales(idalmacen) {
 							select.append('<option value="' + opcion.id + '">' + opcion.nombre + '</option>');
 						});
 						select.selectpicker('refresh');
+						select.closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 					} else if (idalmacen == 0) {
 						select.empty();
 						select.html('<option value="">- Seleccione -</option>');
 						select.selectpicker('refresh');
 						deshabilitarPersonales();
 						select.selectpicker('refresh');
+						select.closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 					} else {
 						select.empty();
 						select.html('<option value="">- Seleccione -</option>');
 						select.selectpicker('refresh');
+						select.closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 					}
 				}
 			}
@@ -204,6 +526,8 @@ function limpiar() {
 
 	$("#idcliente2").val($("#idcliente2 option:first").val());
 	$("#idcliente2").selectpicker('refresh');
+	$("#idcliente3").val($("#idcliente3 option:first").val());
+	$("#idcliente3").selectpicker('refresh');
 	$("#idalmacen2").val($("#idalmacen2 option:first").val());
 	$("#idalmacen2").selectpicker('refresh');
 
@@ -231,7 +555,7 @@ function limpiar() {
 
 	$('#tblarticulos button').removeAttr('disabled');
 	actualizarRUC();
-	actualizarRUC2();
+	actualizarRUC5();
 }
 
 //Función cancelarform
@@ -442,13 +766,13 @@ function mostrar(idproforma) {
 			$("#impuesto").selectpicker('refresh');
 
 			$("#idproforma").val(data.idproforma);
-			actualizarRUC();
-			actualizarRUC2();
+			actualizarRUC5();
 
 			$.post("../ajax/proformas.php?op=listarDetalle&id=" + idproforma, function (r) {
 				$("#detalles").html(r);
 				$('[data-toggle="popover"]').popover();
-				ocultarPrecioCompra();
+				ocultarColumnasPorNombre("detalles", columnasAocultar);
+				ocultarColumnasPorNombre("tblarticulos", columnasAocultar);
 			});
 		})
 	});
@@ -469,8 +793,8 @@ function enviar(idproforma) {
 		actualizarPersonales(data.idalmacen).then(() => {
 			$("#idcliente2").val(data.idcliente);
 			$("#idcliente2").selectpicker('refresh');
-			$("#idalmacen2").val(data.idalmacen);
-			$("#idalmacen2").selectpicker('refresh');
+			$("#idalmacen3").val(data.idalmacen);
+			$("#idalmacen3").selectpicker('refresh');
 			$("#idmetodopago2").val(data.idmetodopago);
 			$("#idmetodopago2").selectpicker('refresh');
 			$("#serie_comprobante2").val(data.serie_comprobante);
@@ -484,8 +808,8 @@ function enviar(idproforma) {
 			$("#impuesto2").selectpicker('refresh');
 
 			$("#idproforma2").val(data.idproforma);
-			actualizarRUC();
-			actualizarRUC2();
+			actualizarRUC4();
+			actualizarRUC5();
 
 			$.post("../ajax/proformas.php?op=listarDetalle2&id=" + idproforma, function (r) {
 				$("#detalles2").html(r);
@@ -559,7 +883,7 @@ function marcarImpuesto() {
 	modificarSubototales();
 }
 
-function agregarDetalle(idarticulo, articulo, precio_compra, precio_venta) {
+function agregarDetalle(idarticulo, articulo, stock, precio_compra, precio_venta) {
 	var cantidad = 1;
 	var descuento = '0.00';
 
@@ -568,9 +892,10 @@ function agregarDetalle(idarticulo, articulo, precio_compra, precio_venta) {
 		var fila = '<tr class="filas" id="fila' + cont + '">' +
 			'<td class="nowrap-cell"><button type="button" class="btn btn-danger" onclick="eliminarDetalle(' + cont + ', ' + idarticulo + ')">X</button></td>' +
 			'<td class="nowrap-cell"><input type="hidden" name="idarticulo[]" value="' + idarticulo + '">' + articulo + '</td>' +
+			'<td class="nowrap-cell">' + stock + '</td>' +
 			'<td class="nowrap-cell"><input type="number" name="cantidad[]" id="cantidad[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></td>' +
 			// '<td class="nowrap-cell"><input type="text" name="cantidad[]" onblur="verificar_stock(' + idarticulo + ', \'' + articulo + '\')" id="cantidad[]" value="' + cantidad + '"></td>' +
-			'<td class="nowrap-cell precio_compra"><input type="hidden" step="any" class="precios" name="precio_compra[]" value="' + precio_compra + '"><span> S/. ' + precio_compra + '</span></td>' +
+			'<td class="nowrap-cell"><input type="hidden" step="any" class="precios" name="precio_compra[]" value="' + precio_compra + '"><span> S/. ' + precio_compra + '</span></td>' +
 			'<td class="nowrap-cell"><input type="number" step="any" class="precios" name="precio_venta[]" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
 			'<td class="nowrap-cell"><input type="number" step="any" name="descuento[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></td>' +
 			'<td class="nowrap-cell"><span name="subtotal" id="subtotal' + cont + '">' + subtotal + '</span></td>' +
@@ -583,6 +908,9 @@ function agregarDetalle(idarticulo, articulo, precio_compra, precio_venta) {
 		evitarCaracteresEspecialesCamposNumericos();
 		aplicarRestrictATodosLosInputs();
 		console.log("Deshabilito a: " + idarticulo + " =)");
+
+		ocultarColumnasPorNombre("detalles", columnasAocultar);
+		ocultarColumnasPorNombre("tblarticulos", columnasAocultar);
 	}
 	else {
 		alert("Error al ingresar el detalle, revisar los datos del artículo");
@@ -619,7 +947,7 @@ function modificarSubototales() {
 		var inpS = sub[i];
 
 		inpS.value = (inpC.value * inpP.value) - inpD.value;
-		document.getElementsByName("subtotal")[i].innerHTML = inpS.value;
+		document.getElementsByName("subtotal")[i].innerHTML = inpS.value.toFixed(2);
 	}
 
 	calcularTotales();

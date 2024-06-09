@@ -30,6 +30,8 @@ if (!isset($_SESSION["nombre"])) {
 		$impuesto = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";
 		$total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";
 
+		$sunat = isset($_POST["sunat"]) ? limpiarCadena($_POST["sunat"]) : "";
+
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 				$numeroExiste = $proforma->verificarNumeroExiste($num_proforma, $idalmacen);
@@ -82,6 +84,7 @@ if (!isset($_SESSION["nombre"])) {
 				echo '<thead style="background-color:#A9D0F5">
                                     <th>Opciones</th>
                                     <th>Artículo</th>
+                                    <th>Stock</th>
                                     <th>Cantidad</th>
                                     <th>Precio compra</th>
                                     <th>Precio venta</th>
@@ -90,7 +93,7 @@ if (!isset($_SESSION["nombre"])) {
                                 </thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_compra</nav>" . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->stock . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_compra</nav>" . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? $reg->subtotal * 0.18 : $reg->subtotal * 0);
 				}
 
@@ -103,10 +106,12 @@ if (!isset($_SESSION["nombre"])) {
 						<th></th>
 						<th></th>
 						<th></th>
+						<th></th>
 						<th><h4 id="igv">S/.' . number_format($igv, 2, '.', '') . '</h4><input type="hidden" name="total_igv" id="total_igv"></th>
 						</tr>
 						<tr>
 						<th>TOTAL</th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th></th>
@@ -128,8 +133,9 @@ if (!isset($_SESSION["nombre"])) {
 				echo '<thead style="background-color:#A9D0F5">
 									<th>Opciones</th>
 									<th>Artículo</th>
+									<th>Stock</th>
 									<th>Cantidad</th>
-									<th class="precio_compra">Precio compra</th>
+									<th>Precio compra</th>
 									<th>Precio venta</th>
 									<th>Descuento</th>
 									<th>Subtotal</th>
@@ -139,8 +145,9 @@ if (!isset($_SESSION["nombre"])) {
 					echo '<tr class="filas">
 							<td></td>
 							<td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td>
+							<td>' . $reg->stock . '</td>
 							<td><input type="number" name="cantidad[]" id="cantidad[]" value="' . $reg->cantidad . '" readonly></td>
-							<td class="precio_compra">' . "<nav>S/. $reg->precio_compra</nav>" . '</td>
+							<td>' . "<nav>S/. $reg->precio_compra</nav>" . '</td>
 							<td><input type="number" name="precio_venta[]" id="precio_venta[]" value="' . $reg->precio_venta . '" readonly></td>
 							<td><input type="number" name="descuento[]" id="descuento[]" value="' . "$reg->descuento" . '" readonly></td>
 							<td>' . "<nav>S/. $reg->subtotal</nav>" . '</td>
@@ -154,7 +161,8 @@ if (!isset($_SESSION["nombre"])) {
 						<th>IGV</th>
 						<th></th>
 						<th></th>
-						<th class="precio_compra"></th>
+						<th></th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th><h4 id="igv2">S/.' . number_format($igv, 2, '.', '') . '</h4><input type="hidden" name="total_igv" id="total_igv2" value="' . number_format($igv, 2, '.', '') . '"></th>
@@ -163,7 +171,8 @@ if (!isset($_SESSION["nombre"])) {
 						<th>TOTAL</th>
 						<th></th>
 						<th></th>
-						<th class="precio_compra"></th>
+						<th></th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th><h4 id="total2">S/.' . number_format($rspta2["total_venta"], 2, '.', '') . '</h4><input type="hidden" name="total_venta" id="total_venta2" value="' . number_format($rspta2["total_venta"], 2, '.', '') . '"></th>
@@ -229,7 +238,7 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							(($reg->estado == 'Pendiente') ?
-								('<a data-toggle="modal" href="#myModal2" title="Mirar detalles de proforma" style="color: black"><button class="btn btn-secondary" onclick="mostrar(' . $reg->idproforma . '); ocultarPrecioCompra();"><i class="fa fa-eye"></i></button></a>' .
+								('<a data-toggle="modal" href="#myModal2" title="Mirar detalles de proforma" style="color: black"><button class="btn btn-secondary" onclick="mostrar(' . $reg->idproforma . ');"><i class="fa fa-eye"></i></button></a>' .
 									mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" title="Anular proforma" style="color: black" onclick="anular(' . $reg->idproforma . ')"><i class="fa fa-close"></i></button>') .
 									mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary" title="Eliminar proforma" onclick="eliminar(' . $reg->idproforma . ')"><i class="fa fa-trash"></i></button>') .
 									('<a target="_blank" href="' . $url . $reg->idproforma . '"> <button class="btn btn-secondary" style="color: black;"><i class="fa fa-file"></i></button></a>')) .
@@ -377,26 +386,26 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						// "0" => ($reg->stock != '0') ? '<div style="display: flex; justify-content: center;"><button class="btn btn-warning" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->codigo . '\'); disableButton(this);"><span class="fa fa-plus"></span></button></div>' : '',
-						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); bloquearPrecios(); ocultarPrecioCompra(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->stock . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); bloquearPrecios(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
-						"3" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,
-						"4" => $reg->categoria,
-						"5" => $reg->marca,
-						"6" => $reg->almacen,
-						"7" => ($reg->peso == '0.00') ? 'Sin registrar.' : $reg->peso,
-						"8" => ($reg->talla == '') ? 'Sin registrar.' : $reg->talla,
-						"9" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
-						"10" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
-						"11" => $reg->codigo_producto,
-						"12" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
-						"13" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
-						"14" => $reg->stock_minimo,
-						"15" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
-						"16" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"17" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
-						"18" => $reg->usuario . ' - ' . $cargo_detalle,
-						"19" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						"3" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
+						"4" => $reg->stock_minimo,
+						"5" => $reg->almacen,
+						"6" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
+						"7" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						// "8" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"8" => $reg->codigo_producto,
+						"9" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
+						"10" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,
+						"11" => $reg->categoria,
+						"12" => $reg->marca,
+						"13" => ($reg->peso == '0.00') ? 'Sin registrar.' : $reg->peso,
+						"14" => ($reg->talla == '') ? 'Sin registrar.' : $reg->talla,
+						"15" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
+						"16" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
+						"17" => $reg->usuario . ' - ' . $cargo_detalle,
+						"18" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 				$results = array(
@@ -464,6 +473,72 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				echo json_encode($data);
+				break;
+
+				/* ======================= SUNAT ======================= */
+
+			case 'consultaSunat':
+				// Token para la API
+				$token = 'apis-token-8814.1Tq4Gy-yKM7ZSWPx6eQC0feuDpVKbuEZ';
+
+				$data = "";
+				$curl = curl_init();
+
+				try {
+					if (strlen($sunat) == 8) {
+						// DNI
+						$url = 'https://api.apis.net.pe/v2/reniec/dni?numero=' . $sunat;
+						$referer = 'https://apis.net.pe/consulta-dni-api';
+					} elseif (strlen($sunat) == 11) {
+						// RUC
+						$url = 'https://api.apis.net.pe/v2/sunat/ruc?numero=' . $sunat;
+						$referer = 'http://apis.net.pe/api-ruc';
+					} elseif (strlen($sunat) < 8) {
+						// Mensaje para DNI no válido
+						$data = "El DNI debe tener 8 caracteres.";
+						echo $data;
+						break;
+					} elseif (strlen($sunat) > 8 && strlen($sunat) < 11) {
+						// Mensaje para RUC no válido
+						$data = "El RUC debe tener 11 caracteres.";
+						echo $data;
+						break;
+					}
+
+					// configuración de cURL
+					curl_setopt_array($curl, array(
+						CURLOPT_URL => $url,
+						CURLOPT_RETURNTRANSFER => true,
+						CURLOPT_SSL_VERIFYPEER => 0,
+						CURLOPT_ENCODING => '',
+						CURLOPT_MAXREDIRS => 2,
+						CURLOPT_TIMEOUT => 0,
+						CURLOPT_FOLLOWLOCATION => true,
+						CURLOPT_CUSTOMREQUEST => 'GET',
+						CURLOPT_HTTPHEADER => array(
+							'Referer: ' . $referer,
+							'Authorization: Bearer ' . $token
+						),
+					));
+
+					$response = curl_exec($curl);
+
+					if ($response === false) {
+						throw new Exception(curl_error($curl));
+					}
+
+					if (stripos($response, 'Not Found') !== false || stripos($response, '{"message":"ruc no valido"}') !== false) {
+						$data = (strlen($sunat) == 8) ? "DNI no valido" : "RUC no valido";
+					} else {
+						$data = $response;
+					}
+				} catch (Exception $e) {
+					$data = "Error al procesar la solicitud: " . $e->getMessage();
+				} finally {
+					curl_close($curl);
+				}
+
+				echo $data;
 				break;
 		}
 		//Fin de las validaciones de acceso

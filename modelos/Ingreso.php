@@ -97,7 +97,7 @@ class Ingreso
 
 	public function listarDetalle($idingreso)
 	{
-		$sql = "SELECT di.idingreso,di.idarticulo,a.nombre,di.cantidad,di.precio_compra,di.precio_venta FROM detalle_ingreso di LEFT JOIN articulo a on di.idarticulo=a.idarticulo where di.idingreso='$idingreso'";
+		$sql = "SELECT di.idingreso,di.idarticulo,a.nombre,a.stock,di.cantidad,di.precio_compra,di.precio_venta FROM detalle_ingreso di LEFT JOIN articulo a on di.idarticulo=a.idarticulo where di.idingreso='$idingreso'";
 		return ejecutarConsulta($sql);
 	}
 

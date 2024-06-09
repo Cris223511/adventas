@@ -81,6 +81,53 @@
     </script>
 
     <script>
+      $('#imagen').on('change', function() {
+        const file = this.files[0];
+        const maxSizeMB = 3;
+        const maxSizeBytes = maxSizeMB * 1024 * 1024;
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp'];
+
+        // Validar tamaño
+        if (file.size > maxSizeBytes) {
+          bootbox.alert(`El archivo es demasiado grande. El tamaño máximo permitido es de ${maxSizeMB} MB.`);
+          $(this).val('');
+          $('#imagenmuestra').attr('src', '').hide();
+          return;
+        }
+
+        // Validar tipo
+        if (!allowedTypes.includes(file.type)) {
+          bootbox.alert('El archivo debe ser una imagen de tipo JPG, JPEG, PNG, GIF o BMP.');
+          $(this).val('');
+          $('#imagenmuestra').attr('src', '').hide();
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          $('#imagenmuestra').attr('src', e.target.result).show();
+        };
+        reader.readAsDataURL(file);
+      });
+    </script>
+
+    <script>
+      function setTitleFromBoxTitle(titleElement) {
+        const title = $(titleElement).contents().filter(function() {
+          return this.nodeType === 3;
+        }).text().trim();
+
+        const fullTitle = title.replace(/\b([a-zA-ZáéíóúÁÉÍÓÚ]+)/g, function(match) {
+          return match.charAt(0).toUpperCase() + match.slice(1).toLowerCase();
+        });
+
+        document.title = fullTitle + " | Adventas";
+      }
+
+      setTitleFromBoxTitle('.box-title');
+    </script>
+
+    <script>
       $('.selectpicker').selectpicker({
         noneResultsText: 'No se encontraron resultados.'
       });
@@ -146,6 +193,18 @@
     </script>
 
     <script>
+      function capitalizarPalabras(palabra) {
+        return palabra.charAt(0).toUpperCase() + palabra.slice(1);
+      }
+
+      function capitalizarTodasLasPalabras(palabra) {
+        return palabra.toUpperCase();
+      }
+
+      function minusTodasLasPalabras(palabra) {
+        return palabra.toLowerCase();
+      }
+
       const thElements = document.querySelectorAll("#tblarticulos th, #tbllistado th, #tbllistado2 th, #tbllistado3 th, #tbltrabajadores th");
 
       thElements.forEach((e) => {
@@ -387,21 +446,28 @@
         ?>
       }
 
-      function ocultarPrecioCompra() {
+      // Define la función de ocultar columnas
+      function ocultarColumnasPorNombre(tablaId, nombresColumnas) {
         <?php
+        // Verificar el rol del usuario
         if ($_SESSION["cargo"] == "vendedor" || $_SESSION["cargo"] == "almacenero") {
           echo '
-              $(".precio_compra").css("display", "none");
-              $("#detalles th:contains(\'Precio compra\')").css("display", "none");
+            // Iteramos sobre cada nombre de columna que queremos ocultar
+            nombresColumnas.forEach(function(nombreColumna) {
+                // Buscar el índice de la columna en el thead
+                $("#" + tablaId + " th").each(function(index) {
+                    if ($(this).text().trim().toLowerCase() === nombreColumna.toLowerCase()) {
+                        // Si el texto del encabezado coincide, obtenemos el índice
+                        var columnIndex = index + 1; // +1 porque :nth-child es 1-based
 
-              $("#tblarticulos th:contains(\'PRECIO DE COMPRA\')").css("display", "none");
-              var columnIndexPrecioCompra = $("#tblarticulos th:contains(\'PRECIO DE COMPRA\')").index() + 1;
-              $("#tblarticulos td:nth-child(" + columnIndexPrecioCompra + ")").css("display", "none");
-
-              $("#tblarticulos th:contains(\'GANANCIA\')").css("display", "none");
-              var columnIndexGanancia = $("#tblarticulos th:contains(\'GANANCIA\')").index() + 1;
-              $("#tblarticulos td:nth-child(" + columnIndexGanancia + ")").css("display", "none");
-          ';
+                        // Ocultamos la columna en thead, tbody y tfoot usando el índice
+                        $("#" + tablaId + " th:nth-child(" + columnIndex + ")").css("display", "none");
+                        $("#" + tablaId + " td:nth-child(" + columnIndex + ")").css("display", "none");
+                        $("#" + tablaId + " tfoot th:nth-child(" + columnIndex + ")").css("display", "none");
+                    }
+                });
+            });
+        ';
         }
         ?>
       }
@@ -414,6 +480,11 @@
         if (modal.hasClass('bootbox') && modal.hasClass('bootbox-confirm')) {
           modal.find('.modal-footer .btn-default').text('Cancelar');
           modal.find('.modal-footer .btn-primary').text('Aceptar');
+        }
+
+        const okButton = modal.find('.modal-footer button[data-bb-handler="ok"]');
+        if (okButton.length) {
+          okButton.text('Aceptar').removeClass('btn-default').addClass('btn-bcp');
         }
       });
     </script>

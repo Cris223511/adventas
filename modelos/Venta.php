@@ -142,7 +142,7 @@ class Venta
 
 	public function listarDetalle($idventa)
 	{
-		$sql = "SELECT dv.idventa,dv.idarticulo,a.nombre,dv.cantidad,dv.precio_venta,a.precio_compra,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal FROM detalle_venta dv LEFT JOIN articulo a on dv.idarticulo=a.idarticulo where dv.idventa='$idventa'";
+		$sql = "SELECT dv.idventa,dv.idarticulo,a.nombre,a.stock,dv.cantidad,dv.precio_venta,a.precio_compra,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal FROM detalle_venta dv LEFT JOIN articulo a on dv.idarticulo=a.idarticulo where dv.idventa='$idventa'";
 		return ejecutarConsulta($sql);
 	}
 
