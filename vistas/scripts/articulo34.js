@@ -259,6 +259,8 @@ function limpiar() {
 
 	$(".btn1").show();
 	$(".btn2").hide();
+
+	detenerEscaneo();
 }
 
 //Función mostrar formulario
@@ -348,13 +350,13 @@ function guardaryeditar(e) {
 		return;
 	}
 
-	var stock = parseFloat($("#stock").val());
-	var stock_minimo = parseFloat($("#stock_minimo").val());
+	// var stock = parseFloat($("#stock").val());
+	// var stock_minimo = parseFloat($("#stock_minimo").val());
 
-	if (stock_minimo > stock) {
-		bootbox.alert("El stock mínimo no puede ser mayor que el stock normal.");
-		return;
-	}
+	// if (stock_minimo > stock) {
+	// 	bootbox.alert("El stock mínimo no puede ser mayor que el stock normal.");
+	// 	return;
+	// }
 
 	var precio_compra = parseFloat($("#precio_compra").val());
 	var precio_venta = parseFloat($("#precio_venta").val());
