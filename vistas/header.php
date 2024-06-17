@@ -8,6 +8,10 @@ $local_login = $_SESSION['local'];
 ?>
 
 <style>
+  .content-wrapper {
+    min-height: 719px !important;
+  }
+
   .skin-blue-light .main-header .navbar .sidebar-toggle:hover {
     background: #1e1e1e !important;
   }
@@ -347,23 +351,23 @@ $local_login = $_SESSION['local'];
           ?>
 
           <?php
-          if ($_SESSION['solicitud'] == 1) {
-            echo '<li id="mSolicitud" class="treeview">
-              <a href="solicitudes.php">
-                <i class="fa fa-paper-plane"></i> <span>Solicitudes</span>
-              </a>
-            </li>';
-          }
+          // if ($_SESSION['solicitud'] == 1) {
+          //   echo '<li id="mSolicitud" class="treeview">
+          //     <a href="solicitudes.php">
+          //       <i class="fa fa-paper-plane"></i> <span>Solicitudes</span>
+          //     </a>
+          //   </li>';
+          // }
           ?>
 
           <?php
-          if ($_SESSION['devolucion'] == 1) {
-            echo '<li id="mDevolucion" class="treeview">
-              <a href="devoluciones.php">
-                <i class="fa fa-truck"></i> <span>Devoluciones</span>
-              </a>
-            </li>';
-          }
+          // if ($_SESSION['devolucion'] == 1) {
+          //   echo '<li id="mDevolucion" class="treeview">
+          //     <a href="devoluciones.php">
+          //       <i class="fa fa-truck"></i> <span>Devoluciones</span>
+          //     </a>
+          //   </li>';
+          // }
           ?>
 
           <li>

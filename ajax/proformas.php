@@ -337,6 +337,7 @@ if (!isset($_SESSION["nombre"])) {
 					$producto = array(
 						'idarticulo' => $reg->idarticulo,
 						'articulo' => $reg->nombre,
+						'stock' => $reg->stock,
 						'precio_compra' => $reg->precio_compra == '' ? "0" : $reg->precio_compra,
 						'precio_venta' => $reg->precio_venta == '' ? "0" : $reg->precio_venta,
 						'codigo_producto' => $reg->codigo_producto
