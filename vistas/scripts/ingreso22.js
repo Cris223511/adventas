@@ -74,7 +74,7 @@ function init() {
 	$(".btn2").hide();
 
 	$.post("../ajax/articulo.php?op=listarTodosActivos", function (data) {
-		// console.log(data)
+		console.log(data)
 		const obj = JSON.parse(data);
 		console.log(obj);
 
@@ -395,13 +395,13 @@ function guardaryeditar2(e) {
 
 	var codigoBarra = $("#codigo").val();
 
-	var formatoValido = /^[0-9]{1} [0-9]{2} [0-9]{4} [0-9]{1} [0-9]{4} [0-9]{1}$/.test(codigoBarra);
+	// var formatoValido = /^[0-9]{1} [0-9]{2} [0-9]{4} [0-9]{1} [0-9]{4} [0-9]{1}$/.test(codigoBarra);
 
-	if (!formatoValido && codigoBarra != "") {
-		bootbox.alert("El formato del código de barra no es válido. El formato correcto es: X XX XXXX X XXXX X");
-		$("#btnGuardar2").prop("disabled", false);
-		return;
-	}
+	// if (!formatoValido && codigoBarra != "") {
+	// 	bootbox.alert("El formato del código de barra no es válido. El formato correcto es: X XX XXXX X XXXX X");
+	// 	$("#btnGuardar2").prop("disabled", false);
+	// 	return;
+	// }
 
 	// var stock = parseFloat($("#stock").val());
 	// var stock_minimo = parseFloat($("#stock_minimo").val());
@@ -506,20 +506,19 @@ function formatearNumero() {
 	var codigo = $("#codigo").val().replace(/\s/g, '').replace(/\D/g, '');
 	var formattedCode = '';
 
-	for (var i = 0; i < codigo.length; i++) {
-		if (i === 1 || i === 3 || i === 7 || i === 8 || i === 12 || i === 13) {
-			formattedCode += ' ';
-		}
+	// for (var i = 0; i < codigo.length; i++) {
+	// 	if (i === 1 || i === 3 || i === 7 || i === 8 || i === 12 || i === 13) {
+	// 		formattedCode += ' ';
+	// 	}
 
-		formattedCode += codigo[i];
-	}
+	// 	formattedCode += codigo[i];
+	// }
 
-	var maxLength = parseInt($("#codigo").attr("maxlength"));
-	if (formattedCode.length > maxLength) {
-		formattedCode = formattedCode.substring(0, maxLength);
-	}
-
-	$("#codigo").val(formattedCode);
+	// var maxLength = parseInt($("#codigo").attr("maxlength"));
+	// if (formattedCode.length > maxLength) {
+	// 	formattedCode = formattedCode.substring(0, maxLength);
+	// }
+	$("#codigo").val(codigo);
 	generarbarcode(0);
 }
 
@@ -531,10 +530,10 @@ function borrar() {
 
 //función para generar el número aleatorio del código de barra
 function generar() {
-	var codigo = "7 75 ";
-	codigo += generarNumero(10000, 999) + " ";
-	codigo += Math.floor(Math.random() * 10) + " ";
-	codigo += generarNumero(100, 9) + " ";
+	var codigo = "775";
+	codigo += generarNumero(10000, 999) + "";
+	codigo += Math.floor(Math.random() * 10) + "";
+	codigo += generarNumero(100, 9) + "";
 	codigo += Math.floor(Math.random() * 10);
 	$("#codigo").val(codigo);
 	generarbarcode(1);
@@ -549,22 +548,24 @@ function generarNumero(max, min) {
 // Función para generar el código de barras
 function generarbarcode(param) {
 
-	if (param == 1) {
-		var codigo = $("#codigo").val().replace(/\s/g, '');
-		console.log(codigo.length);
+	// if (param == 1) {
+	// 	var codigo = $("#codigo").val().replace(/\s/g, '');
+	// 	console.log(codigo.length);
 
-		if (!/^\d+$/.test(codigo)) {
-			bootbox.alert("El código de barra debe contener solo números.");
-			return;
-		} else if (codigo.length !== 13) {
-			bootbox.alert("El código de barra debe tener 13 dígitos.");
-			return;
-		} else {
-			codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
-		}
-	} else {
-		var codigo = $("#codigo").val()
-	}
+	// 	if (!/^\d+$/.test(codigo)) {
+	// 		bootbox.alert("El código de barra debe contener solo números.");
+	// 		return;
+	// 	} else if (codigo.length !== 13) {
+	// 		bootbox.alert("El código de barra debe tener 13 dígitos.");
+	// 		return;
+	// 	} else {
+	// 		codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
+	// 	}
+	// } else {
+	// 	var codigo = $("#codigo").val()
+	// }
+
+	var codigo = $("#codigo").val().replace(/\s/g, '');
 
 	if (codigo != "") {
 		JsBarcode("#barcode", codigo);

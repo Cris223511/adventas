@@ -61,7 +61,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Artículos Externos
-                  <!-- <button class="btn btn-secondary" id="btnagregar" onclick="mostrarform(true); desbloquearPrecioCompraVenta();"><i class="fa fa-plus-circle"></i> Agregar</button> -->
+                  <button class="btn btn-secondary" id="btnagregar" onclick="mostrarform(true); desbloquearPrecioCompraVenta();"><i class="fa fa-plus-circle"></i> Agregar</button>
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
                     <a href="../reportes/rptarticulosExternos.php" target="_blank"><button class="btn btn-secondary" style="color: black !important;"><i class="fa fa-clipboard"></i> Reporte</button></a>
                   <?php } ?>
@@ -76,6 +76,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Opciones</th>
                     <th>Imagen</th>
                     <th>Nombre</th>
+                    <th>U. medida</th>
                     <th>Categoría</th>
                     <th>Ubicación del local</th>
                     <th>Marca</th>
@@ -89,7 +90,6 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Talla</th>
                     <th>Color</th>
                     <th>Peso</th>
-                    <th>U. medida</th>
                     <th>Posición</th>
                     <th>Agregado por</th>
                     <th>Estado</th>
@@ -100,6 +100,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Opciones</th>
                     <th>Imagen</th>
                     <th>Nombre</th>
+                    <th>U. medida</th>
                     <th>Categoría</th>
                     <th>Ubicación del local</th>
                     <th>Marca</th>
@@ -109,11 +110,10 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock mínimo</th>
                     <th>Precio de compra</th>
                     <th>Precio de venta</th>
-                    <th>Granancia</th>
+                    <th>Ganancia</th>
                     <th>Talla</th>
                     <th>Color</th>
                     <th>Peso</th>
-                    <th>U. medida</th>
                     <th>Posición</th>
                     <th>Agregado por</th>
                     <th>Estado</th>
@@ -131,10 +131,14 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                   </div>
                   <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #3d3f3f solid; padding: 20px;">
-                    <div class="form-group col-lg-12 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label class="label_input" style="width: 90px;">Nombre(*):</label>
                       <input type="hidden" name="idarticulo" id="idarticulo">
                       <input type="text" class="form-control" name="nombre" id="nombre" maxlength="100" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                      <label style="width: 100px;">Unidad de medida(*):</label>
+                      <select id="idmedida" name="idmedida" class="form-control selectpicker" data-live-search="true" required></select>
                     </div>
                     <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label style="width: 100px;">Local(*):</label>
@@ -163,7 +167,7 @@ if (!isset($_SESSION["nombre"])) {
                       <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="1" placeholder="Stock mínimo" required>
                     </div>
                     <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label class="label_input" style="width: 100px;">Precio compra(*):</label>
+                      <label class="label_input" style="width: 115px;">Precio compra(*):</label>
                       <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de compra." required>
                     </div>
                     <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
@@ -178,7 +182,7 @@ if (!isset($_SESSION["nombre"])) {
                       <label class="label_input" style="width: 90px;">Descripción:</label>
                       <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Descripción del artículo" autocomplete="off">
                     </div>
-                    <div class="form-group col-lg-12 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                       <label class="label_input" style="width: 90px;">Imagen:</label>
                       <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">
                       <input type="hidden" name="imagenactual" id="imagenactual">
@@ -187,25 +191,6 @@ if (!isset($_SESSION["nombre"])) {
                       <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                         <label style="width: 100px;">Código del producto(*):</label>
                         <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="13" placeholder="Código del producto" onblur="convertirMayus(this)" required>
-                      </div>
-                      <div style="display: flex; justify-content: end;">
-                        <div id="camera"></div>
-                      </div>
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12">
-                      <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                        <label style="width: 100px;">Código de barra(*):</label>
-                        <input type="text" class="form-control" name="codigo" id="codigo" maxlength="18" placeholder="Código de barra">
-                      </div>
-                      <div style="margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
-                        <button class="btn btn-info" type="button" onclick="generar()">Generar</button>
-                        <button class="btn btn-warning" type="button" onclick="imprimir()">Imprimir</button>
-                        <button class="btn btn-danger" type="button" onclick="borrar()">Borrar</button>
-                        <button class="btn btn-success btn1" type="button" onclick="escanear()">Escanear</button>
-                        <button class="btn btn-danger btn2" type="button" onclick="detenerEscaneo()">Detener</button>
-                      </div>
-                      <div id="print" style="overflow-y: hidden;">
-                        <img id="barcode">
                       </div>
                     </div>
                     <div class="form-group col-lg-12 col-md-12" style="display: flex; justify-content: center;">
@@ -227,12 +212,29 @@ if (!isset($_SESSION["nombre"])) {
                         <input type="text" class="form-control" name="posicion" id="posicion" maxlength="30" placeholder="Ingrese la posición de objeto." autocomplete="off">
                       </div>
                       <div class="form-group col-lg-6 col-md-12">
-                        <label>Unidad de medida:</label>
-                        <select id="idmedida" name="idmedida" class="form-control selectpicker" data-live-search="true"></select>
-                      </div>
-                      <div class="form-group col-lg-6 col-md-12">
                         <label>Peso:</label>
                         <input type="number" class="form-control" name="peso" id="peso" step="any" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" placeholder="Ingrese el peso.">
+                      </div>
+                      <div class="form-group col-lg-6 col-md-12">
+                        <div>
+                          <label>Código de barra(*):</label>
+                          <input type="text" class="form-control" name="codigo" id="codigo" maxlength="13" placeholder="Código de barra">
+                        </div>
+                        <div style="margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
+                          <button class="btn btn-info" type="button" onclick="generar()">Generar</button>
+                          <button class="btn btn-warning" type="button" onclick="imprimir()">Imprimir</button>
+                          <button class="btn btn-danger" type="button" onclick="borrar()">Borrar</button>
+                          <button class="btn btn-success btn1" type="button" onclick="escanear()">Escanear</button>
+                          <button class="btn btn-danger btn2" type="button" onclick="detenerEscaneo()">Detener</button>
+                        </div>
+                        <div id="print" style="overflow-y: hidden;">
+                          <img id="barcode">
+                        </div>
+                      </div>
+                      <div class="form-group col-lg-6 col-md-12">
+                        <div style="display: flex; justify-content: start;">
+                          <div id="camera"></div>
+                        </div>
                       </div>
                     </div>
                     <!-- end form detalles -->

@@ -7,7 +7,7 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 	//Validamos el acceso solo al usuario logueado y autorizado.
-	if ($_SESSION['almacen'] == 1 && $_SESSION["cargo"] == "superadmin") {
+	if (($_SESSION['almacen'] == 1 || !empty($_SESSION['cargo'])) && $_SESSION["cargo"] == "superadmin") {
 		require_once "../modelos/ArticuloExterno.php";
 
 		$articulo = new ArticuloExterno();
@@ -154,23 +154,23 @@ if (!isset($_SESSION["nombre"])) {
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-secondary "style="height: 35px;" onclick="eliminar(' . $reg->idarticulo . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
-							<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
-						</a>',
+									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
 						"2" => $reg->nombre,
-						"3" => $reg->categoria,
-						"4" => $reg->almacen,
-						"5" => $reg->marca,
-						"6" => $reg->codigo_producto,
-						"7" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
-						"8" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
-						"9" => $reg->stock_minimo,
-						"10" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
-						"11" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"12" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
-						"13" => ($reg->talla == "") ? 'Sin registrar.' : $reg->talla,
-						"14" => ($reg->color == "") ? 'Sin registrar.' : $reg->color,
-						"15" => ($reg->peso == "0.00") ? 'Sin registrar.' : $reg->peso,
-						"16" => ($reg->medida == "") ? 'Sin registrar.' : $reg->medida,
+						"3" => ($reg->medida == "") ? 'Sin registrar.' : $reg->medida,
+						"4" => $reg->categoria,
+						"5" => $reg->almacen,
+						"6" => $reg->marca,
+						"7" => $reg->codigo_producto,
+						"8" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
+						"9" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
+						"10" => $reg->stock_minimo,
+						"11" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
+						"12" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"13" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"14" => ($reg->talla == "") ? 'Sin registrar.' : $reg->talla,
+						"15" => ($reg->color == "") ? 'Sin registrar.' : $reg->color,
+						"16" => ($reg->peso == "0.00") ? 'Sin registrar.' : $reg->peso,
 						"17" => ($reg->posicion == "") ? 'Sin registrar.' : $reg->posicion,
 						"18" => $reg->usuario . ' - ' . $cargo_detalle,
 						"19" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>'),

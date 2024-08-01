@@ -148,17 +148,19 @@ function marcarCheckboxPorRol(selectElement) {
 		case "almacenero":
 			checkboxes[0].checked = true; // Escritorio
 			checkboxes[1].checked = true; // Almacen
+			checkboxes[8].checked = true; // Solicitudes
+			checkboxes[9].checked = true; // Devoluciones
 			checkboxes[10].checked = true; // Perfil Usuario
 			checkboxes[11].checked = true; // Método de Pago
 			break;
-		// case "encargado":
-		// 	checkboxes[0].checked = true; // Escritorio
-		// 	checkboxes[1].checked = true; // Almacen
-		// 	checkboxes[8].checked = true; // Solicitudes
-		// 	checkboxes[9].checked = true; // Devoluciones
-		// 	checkboxes[10].checked = true; // Perfil Usuario
-		// 	checkboxes[11].checked = true; // Método de Pago
-		// 	break;
+		case "encargado":
+			checkboxes[0].checked = true; // Escritorio
+			checkboxes[1].checked = true; // Almacen
+			checkboxes[8].checked = true; // Solicitudes
+			checkboxes[9].checked = true; // Devoluciones
+			checkboxes[10].checked = true; // Perfil Usuario
+			checkboxes[11].checked = true; // Método de Pago
+			break;
 		case "admin":
 			checkboxes.forEach(function (checkbox) {
 				checkbox.checked = true;

@@ -117,7 +117,7 @@ if (!isset($_SESSION["nombre"])) {
                       <option value="admin">Administrador</option>
                       <option value="cliente">Cliente</option>
                       <option value="vendedor">Vendedor</option>
-                      <!-- <option value="encargado">Encargado de pedido</option> -->
+                      <option value="encargado">Encargado de pedido</option>
                       <option value="almacenero">Almacenero</option>
                     </select>
                   </div>
