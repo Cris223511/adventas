@@ -100,7 +100,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$iterador = 1;
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->cantidad . '</td><td data-cantidadprestada="' . $iterador . '">' . $reg->cantidad_prestada . '</td><td data-cantidaddevuelta="' . $iterador . '">' . $reg->cantidad_devuelta . '</td><td><input type="text" data-cantidaddevolver="' . $iterador . '" name="cantidad_devuelta[]" id="cantidad_devuelta[]" oninput="onlyNumbers(this)" onpaste="false" ondrop="false" required></td></tr>';
+					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->cantidad . '</td><td data-cantidadprestada="' . $iterador . '">' . $reg->cantidad_prestada . '</td><td data-cantidaddevuelta="' . $iterador . '">' . $reg->cantidad_devuelta . '</td><td><input type="number" data-cantidaddevolver="' . $iterador . '" name="cantidad_devuelta[]" id="cantidad_devuelta[]" step="any" value="0" min="0.1" required></td></tr>';
 					$iterador = $iterador + 1;
 				}
 				break;
@@ -122,7 +122,7 @@ if (!isset($_SESSION["nombre"])) {
 								</thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td><input type="text" name="cantidad_devuelta[]" id="cantidad_devuelta[]" oninput="onlyNumbers(this)" onpaste="false" ondrop="false" value="' . $reg->cantidad_devuelta . '" disabled></td></td></tr>';
+					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td><input type="number" name="cantidad_devuelta[]" id="cantidad_devuelta[]" step="any" value="0" min="0.1" value="' . $reg->cantidad_devuelta . '" disabled></td></td></tr>';
 				}
 				break;
 

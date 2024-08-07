@@ -50,6 +50,8 @@ function limpiar() {
 
 	$(".filas").remove();
 	$("input[name='opcion']").prop("checked", false);
+
+	$('#tblarticulos button').removeAttr('disabled');
 }
 
 function ocultarModal() {

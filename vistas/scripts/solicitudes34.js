@@ -68,6 +68,8 @@ function limpiar() {
 	$("#btnAgregarArt").show();
 	$(".filas").remove();
 
+	$('#tblarticulos button').removeAttr('disabled');
+
 	$("#detalles").html(`
 		<thead style="background-color:#A9D0F5">
 			<th>Opciones</th>
@@ -509,7 +511,7 @@ var detalles = 0;
 $("#btnGuardar").hide();
 
 function agregarDetalle(marca, categoria, idarticulo, stock, articulo) {
-	var cantidad = 1;
+	var cantidad = 0;
 
 	if (idarticulo != "") {
 		var fila = '<tr class="filas" id="fila' + cont + '">' +
@@ -518,7 +520,7 @@ function agregarDetalle(marca, categoria, idarticulo, stock, articulo) {
 			'<td>' + categoria + '</td>' +
 			'<td>' + marca + '</td>' +
 			'<td>' + stock + '</td>' +
-			'<td class="nowrap-cell"><input type="number" name="cantidad[]" id="cantidad[]" value="' + cantidad + '"></td>' +
+			'<td class="nowrap-cell"><input type="number" step="any" name="cantidad[]" id="cantidad[]" value="' + cantidad + '" min="0.1"></td>' +
 			'</tr>';
 		cont++;
 		detalles = detalles + 1;
