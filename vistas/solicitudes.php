@@ -62,7 +62,8 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                </h1>
+                  &nbsp;<a href="#" data-toggle="popover" data-placement="bottom" title="Información de módulo solicitud" data-html="true" data-content="Módulo en el que se solicita productos del almacén para que sean prestados. El <strong>encargado</strong> es el quien solicita, el <strong>almacenero</strong> es el quien acepta o no la solicitud del préstamo. Una vez acepte, el stock del producto solicitado se reduce del almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
+                  </h1>
                 <div class="box-tools pull-right">
                 </div>
               </div>
@@ -70,7 +71,7 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                   <thead>
                     <th style="width: 12%;">Opciones</th>
-                    <th>Código LCL</th>
+                    <th>Código</th>
                     <th>Fecha pedido</th>
                     <th>Fecha despacho</th>
                     <th>Responsable pedido</th>
@@ -83,7 +84,7 @@ if (!isset($_SESSION["nombre"])) {
                   </tbody>
                   <tfoot>
                     <th>Opciones</th>
-                    <th>Código LCL</th>
+                    <th>Código</th>
                     <th>Fecha pedido</th>
                     <th>Fecha despacho</th>
                     <th>Responsable pedido</th>
@@ -106,7 +107,7 @@ if (!isset($_SESSION["nombre"])) {
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title infotitulo">Registro de solicitud:</h4>
+            <h4 class="modal-title infotitulo">Aceptar solicitud:</h4>
           </div>
           <div class="panel-body">
             <form name="formulario3" id="formulario3" method="POST">
@@ -204,8 +205,8 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="row" style="padding-left: 15px; padding-right: 15px;">
                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                  <label style="width: 125px;">Código LCL(*):</label>
-                  <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumero(this)" maxlength="10" onpaste="false" ondrop="false" placeholder="Ingrese el código correlativo LCL." required>
+                  <label style="width: 125px;">Código(*):</label>
+                  <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumero(this)" maxlength="10" onpaste="false" ondrop="false" placeholder="Ingrese el código correlativo." required>
                 </div>
                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                   <label style="width: 125px;">Teléfono(*):</label>

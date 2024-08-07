@@ -73,17 +73,13 @@ if (!isset($_SESSION["nombre"])) {
       <section class="content">
         <div class="row">
           <div class="tab">
-            <button class="tablinks active" onclick="changeTables(event, 'type_1')">Tipo 1 (Merma)</button>
-            <button class="tablinks" onclick="changeTables(event, 'type_2')">Tipo 2 (Recupero)</button>
-            <button class="tablinks" onclick="changeTables(event, 'type_3')">Tipo 3 (Nuevo)</button>
-            <button class="tablinks" onclick="changeTables(event, 'type_4')">Tipo 4 (Menudo - Regresa al stock)</button>
-            <button class="tablinks" onclick="changeTables(event, 'type_5')">Tipo 5 (EPP segunda)</button>
-            <button class="tablinks" onclick="changeTables(event, 'type_6')">Tipo 6 (EPP nuevo - Regresa al stock)</button>
+            <button class="tablinks active" onclick="changeTables(event, 'type_1')">Tipo 1 (Almacén de origen)</button>
+            <button class="tablinks" onclick="changeTables(event, 'type_2')">Tipo 2 (Almacén de devolución)</button>
           </div>
           <div id="type_1" class="col-md-12 tabcontent">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Productos más devueltos del <strong>tipo de devolución 1 (Merma)</strong>:</h1>
+                <h1 class="box-title">PRODUCTOS MÁS DEVUELTOS DEL <strong>ALMACÉN DE ORIGEN</strong>:</h1>
                 <div class="box-tools pull-right">
                 </div>
               </div>
@@ -118,152 +114,12 @@ if (!isset($_SESSION["nombre"])) {
           <div id="type_2" class="col-md-12 tabcontent">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Productos más devueltos del <strong>tipo de devolución 2 (Recupero)</strong>:</h1>
+                <h1 class="box-title">PRODUCTOS MÁS DEVUELTOS DEL <strong>ALMACÉN DE DEVOLUCIÓN</strong>:</h1>
                 <div class="box-tools pull-right">
                 </div>
               </div>
               <div class="panel-body table-responsive" id="listadoregistros">
                 <table id="tbllistado_2" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
-                  <thead>
-                    <th>Código de producto</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Ubicación del local</th>
-                    <th>Stock normal</th>
-                    <th>Imagen</th>
-                    <th>Veces devueltos</th>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                  <tfoot>
-                    <th>Código de producto</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Ubicación del local</th>
-                    <th>Stock normal</th>
-                    <th>Imagen</th>
-                    <th>Veces devueltos</th>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div id="type_3" class="col-md-12 tabcontent">
-            <div class="box">
-              <div class="box-header with-border">
-                <h1 class="box-title">Productos más devueltos del <strong>tipo de devolución 3 (Nuevo)</strong>:</h1>
-                <div class="box-tools pull-right">
-                </div>
-              </div>
-              <div class="panel-body table-responsive" id="listadoregistros">
-                <table id="tbllistado_3" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
-                  <thead>
-                    <th>Código de producto</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Ubicación del local</th>
-                    <th>Stock normal</th>
-                    <th>Imagen</th>
-                    <th>Veces devueltos</th>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                  <tfoot>
-                    <th>Código de producto</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Ubicación del local</th>
-                    <th>Stock normal</th>
-                    <th>Imagen</th>
-                    <th>Veces devueltos</th>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div id="type_4" class="col-md-12 tabcontent">
-            <div class="box">
-              <div class="box-header with-border">
-                <h1 class="box-title">Productos más devueltos del <strong>tipo de devolución 4 (Menudo - Regresa al stock)</strong>:</h1>
-                <div class="box-tools pull-right">
-                </div>
-              </div>
-              <div class="panel-body table-responsive" id="listadoregistros">
-                <table id="tbllistado_4" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
-                  <thead>
-                    <th>Código de producto</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Ubicación del local</th>
-                    <th>Stock normal</th>
-                    <th>Imagen</th>
-                    <th>Veces devueltos</th>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                  <tfoot>
-                    <th>Código de producto</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Ubicación del local</th>
-                    <th>Stock normal</th>
-                    <th>Imagen</th>
-                    <th>Veces devueltos</th>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div id="type_5" class="col-md-12 tabcontent">
-            <div class="box">
-              <div class="box-header with-border">
-                <h1 class="box-title">Productos más devueltos del <strong>tipo de devolución 5 (EPP segunda)</strong>:</h1>
-                <div class="box-tools pull-right">
-                </div>
-              </div>
-              <div class="panel-body table-responsive" id="listadoregistros">
-                <table id="tbllistado_5" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
-                  <thead>
-                    <th>Código de producto</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Ubicación del local</th>
-                    <th>Stock normal</th>
-                    <th>Imagen</th>
-                    <th>Veces devueltos</th>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                  <tfoot>
-                    <th>Código de producto</th>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Ubicación del local</th>
-                    <th>Stock normal</th>
-                    <th>Imagen</th>
-                    <th>Veces devueltos</th>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div id="type_6" class="col-md-12 tabcontent">
-            <div class="box">
-              <div class="box-header with-border">
-                <h1 class="box-title">Productos más devueltos del <strong>tipo de devolución 6 (EPP nuevo - Regresa al stock)</strong>:</h1>
-                <div class="box-tools pull-right">
-                </div>
-              </div>
-              <div class="panel-body table-responsive" id="listadoregistros">
-                <table id="tbllistado_6" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                   <thead>
                     <th>Código de producto</th>
                     <th>Nombre</th>

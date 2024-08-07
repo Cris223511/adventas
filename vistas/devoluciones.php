@@ -67,7 +67,7 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                   <thead>
                     <th style="width: 12%;">Opciones</th>
-                    <th>Código LCL</th>
+                    <th>Código</th>
                     <th>Fecha pedido</th>
                     <th>Fecha devolución</th>
                     <th>Responsable pedido</th>
@@ -80,7 +80,7 @@ if (!isset($_SESSION["nombre"])) {
                   </tbody>
                   <tfoot>
                     <th>Opciones</th>
-                    <th>Código LCL</th>
+                    <th>Código</th>
                     <th>Fecha pedido</th>
                     <th>Fecha devolución</th>
                     <th>Responsable pedido</th>
@@ -103,7 +103,7 @@ if (!isset($_SESSION["nombre"])) {
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title infotitulo">Enviar devolución:</h4>
+            <h4 class="modal-title infotitulo">Aceptar devolución:</h4>
           </div>
           <div class="panel-body">
             <form name="formulario4" id="formulario4" method="POST">
@@ -129,14 +129,10 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
                 <hr>
                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 selects">
-                  <label class="label_serie">Selecione una opción(*): &nbsp;<a href="#" data-toggle="popover" data-placement="right" title="Tipos de envío" data-html="true" data-content="Selecciona almenos una de las opciones. Si selecciona las opciones <strong>4</strong> o <strong>6</strong>, la cantidad a devolver (digitada por el encargado) se devolverá al almacén, aumentando el stock del producto, mientras que las demás opciones no (Puedes editar el registro y cambiar la opción en cualquier momento exepto si se selecciona las opciones <strong>4</strong> o <strong>6</strong>, ya que estas opciones hacen devolver los artículos al almacén y no se pueden devolver nuevamente)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></label><br>
+                  <label class="label_serie">Seleccione una opción(*): &nbsp;<a href="#" data-toggle="popover" data-placement="right" title="Tipos de envío" data-html="true" data-content="Selecciona almenos una de las opciones. Si selecciona la opción de <strong>almacén de origen</strong>, la cantidad a devolver (digitada por el encargado) se devolverá al almacén en el que te encuentras actualmente, aumentando el stock del producto devuelto; mientras que la opción de <strong>almacén de devolución</strong>, envías el producto a un almacén de productos devueltos, que hace referencia a los productos que están malogrados y no están disponible para ser utilizados en las ventas, compras, proformas y cuotas. (Puedes editar el registro y cambiar la opción en cualquier momento exepto si se selecciona la opción de <strong>almacén de origen</strong>, ya que esta opción envía los artículos al almacén y no se pueden devolver nuevamente)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></label><br>
                   <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <input type="radio" class="opcion" name="opcion" value="1" required> Merma
-                    <input type="radio" class="opcion" name="opcion" value="2" required> Recupero
-                    <input type="radio" class="opcion" name="opcion" value="3" required> Nuevo
-                    <input type="radio" class="opcion" name="opcion" value="4" required> Menudo
-                    <input type="radio" class="opcion" name="opcion" value="5" required> EPP Segunda
-                    <input type="radio" class="opcion" name="opcion" value="6" required> EPP Nuevo
+                    <input type="radio" class="opcion" name="opcion" value="1" required> Almacén de origen
+                    <input type="radio" class="opcion" name="opcion" value="2" required> Almacén de devolución
                   </div>
                 </div>
               </div>
@@ -187,7 +183,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="row" style="padding-left: 15px; padding-right: 15px;">
                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                  <label style="width: 125px;">Código LCL(*):</label>
+                  <label style="width: 125px;">Código(*):</label>
                   <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido2" maxlength="10" placeholder="Cargando..." disabled>
                 </div>
                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
@@ -273,7 +269,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="row" style="padding-left: 15px; padding-right: 15px;">
                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                  <label style="width: 125px;">Código LCL(*):</label>
+                  <label style="width: 125px;">Código(*):</label>
                   <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" placeholder="Cargando..." disabled>
                 </div>
                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">

@@ -42,7 +42,7 @@ class Devolucion
 		$num_elementos = 0;
 		$sw = true;
 
-		if ($opcion == 4 || $opcion == 6) {
+		if ($opcion == 1) {
 			while ($num_elementos < count($idarticulo)) {
 				$sql_detalle1 = "UPDATE detalle_devolucion SET cantidad_a_devolver=cantidad_a_devolver+'$cantidad_devuelta[$num_elementos]' WHERE iddevolucion='$iddevolucion' AND idarticulo='$idarticulo[$num_elementos]'";
 				ejecutarConsulta($sql_detalle1) or $sw = false;

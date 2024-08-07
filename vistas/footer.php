@@ -117,10 +117,17 @@
           return this.nodeType === 3;
         }).text().trim();
 
-        const fullTitle = title.replace(/\b([a-zA-ZáéíóúÁÉÍÓÚ]+)/g, function(match) {
+        const formattedTitle = title.replace(/\b([a-zA-ZáéíóúÁÉÍÓÚ]+)/g, function(match) {
           return match.charAt(0).toUpperCase() + match.slice(1).toLowerCase();
         });
 
+        let fullTitle = formattedTitle;
+
+        if (formattedTitle.startsWith("Productos Más Devueltos Del")) {
+          fullTitle = "Productos Más Devueltos";
+        }
+
+        console.log(fullTitle); // Imprime el título para verificación
         document.title = fullTitle + " | Adventas";
       }
 
@@ -154,7 +161,7 @@
       }
 
       function nowrapCell() {
-        ["#tbllistado", "#detalles", "#tbllistado2", "#tbllistado3", "#tblarticulos", "#tbltrabajadores"].forEach(selector => {
+        ["#tbllistado", "#tbllistado_1", "#tbllistado_2", "#detalles", "#tbllistado2", "#tbllistado3", "#tblarticulos", "#tbltrabajadores"].forEach(selector => {
           addClassToCells(selector, "nowrap-cell");
         });
       }
@@ -174,7 +181,7 @@
       }
 
       $(document).on('draw.dt', function(e, settings) {
-        if ($(settings.nTable).is('#tbllistado') || $(settings.nTable).is('#tbllistado2') || $(settings.nTable).is('#tbllistado3') || $(settings.nTable).is('#tblarticulos') || $(settings.nTable).is('#tbltrabajadores')) {
+        if ($(settings.nTable).is('#tbllistado') || $(settings.nTable).is('#tbllistado2') || $(settings.nTable).is('#tbllistado3') || $(settings.nTable).is('#tbllistado_1') || $(settings.nTable).is('#tbllistado_2') || $(settings.nTable).is('#tblarticulos') || $(settings.nTable).is('#tbltrabajadores')) {
           const table = $(settings.nTable).DataTable();
           if (table.rows({
               page: 'current'
@@ -205,7 +212,7 @@
         return palabra.toLowerCase();
       }
 
-      const thElements = document.querySelectorAll("#tblarticulos th, #tbllistado th, #tbllistado2 th, #tbllistado3 th, #tbltrabajadores th");
+      const thElements = document.querySelectorAll("#tblarticulos th, #tbllistado_1 th, #tbllistado_2 th, #tbllistado th, #tbllistado2 th, #tbllistado3 th, #tbltrabajadores th");
 
       thElements.forEach((e) => {
         e.textContent = e.textContent.toUpperCase();

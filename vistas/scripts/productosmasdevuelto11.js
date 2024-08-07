@@ -12,10 +12,6 @@ async function cargarTablas() {
 	const promise = [
 		cargarDatos('articulosmasdevueltos_tipo1'),
 		cargarDatos('articulosmasdevueltos_tipo2'),
-		cargarDatos('articulosmasdevueltos_tipo3'),
-		cargarDatos('articulosmasdevueltos_tipo4'),
-		cargarDatos('articulosmasdevueltos_tipo5'),
-		cargarDatos('articulosmasdevueltos_tipo6'),
 	];
 
 	tablas = await Promise.all(promise);
