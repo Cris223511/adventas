@@ -10,13 +10,13 @@ class Articulo
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idusuario, $idcategoria, $idalmacen, $idmarcas, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $precio_compra, $precio_venta, $ganancia, $descripcion, $talla, $color, $peso, $posicion, $imagen)
+	public function insertar($idusuario, $idcategoria, $idalmacen, $idmarcas, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $precio_compra, $precio_venta, $ganancia, $descripcion, $talla, $color, $peso, $posicion, $fecha_emision, $fecha_vencimiento, $nota_1, $nota_2, $imagen)
 	{
 		if (empty($imagen))
 			$imagen = "product.jpg";
 
-		$sql = "INSERT INTO articulo (idusuario,idcategoria,idalmacen,idmarcas,idmedida,codigo,codigo_producto,nombre,stock,stock_minimo,precio_compra,precio_venta,ganancia,descripcion,talla,color,peso,posicion,imagen,estado)
-		VALUES ('$idusuario','$idcategoria','$idalmacen','$idmarcas','$idmedida','$codigo','$codigo_producto','$nombre','$stock','$stock_minimo','$precio_compra','$precio_venta','$ganancia','$descripcion','$talla','$color','$peso','$posicion','$imagen','1')";
+		$sql = "INSERT INTO articulo (idusuario,idcategoria,idalmacen,idmarcas,idmedida,codigo,codigo_producto,nombre,stock,stock_minimo,precio_compra,precio_venta,ganancia,descripcion,talla,color,peso,posicion,fecha_emision,fecha_vencimiento,nota_1,nota_2,imagen,estado)
+		VALUES ('$idusuario','$idcategoria','$idalmacen','$idmarcas','$idmedida','$codigo','$codigo_producto','$nombre','$stock','$stock_minimo','$precio_compra','$precio_venta','$ganancia','$descripcion','$talla','$color','$peso','$posicion','$fecha_emision','$fecha_vencimiento','$nota_1','$nota_2','$imagen','1')";
 		return ejecutarConsulta($sql);
 	}
 
@@ -70,9 +70,9 @@ class Articulo
 	}
 	
 	//Implementamos un método para editar registros
-	public function editar($idarticulo, $idcategoria, $idalmacen, $idmarcas, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $precio_compra, $precio_venta, $ganancia, $descripcion, $talla, $color, $peso, $posicion, $imagen)
+	public function editar($idarticulo, $idcategoria, $idalmacen, $idmarcas, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $precio_compra, $precio_venta, $ganancia, $descripcion, $talla, $color, $peso, $posicion, $fecha_emision, $fecha_vencimiento, $nota_1, $nota_2, $imagen)
 	{
-		$sql = "UPDATE articulo SET idcategoria='$idcategoria',idalmacen='$idalmacen',idmarcas='$idmarcas',idmedida='$idmedida',codigo='$codigo',codigo_producto='$codigo_producto',nombre='$nombre',stock='$stock',stock_minimo='$stock_minimo',precio_compra='$precio_compra',precio_venta='$precio_venta',ganancia='$ganancia',descripcion='$descripcion',talla='$talla',color='$color',peso='$peso',posicion='$posicion',imagen='$imagen' WHERE idarticulo='$idarticulo'";
+		$sql = "UPDATE articulo SET idcategoria='$idcategoria',idalmacen='$idalmacen',idmarcas='$idmarcas',idmedida='$idmedida',codigo='$codigo',codigo_producto='$codigo_producto',nombre='$nombre',stock='$stock',stock_minimo='$stock_minimo',precio_compra='$precio_compra',precio_venta='$precio_venta',ganancia='$ganancia',descripcion='$descripcion',talla='$talla',color='$color',peso='$peso',posicion='$posicion',fecha_emision='$fecha_emision',fecha_vencimiento='$fecha_vencimiento',nota_1='$nota_1',nota_2='$nota_2',imagen='$imagen' WHERE idarticulo='$idarticulo'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -112,56 +112,60 @@ class Articulo
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idarticulo)
 	{
-		$sql = "SELECT * FROM articulo WHERE idarticulo='$idarticulo'";
+		$sql = "SELECT *, 
+					   DATE_FORMAT(fecha_emision, '%Y-%m-%d') as fecha_emision_formateada, 
+					   DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d') as fecha_vencimiento_formateada 
+				FROM articulo 
+				WHERE idarticulo='$idarticulo'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,al.ubicacion as almacen,m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, al.ubicacion as almacen, u.idusuario, u.cargo AS cargo,c.nombre as categoria,m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,DATE_FORMAT(a.fecha_emision, '%d-%m-%Y') as fecha_emision,DATE_FORMAT(a.fecha_vencimiento, '%d-%m-%Y') as fecha_vencimiento,a.nota_1,a.nota_2,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para listar los registros
 	public function listarPorUsuario($idalmacenSession)
 	{
-		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,al.ubicacion as almacen,m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0'AND a.idalmacen = '$idalmacenSession' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, al.ubicacion as almacen, u.idusuario, u.cargo AS cargo,c.nombre as categoria,m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,DATE_FORMAT(a.fecha_emision, '%d-%m-%Y') as fecha_emision,DATE_FORMAT(a.fecha_vencimiento, '%d-%m-%Y') as fecha_vencimiento,a.nota_1,a.nota_2,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0'AND a.idalmacen = '$idalmacenSession' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para listar los registros activos
 	public function listarActivos()
 	{
-		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria WHERE a.eliminado = '0' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.descripcion,a.talla,a.color,a.peso,a.posicion,DATE_FORMAT(a.fecha_emision, '%d-%m-%Y') as fecha_emision,DATE_FORMAT(a.fecha_vencimiento, '%d-%m-%Y') as fecha_vencimiento,a.nota_1,a.nota_2,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria WHERE a.eliminado = '0' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para listar los registros activos
 	public function listarUsuarioActivos($idalmacenSession)
 	{
-		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria WHERE a.eliminado = '0' AND a.idalmacen = '$idalmacenSession' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.descripcion,a.talla,a.color,a.peso,a.posicion,DATE_FORMAT(a.fecha_emision, '%d-%m-%Y') as fecha_emision,DATE_FORMAT(a.fecha_vencimiento, '%d-%m-%Y') as fecha_vencimiento,a.nota_1,a.nota_2,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria WHERE a.eliminado = '0' AND a.idalmacen = '$idalmacenSession' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para listar los registros activos, su último precio y el stock (vamos a unir con el último registro de la tabla detalle_ingreso)
 	public function listarActivosVenta()
 	{
-		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria, m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, al.ubicacion as almacen, u.idusuario, u.cargo AS cargo,c.nombre as categoria, m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,DATE_FORMAT(a.fecha_emision, '%d-%m-%Y') as fecha_emision,DATE_FORMAT(a.fecha_vencimiento, '%d-%m-%Y') as fecha_vencimiento,a.nota_1,a.nota_2,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para listar los registros activos, su último precio y el stock (vamos a unir con el último registro de la tabla detalle_ingreso)
 	public function listarUsuarioActivosVenta($idusuario)
 	{
-		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria, m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' AND a.idusuario = '$idusuario' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, al.ubicacion as almacen, u.idusuario, u.cargo AS cargo,c.nombre as categoria, m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,DATE_FORMAT(a.fecha_emision, '%d-%m-%Y') as fecha_emision,DATE_FORMAT(a.fecha_vencimiento, '%d-%m-%Y') as fecha_vencimiento,a.nota_1,a.nota_2,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' AND a.idusuario = '$idusuario' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para listar los registros activos, su último precio y el stock (vamos a unir con el último registro de la tabla detalle_ingreso)
 	public function listarActivosVentaPorArticulo($idarticulo)
 	{
-		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.idusuario, u.cargo AS cargo,c.nombre as categoria,al.ubicacion as almacen,m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' AND a.idarticulo = $idarticulo ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, al.ubicacion as almacen, u.idusuario, u.cargo AS cargo,c.nombre as categoria,m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.precio_compra,a.precio_venta,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,DATE_FORMAT(a.fecha_emision, '%d-%m-%Y') as fecha_emision,DATE_FORMAT(a.fecha_vencimiento, '%d-%m-%Y') as fecha_vencimiento,a.nota_1,a.nota_2,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' AND a.idarticulo = $idarticulo ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 

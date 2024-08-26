@@ -83,10 +83,16 @@ function limpiar() {
 				Marca
 			</th>
 			<th>
+				Local
+			</th>
+			<th>
 				Cantidad <a href="#" data-toggle="popover" data-placement="top" title="Cantidad" data-content="Es la cantidad o stock del producto." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
 			</th>
 			<th>
 				Cantidad a Solicitar <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Digita la cantidad a solicitar prestado (no debe superar a la cantidad o stock del producto)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
+			</th>
+			<th>
+				Estado
 			</th>
 		</thead>
 		<tbody>
@@ -362,10 +368,16 @@ function mostrar(idsolicitud) {
 				Marca
 			</th>
 			<th>
+				Local
+			</th>
+			<th>
 				Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
 			</th>
 			<th>
 				Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el almacenero prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
+			</th>
+			<th>
+				Estado
 			</th>
 		</thead>
 	`);
@@ -414,6 +426,9 @@ function mostrar2(idsolicitud) {
 				Marca
 			</th>
 			<th>
+				Local
+			</th>
+			<th>
 				Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
 			</th>
 			<th>
@@ -421,6 +436,9 @@ function mostrar2(idsolicitud) {
 			</th>
 			<th>
 				Cantidad a Prestar <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a Prestar" data-content="Digita la cantidad que deseas prestar al encargado (no debe superar la cantidad solicitada)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
+			</th>
+			<th>
+				Estado
 			</th>
 		</thead>
 	`);
@@ -510,7 +528,7 @@ var cont = 0;
 var detalles = 0;
 $("#btnGuardar").hide();
 
-function agregarDetalle(marca, categoria, idarticulo, stock, articulo) {
+function agregarDetalle(marca, almacen, categoria, idarticulo, stock, articulo) {
 	var cantidad = 0;
 
 	if (idarticulo != "") {
@@ -519,8 +537,10 @@ function agregarDetalle(marca, categoria, idarticulo, stock, articulo) {
 			'<td class="nowrap-cell"><input type="hidden" name="idarticulo[]" value="' + idarticulo + '">' + articulo + '</td>' +
 			'<td>' + categoria + '</td>' +
 			'<td>' + marca + '</td>' +
+			'<td>' + almacen + '</td>' +
 			'<td>' + stock + '</td>' +
 			'<td class="nowrap-cell"><input type="number" step="any" name="cantidad[]" id="cantidad[]" value="' + cantidad + '" min="0.1"></td>' +
+			'<td><span class="label bg-orange">Incompleto</span></td>' +
 			'</tr>';
 		cont++;
 		detalles = detalles + 1;

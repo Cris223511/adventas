@@ -235,6 +235,10 @@ function limpiar() {
 	$("#color").val("");
 	$("#peso").val("");
 	$("#posicion").val("");
+	$("#fecha_emision").val("");
+	$("#fecha_vencimiento").val("");
+	$("#nota_1").val("");
+	$("#nota_2").val("");
 	$("#stock").val("");
 	$("#stock_minimo").val("");
 	$("#precio_compra").val("");
@@ -382,7 +386,11 @@ function guardaryeditar(e) {
 
 		success: function (datos) {
 			datos = limpiarCadena(datos);
-			if (datos == "El código de barra del artículo que ha ingresado ya existe." || datos == "El código del artículo que ha ingresado ya existe.") {
+			if (!datos) {
+				console.log("No se recibieron datos del servidor.");
+				$("#btnGuardar").prop("disabled", false);
+				return;
+			} else if (datos == "El código de barra del artículo que ha ingresado ya existe." || datos == "El código del artículo que ha ingresado ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
@@ -427,6 +435,10 @@ function mostrar(idarticulo) {
 		$("#color").val(data.color);
 		$("#peso").val(data.peso);
 		$("#posicion").val(data.posicion);
+		data.fecha_emision_formateada != "0000-00-00" ? $("#fecha_emision").val(data.fecha_emision_formateada) : null;
+		data.fecha_vencimiento_formateada != "0000-00-00" ? $("#fecha_vencimiento").val(data.fecha_vencimiento_formateada) : null;
+		$("#nota_1").val(data.nota_1);
+		$("#nota_2").val(data.nota_2);
 		$("#imagenmuestra").show();
 		$("#imagenmuestra").attr("src", "../files/articulos/" + data.imagen);
 		$("#imagenactual").val(data.imagen);
@@ -553,7 +565,6 @@ function formatearNumero() {
 	// if (formattedCode.length > maxLength) {
 	// 	formattedCode = formattedCode.substring(0, maxLength);
 	// }
-
 	$("#codigo").val(codigo);
 	generarbarcode(0);
 }
@@ -566,10 +577,11 @@ function borrar() {
 
 //función para generar el número aleatorio del código de barra
 function generar() {
+	console.log("a generar =)");
 	var codigo = "775";
-	codigo += generarNumero(10000, 999) + "";
-	codigo += Math.floor(Math.random() * 10) + "";
-	codigo += generarNumero(100, 9) + "";
+	codigo += generarNumero(10000, 999);
+	codigo += Math.floor(Math.random() * 10);
+	codigo += generarNumero(100, 9);
 	codigo += Math.floor(Math.random() * 10);
 	$("#codigo").val(codigo);
 	generarbarcode(1);

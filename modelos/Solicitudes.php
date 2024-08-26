@@ -19,11 +19,11 @@ class Solicitud
 		}
 
 		$sql = "INSERT INTO solicitud (idalmacenero, idencargado, codigo_pedido, telefono, comentario, empresa, fecha_hora_pedido, fecha_hora_despacho, estado)
-		VALUES (0, '$idencargado', '$codigo_pedido', '$telefono', '', '$empresa', NOW(), '2000-01-01 00:00:00', 'Recibido')";
+		VALUES (0, '$idencargado', '$codigo_pedido', '$telefono', '', '$empresa', SYSDATE(), '2000-01-01 00:00:00', 'Recibido')";
 		$idsolicitudnew = ejecutarConsulta_retornarID($sql);
 
 		$sql2 = "INSERT INTO devolucion (idalmacenero, idencargado, codigo_pedido, telefono, comentario, empresa, fecha_hora_pedido, fecha_hora_devolucion, opcion, estado)
-		VALUES (0, '$idencargado', '$codigo_pedido', '$telefono', '', '$empresa', NOW(), '2000-01-01 00:00:00', '1', 'Recibido')";
+		VALUES (0, '$idencargado', '$codigo_pedido', '$telefono', '', '$empresa', SYSDATE(), '2000-01-01 00:00:00', '1', 'Recibido')";
 		ejecutarConsulta($sql2);
 
 		$num_elementos = 0;
@@ -32,7 +32,7 @@ class Solicitud
 		while ($num_elementos < count($idarticulo)) {
 			$sql_detalle1 = "INSERT INTO detalle_solicitud(idsolicitud, idarticulo, cantidad, cantidad_prestada) VALUES ('$idsolicitudnew', '$idarticulo[$num_elementos]','$cantidad[$num_elementos]',0)";
 			ejecutarConsulta($sql_detalle1) or $sw = false;
-			$sql_detalle2 = "INSERT INTO detalle_devolucion(iddevolucion, idarticulo, cantidad, cantidad_prestada, cantidad_devuelta, cantidad_a_devolver) VALUES ('$idsolicitudnew', '$idarticulo[$num_elementos]','$cantidad[$num_elementos]',0,0,0)";
+			$sql_detalle2 = "INSERT INTO detalle_devolucion(iddevolucion, idarticulo, cantidad, cantidad_prestada, cantidad_devuelta, cantidad_a_devolver, fecha_hora) VALUES ('$idsolicitudnew', '$idarticulo[$num_elementos]','$cantidad[$num_elementos]',0,0,0,SYSDATE())";
 			ejecutarConsulta($sql_detalle2) or $sw = false;
 			$num_elementos = $num_elementos + 1;
 		}
@@ -107,9 +107,9 @@ class Solicitud
 		//				  => Si es "0", todas las sumas de la cantidad prestada con la cantidad prestada actual es igual a la cantidad.
 
 		if ($todosCumplen == 1) {
-			$sql3 = "UPDATE solicitud SET idalmacenero='$idalmaceneroActual', estado='Pendiente', fecha_hora_despacho=NOW() WHERE idsolicitud='$idsolicitud'";
+			$sql3 = "UPDATE solicitud SET idalmacenero='$idalmaceneroActual', estado='Pendiente', fecha_hora_despacho=SYSDATE() WHERE idsolicitud='$idsolicitud'";
 		} else {
-			$sql3 = "UPDATE solicitud SET idalmacenero='$idalmaceneroActual', estado='Finalizado', fecha_hora_despacho=NOW() WHERE idsolicitud='$idsolicitud'";
+			$sql3 = "UPDATE solicitud SET idalmacenero='$idalmaceneroActual', estado='Finalizado', fecha_hora_despacho=SYSDATE() WHERE idsolicitud='$idsolicitud'";
 		}
 
 		if ($estadoDevolucionEnCurso == 0) {
@@ -271,12 +271,14 @@ class Solicitud
 					a.nombre,
 					c.nombre as categoria,
 					m.nombre as marca,
+					al.ubicacion as almacen,
 					ds.cantidad,
 					ds.cantidad_prestada
 				FROM detalle_solicitud ds
 				LEFT JOIN articulo a ON ds.idarticulo = a.idarticulo
 				LEFT JOIN marcas m ON a.idmarcas = m.idmarcas
 				LEFT JOIN categoria c ON a.idcategoria = c.idcategoria
+				LEFT JOIN almacen al ON a.idalmacen = al.idalmacen
 				WHERE ds.idsolicitud = '$idsolicitud'";
 		return ejecutarConsulta($sql);
 	}
@@ -288,12 +290,14 @@ class Solicitud
 					a.nombre,
 					c.nombre as categoria,
 					m.nombre as marca,
+					al.ubicacion as almacen,
 					ds.cantidad,
 					ds.cantidad_prestada
 				FROM detalle_solicitud ds
 				LEFT JOIN articulo a ON ds.idarticulo = a.idarticulo
 				LEFT JOIN marcas m ON a.idmarcas = m.idmarcas
 				LEFT JOIN categoria c ON a.idcategoria = c.idcategoria
+				LEFT JOIN almacen al ON a.idalmacen = al.idalmacen
 				WHERE ds.idsolicitud = '$idsolicitud'";
 		return ejecutarConsulta($sql);
 	}

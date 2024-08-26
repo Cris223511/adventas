@@ -47,6 +47,10 @@ $local_login = $_SESSION['local'];
     padding-right: 0 !important
   }
 
+  textarea {
+    resize: none !important;
+  }
+
   .table-responsive {
     border: none !important;
   }
@@ -59,6 +63,12 @@ $local_login = $_SESSION['local'];
   .box {
     box-shadow: none !important;
     border-top: 3px solid #d2d6de !important;
+  }
+
+  #formularioregistros textarea.form-control {
+    height: fit-content !important;
+    font-size: 16px !important;
+    align-content: start !important;
   }
 </style>
 
@@ -172,7 +182,7 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
                 <li id="lArticulos"><a href="articulo.php"><i class="fa fa-circle-o"></i> Artículos</a></li>
                 ';
-            if ($_SESSION['cargo'] == "superadmin") {
+            if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "encargado") {
               echo '<li id="lArticulosExternos"><a href="articuloExterno.php"><i class="fa fa-circle-o"></i> Artículos externos</a></li>';
             }
             echo '

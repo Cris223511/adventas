@@ -235,6 +235,10 @@ function limpiar() {
 	$("#color").val("");
 	$("#peso").val("");
 	$("#posicion").val("");
+	$("#fecha_emision").val("");
+	$("#fecha_vencimiento").val("");
+	$("#nota_1").val("");
+	$("#nota_2").val("");
 	$("#stock").val("");
 	$("#stock_minimo").val("");
 	$("#precio_compra").val("");
@@ -431,6 +435,10 @@ function mostrar(idarticulo) {
 		$("#color").val(data.color);
 		$("#peso").val(data.peso);
 		$("#posicion").val(data.posicion);
+		$("#fecha_emision").val(data.fecha_emision);
+		$("#fecha_vencimiento").val(data.fecha_vencimiento);
+		$("#nota_1").val(data.nota_1);
+		$("#nota_2").val(data.nota_2);
 		$("#imagenmuestra").show();
 		$("#imagenmuestra").attr("src", "../files/articulos/" + data.imagen);
 		$("#imagenactual").val(data.imagen);

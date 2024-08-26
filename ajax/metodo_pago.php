@@ -127,7 +127,6 @@ if (!isset($_SESSION["nombre"])) {
 							break;
 					}
 
-					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
@@ -138,7 +137,7 @@ if (!isset($_SESSION["nombre"])) {
 							'</div>',
 						"1" => $reg->usuario . ' - ' . $cargo_detalle,
 						"2" => $reg->nombre,
-						"3" => ($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion,
+						"3" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
 						"4" => "<img src='../files/metodo_pago/" . $reg->imagen . "' height='50px' width='50px' >",
 						"5" => ($reg->estado == 'Activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'

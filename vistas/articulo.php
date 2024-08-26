@@ -9,9 +9,11 @@ if (!isset($_SESSION["nombre"])) {
   require 'header.php';
   if ($_SESSION['almacen'] == 1) {
 ?>
-    <!--Contenido-->
-    <!-- Content Wrapper. Contains page content -->
     <style>
+      .caja1 .contenedor {
+        text-align: center;
+      }
+
       @media (max-width: 1198px) {
         .label_input {
           width: 100px !important;
@@ -20,6 +22,7 @@ if (!isset($_SESSION["nombre"])) {
 
       @media (max-width: 991px) {
         .caja1 {
+          padding-left: 0 !important;
           padding-right: 0 !important;
         }
 
@@ -33,6 +36,11 @@ if (!isset($_SESSION["nombre"])) {
 
         .caja1 .contenedor img {
           width: 25% !important;
+        }
+
+        .contenedor_articulos {
+          display: flex;
+          flex-direction: column-reverse !important;
         }
       }
 
@@ -77,6 +85,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Imagen</th>
                     <th>Nombre</th>
                     <th>U. medida</th>
+                    <th style="width: 20%; min-width: 300px;">Descripción</th>
                     <th>Categoría</th>
                     <th>Ubicación del local</th>
                     <th>Marca</th>
@@ -91,6 +100,10 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Color</th>
                     <th>Peso</th>
                     <th>Posición</th>
+                    <th>Fecha emisión</th>
+                    <th>Fecha vencimiento</th>
+                    <th style="width: 20%; min-width: 200px;">Nota 1</th>
+                    <th style="width: 20%; min-width: 200px;">Nota 2</th>
                     <th>Agregado por</th>
                     <th>Estado</th>
                   </thead>
@@ -101,6 +114,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Imagen</th>
                     <th>Nombre</th>
                     <th>U. medida</th>
+                    <th>Descripción</th>
                     <th>Categoría</th>
                     <th>Ubicación del local</th>
                     <th>Marca</th>
@@ -115,132 +129,154 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Color</th>
                     <th>Peso</th>
                     <th>Posición</th>
+                    <th>Fecha emisión</th>
+                    <th>Fecha vencimiento</th>
+                    <th>Nota 1</th>
+                    <th>Nota 2</th>
                     <th>Agregado por</th>
                     <th>Estado</th>
                   </tfoot>
                 </table>
               </div>
               <div class="panel-body" id="formularioregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important;">
-                <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
-                  <div class="form-group col-lg-2 col-md-4 col-sm-12 caja1" style="padding-left: 0 !important; padding-right: 20px;">
-                    <div class="contenedor" style="background-color: white; border-top: 3px #3d3f3f solid; padding: 10px 20px 20px 20px;">
-                      <label>Imagen de muestra:</label>
-                      <div>
-                        <img src="" width="100%" id="imagenmuestra" style="display: none;">
+                <form name="formulario" id="formulario" method="POST">
+                  <div class="contenedor_articulos">
+                    <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #3d3f3f solid; padding: 20px;">
+                      <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label class="label_input" style="width: 100px;">Nombre(*):</label>
+                        <input type="hidden" name="idarticulo" id="idarticulo">
+                        <input type="text" class="form-control" name="nombre" id="nombre" maxlength="100" placeholder="Nombre" required>
                       </div>
-                    </div>
-                  </div>
-                  <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #3d3f3f solid; padding: 20px;">
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label class="label_input" style="width: 90px;">Nombre(*):</label>
-                      <input type="hidden" name="idarticulo" id="idarticulo">
-                      <input type="text" class="form-control" name="nombre" id="nombre" maxlength="100" placeholder="Nombre" required>
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Unidad de medida(*):</label>
-                      <select id="idmedida" name="idmedida" class="form-control selectpicker" data-live-search="true" required></select>
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Local(*):</label>
-                      <select id="idalmacen" name="idalmacen" class="form-control selectpicker idalmacen" data-live-search="true" data-size="5" onchange="actualizarRUC()" required>
-                        <option value="">- Seleccione -</option>
-                      </select>
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">RUC local(*):</label>
-                      <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Categoría(*):</label>
-                      <select id="idcategoria" name="idcategoria" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Marca(*):</label>
-                      <select id="idmarcas" name="idmarcas" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Stock(*):</label>
-                      <input type="number" class="form-control" name="stock" id="stock" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Stock" required>
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Stock mínimo(*):</label>
-                      <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="1" placeholder="Stock mínimo" required>
-                    </div>
-                    <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label class="label_input" style="width: 115px;">Precio compra(*):</label>
-                      <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de compra." required>
-                    </div>
-                    <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Precio venta(*):</label>
-                      <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de venta." required>
-                    </div>
-                    <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Ganancia(*):</label>
-                      <input type="number" class="form-control" name="ganancia" id="ganancia" step="any" placeholder="Ganancia total." disabled required>
-                    </div>
-                    <div class="form-group col-lg-12 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label class="label_input" style="width: 90px;">Descripción:</label>
-                      <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Descripción del artículo" autocomplete="off">
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label class="label_input" style="width: 90px;">Imagen:</label>
-                      <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">
-                      <input type="hidden" name="imagenactual" id="imagenactual">
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12">
-                      <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                        <label style="width: 100px;">Código del producto(*):</label>
-                        <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="13" placeholder="Código del producto" onblur="convertirMayus(this)" required>
+                      <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label style="width: 100px;">Unidad de medida(*):</label>
+                        <select id="idmedida" name="idmedida" class="form-control selectpicker" data-live-search="true" required></select>
                       </div>
-                    </div>
-                    <div class="form-group col-lg-12 col-md-12" style="display: flex; justify-content: center;">
-                      <button class="btn btn-success" type="button" id="btnDetalles1" onclick="frmDetalles(true)"><i class="fa fa-plus"></i> Más detalles</button>
-                      <button class="btn btn-danger" type="button" id="btnDetalles2" onclick="frmDetalles(false)"><i class="fa fa-minus"></i> Cerrar</button>
-                    </div>
-                    <!-- form detalles -->
-                    <div id="frmDetalles" class="col-lg-12 col-md-12" style="margin: 0 !important; padding: 0 !important;">
-                      <div class="form-group col-lg-6 col-md-12">
-                        <label>Talla:</label>
-                        <input type="text" class="form-control" name="talla" id="talla" maxlength="5" placeholder="Ingrese la talla del producto." autocomplete="off">
+                      <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label style="width: 100px;">Local(*):</label>
+                        <select id="idalmacen" name="idalmacen" class="form-control selectpicker idalmacen" data-live-search="true" data-size="5" onchange="actualizarRUC()" required>
+                          <option value="">- Seleccione -</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label style="width: 100px;">RUC local(*):</label>
+                        <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
+                      </div>
+                      <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label style="width: 100px;">Categoría(*):</label>
+                        <select id="idcategoria" name="idcategoria" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
+                      </div>
+                      <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label style="width: 100px;">Marca(*):</label>
+                        <select id="idmarcas" name="idmarcas" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
+                      </div>
+                      <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label style="width: 100px;">Stock(*):</label>
+                        <input type="number" class="form-control" name="stock" id="stock" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Stock" required>
+                      </div>
+                      <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label style="width: 100px;">Stock mínimo(*):</label>
+                        <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" step="any" min="0.1" placeholder="Stock mínimo" required>
+                      </div>
+                      <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label class="label_input" style="width: 115px;">Precio compra(*):</label>
+                        <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el precio de compra." required>
+                      </div>
+                      <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label style="width: 100px;">Precio venta(*):</label>
+                        <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="11" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el precio de venta." required>
+                      </div>
+                      <div class="form-group col-lg-4 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label style="width: 100px;">Ganancia(*):</label>
+                        <input type="number" class="form-control" name="ganancia" id="ganancia" step="any" placeholder="Ganancia total." disabled required>
+                      </div>
+                      <div class="form-group col-lg-12 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label class="label_input" style="width: 90px;">Descripción:</label>
+                        <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" placeholder="Descripción del artículo" autocomplete="off">
+                      </div>
+                      <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                        <label class="label_input" style="width: 90px;">Imagen:</label>
+                        <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">
+                        <input type="hidden" name="imagenactual" id="imagenactual">
                       </div>
                       <div class="form-group col-lg-6 col-md-12">
-                        <label>Color:</label>
-                        <input type="text" class="form-control" name="color" id="color" maxlength="30" placeholder="Ingrese el color del producto." autocomplete="off">
+                        <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
+                          <label style="width: 100px;">Código del producto(*):</label>
+                          <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="13" placeholder="Código del producto" onblur="convertirMayus(this)" required>
+                        </div>
                       </div>
-                      <div class="form-group col-lg-6 col-md-12">
-                        <label>Posición de objeto:</label>
-                        <input type="text" class="form-control" name="posicion" id="posicion" maxlength="30" placeholder="Ingrese la posición de objeto." autocomplete="off">
+                      <div class="form-group col-lg-12 col-md-12" style="display: flex; justify-content: center;">
+                        <button class="btn btn-success" type="button" id="btnDetalles1" onclick="frmDetalles(true)"><i class="fa fa-plus"></i> Más detalles</button>
+                        <button class="btn btn-danger" type="button" id="btnDetalles2" onclick="frmDetalles(false)"><i class="fa fa-minus"></i> Cerrar</button>
                       </div>
-                      <div class="form-group col-lg-6 col-md-12">
-                        <label>Peso:</label>
-                        <input type="number" class="form-control" name="peso" id="peso" step="any" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" placeholder="Ingrese el peso.">
+                      <!-- form detalles -->
+                      <div id="frmDetalles" class="col-lg-12 col-md-12" style="margin: 0 !important; padding: 0 !important;">
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Talla:</label>
+                          <input type="text" class="form-control" name="talla" id="talla" maxlength="15" placeholder="Ingrese la talla del producto." autocomplete="off">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Color:</label>
+                          <input type="text" class="form-control" name="color" id="color" maxlength="30" placeholder="Ingrese el color del producto." autocomplete="off">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Posición de objeto:</label>
+                          <input type="text" class="form-control" name="posicion" id="posicion" maxlength="30" placeholder="Ingrese la posición de objeto." autocomplete="off">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Peso:</label>
+                          <input type="number" class="form-control" name="peso" id="peso" step="any" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" placeholder="Ingrese el peso.">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Fecha Emisión:</label>
+                          <input type="date" class="form-control" name="fecha_emision" id="fecha_emision">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Fecha Vencimiento:</label>
+                          <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Nota 1:</label>
+                          <textarea type="text" class="form-control" name="nota_1" id="nota_1" maxlength="10000" rows="4" placeholder="Ingrese la nota 1."></textarea>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Nota 2:</label>
+                          <textarea type="text" class="form-control" name="nota_2" id="nota_2" maxlength="10000" rows="4" placeholder="Ingrese la nota 2."></textarea>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <div>
+                            <label>Código de barra:</label>
+                            <input type="text" class="form-control" name="codigo" id="codigo" maxlength="13" placeholder="Código de barra">
+                          </div>
+                          <div style="margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
+                            <button class="btn btn-info" type="button" onclick="generar()">Generar</button>
+                            <button class="btn btn-warning" type="button" onclick="imprimir()">Imprimir</button>
+                            <button class="btn btn-danger" type="button" onclick="borrar()">Borrar</button>
+                            <button class="btn btn-success btn1" type="button" onclick="escanear()">Escanear</button>
+                            <button class="btn btn-danger btn2" type="button" onclick="detenerEscaneo()">Detener</button>
+                          </div>
+                          <div id="print" style="overflow-y: hidden;">
+                            <img id="barcode">
+                          </div>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <div style="display: flex; justify-content: start;">
+                            <div id="camera"></div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="form-group col-lg-6 col-md-12">
+                      <!-- end form detalles -->
+                    </div>
+                    <div class="form-group col-lg-2 col-md-4 col-sm-12 caja1" style="padding-right: 0 !important; padding-left: 20px;">
+                      <div class="contenedor" style="background-color: white; border-top: 3px #3d3f3f solid !important; padding: 10px 20px 20px 20px;">
+                        <label>Imagen de muestra:</label>
                         <div>
-                          <label>Código de barra(*):</label>
-                          <input type="text" class="form-control" name="codigo" id="codigo" maxlength="13" placeholder="Código de barra">
-                        </div>
-                        <div style="margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
-                          <button class="btn btn-info" type="button" onclick="generar()">Generar</button>
-                          <button class="btn btn-warning" type="button" onclick="imprimir()">Imprimir</button>
-                          <button class="btn btn-danger" type="button" onclick="borrar()">Borrar</button>
-                          <button class="btn btn-success btn1" type="button" onclick="escanear()">Escanear</button>
-                          <button class="btn btn-danger btn2" type="button" onclick="detenerEscaneo()">Detener</button>
-                        </div>
-                        <div id="print" style="overflow-y: hidden;">
-                          <img id="barcode">
-                        </div>
-                      </div>
-                      <div class="form-group col-lg-6 col-md-12">
-                        <div style="display: flex; justify-content: start;">
-                          <div id="camera"></div>
+                          <img src="" width="100%" id="imagenmuestra" style="display: none;">
                         </div>
                       </div>
                     </div>
-                    <!-- end form detalles -->
                   </div>
-                  <div class="form-group col-lg-10 col-md-8 col-sm-12 botones" style="background-color: white !important; padding: 10px 10px 10px 0 !important; float: right;">
-                    <div style="float: right;">
+                  <div class="form-group col-lg-10 col-md-8 col-sm-12 botones" style="background-color: white !important; padding: 10px !important; float: left;">
+                    <div style="float: left;">
                       <button class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                       <button class="btn btn-secondary" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
                     </div>
@@ -262,7 +298,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <label>Descripción:</label>
-        <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="256" placeholder="Descripción">
+        <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="10000" placeholder="Descripción">
       </div>
     </form>
     <!-- Fin form categoría -->
@@ -276,7 +312,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <label>Descripción:</label>
-        <textarea type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="150" rows="4" placeholder="Descripción"></textarea>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="10000" rows="4" placeholder="Descripción"></textarea>
       </div>
     </form>
     <!-- Fin form marcas -->
@@ -290,7 +326,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <label>Descripción:</label>
-        <textarea type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="150" rows="4" placeholder="Descripción"></textarea>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="10000" rows="4" placeholder="Descripción"></textarea>
       </div>
     </form>
     <!-- Fin form medidas -->

@@ -5602,6 +5602,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->stock,
 						"6" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"7" => $reg->cantidad,
+						"8" => $reg->fecha,
 					);
 				}
 				$results = array(
@@ -5629,6 +5630,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->stock,
 						"6" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"7" => $reg->cantidad,
+						"8" => $reg->fecha,
 					);
 				}
 				$results = array(

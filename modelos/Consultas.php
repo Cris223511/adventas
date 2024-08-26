@@ -61,7 +61,7 @@ class Consultas
 		return ejecutarConsulta($sql);
 	}
 
-	
+
 	public function listarventasservicio($fecha_inicio, $fecha_fin, $idcliente)
 	{
 		$sql = "SELECT v.idventa_servicio,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y') as fecha,CONCAT(u.nombre,' ',u.apellido) AS usuario, u.cargo AS cargo, p.nombre as cliente,al.ubicacion as almacen, mp.nombre as metodo_pago,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,v.estado FROM venta_servicio v LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN persona p ON v.idcliente=p.idpersona LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idcliente='$idcliente' ORDER by v.idventa_servicio ASC";
@@ -262,7 +262,7 @@ class Consultas
 		return ejecutarConsulta($sql);
 	}
 
-	
+
 	public function listarventasyproductocuotas($fecha_inicio, $fecha_fin, $idcliente)
 	{
 		$sql = "SELECT dv.idcuotas,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y') as fecha,dv.idarticulo,CONCAT(u.nombre,' ',u.apellido) AS usuario,p.nombre as cliente,al.ubicacion as almacen,mp.nombre as metodo_pago,u.cargo AS cargo,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,a.nombre,dv.cantidad,a.idarticulo,a.idcategoria,a.codigo,a.codigo_producto,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.descripcion,a.talla,a.color,a.peso,a.posicion,a.imagen,v.estado FROM detalle_cuotas dv LEFT JOIN cuotas v ON v.idcuotas=dv.idcuotas LEFT JOIN usuario p ON v.idcliente=p.idusuario LEFT JOIN metodo_pago mp ON v.idmetodopago = mp.idmetodopago LEFT JOIN almacen al ON v.idalmacen = al.idalmacen LEFT JOIN usuario u ON v.idusuario=u.idusuario LEFT JOIN articulo a on dv.idarticulo=a.idarticulo WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idcliente='$idcliente' ORDER by v.idcuotas ASC";
@@ -322,7 +322,8 @@ class Consultas
 				  a.stock as stock,
 				  a.descripcion as descripcion,
 				  a.imagen as imagen,
-				  COUNT(dd.idarticulo) as cantidad
+				  COUNT(dd.idarticulo) as cantidad,
+				  DATE_FORMAT(dd.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha
 				FROM detalle_devolucion dd
 				LEFT JOIN articulo a ON dd.idarticulo = a.idarticulo
 				LEFT JOIN categoria c ON a.idcategoria = c.idcategoria
@@ -350,7 +351,8 @@ class Consultas
 				  a.stock as stock,
 				  a.descripcion as descripcion,
 				  a.imagen as imagen,
-				  COUNT(dd.idarticulo) as cantidad
+				  COUNT(dd.idarticulo) as cantidad,
+				  DATE_FORMAT(dd.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha
 				FROM detalle_devolucion dd
 				LEFT JOIN articulo a ON dd.idarticulo = a.idarticulo
 				LEFT JOIN categoria c ON a.idcategoria = c.idcategoria

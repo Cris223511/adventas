@@ -356,7 +356,7 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                   <label>Monto (S/.):</label>
-                  <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" min="1" maxlength="10" placeholder="Monto (S/.)" required>
+                  <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" step="any" min="0.1" maxlength="10" placeholder="Monto (S/.)" required>
                 </div>
               </div>
               <div class="modal-footer">

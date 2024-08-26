@@ -49,7 +49,7 @@ class Devolucion
 				$num_elementos = $num_elementos + 1;
 			}
 
-			$sql2 = "UPDATE devolucion SET opcion='$opcion', estado='Finalizado', fecha_hora_devolucion=NOW() WHERE iddevolucion='$iddevolucion'";
+			$sql2 = "UPDATE devolucion SET opcion='$opcion', estado='Finalizado', fecha_hora_devolucion=SYSDATE() WHERE iddevolucion='$iddevolucion'";
 			ejecutarConsulta($sql2);
 		}
 
@@ -151,6 +151,7 @@ class Devolucion
 					a.nombre,
 					c.nombre as categoria,
 					m.nombre as marca,
+					al.ubicacion as almacen,
 					dd.cantidad,
 					dd.cantidad_prestada,
 					dd.cantidad_devuelta
@@ -158,24 +159,7 @@ class Devolucion
 				LEFT JOIN articulo a ON dd.idarticulo = a.idarticulo
 				LEFT JOIN marcas m ON a.idmarcas = m.idmarcas
 				LEFT JOIN categoria c ON a.idcategoria = c.idcategoria
-				WHERE dd.iddevolucion='$iddevolucion'";
-		return ejecutarConsulta($sql);
-	}
-
-	public function listarDetalle2($iddevolucion)
-	{
-		$sql = "SELECT dd.iddevolucion,
-					dd.idarticulo,
-					a.nombre,
-					c.nombre as categoria,
-					m.nombre as marca,
-					dd.cantidad,
-					dd.cantidad_prestada,
-					dd.cantidad_devuelta
-				FROM detalle_devolucion dd
-				LEFT JOIN articulo a ON dd.idarticulo = a.idarticulo
-				LEFT JOIN marcas m ON a.idmarcas = m.idmarcas
-				LEFT JOIN categoria c ON a.idcategoria = c.idcategoria
+				LEFT JOIN almacen al ON a.idalmacen = al.idalmacen
 				WHERE dd.iddevolucion='$iddevolucion'";
 		return ejecutarConsulta($sql);
 	}

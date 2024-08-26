@@ -110,7 +110,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Responsable despacho(*):</label>
                 <input type="hidden" name="iddevolucion" id="iddevolucion3">
-                <select id="idalmacenero3" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5"disabled>
+                <select id="idalmacenero3" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5" disabled>
                   <option value="">- Seleccione -</option>
                 </select>
               </div>
@@ -129,7 +129,7 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
                 <hr>
                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 selects">
-                  <label class="label_serie">Seleccione una opción(*): &nbsp;<a href="#" data-toggle="popover" data-placement="right" title="Tipos de envío" data-html="true" data-content="Selecciona almenos una de las opciones. Si selecciona la opción de <strong>almacén de origen</strong>, la cantidad a devolver (digitada por el encargado) se devolverá al almacén en el que te encuentras actualmente, aumentando el stock del producto devuelto; mientras que la opción de <strong>almacén de devolución</strong>, envías el producto a un almacén de productos devueltos, que hace referencia a los productos que están malogrados y no están disponible para ser utilizados en las ventas, compras, proformas y cuotas. (Puedes editar el registro y cambiar la opción en cualquier momento exepto si se selecciona la opción de <strong>almacén de origen</strong>, ya que esta opción envía los artículos al almacén y no se pueden devolver nuevamente)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></label><br>
+                  <label class="label_serie">Seleccione una opción(*): &nbsp;<a href="#" data-toggle="popover" data-placement="right" title="Tipos de envío" data-html="true" data-content="Selecciona almenos una de las opciones. Si selecciona la opción de <strong>almacén de origen</strong>, la Solicitar cantidad a devolver (digitada por el encargado) se devolverá al almacén en el que te encuentras actualmente, aumentando el stock del producto devuelto; mientras que la opción de <strong>almacén de devolución</strong>, envías el producto a un almacén de productos devueltos, que hace referencia a los productos que están malogrados y no están disponible para ser utilizados en las ventas, compras, proformas y cuotas. (Puedes editar el registro y cambiar la opción en cualquier momento exepto si se selecciona la opción de <strong>almacén de origen</strong>, ya que esta opción envía los artículos al almacén y no se pueden devolver nuevamente)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></label><br>
                   <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <input type="radio" class="opcion" name="opcion" value="1" required> Almacén de origen
                     <input type="radio" class="opcion" name="opcion" value="2" required> Almacén de devolución
@@ -144,16 +144,18 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Artículo</th>
                     <th>Categoría</th>
                     <th>Marca</th>
+                    <th>Local</th>
                     <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                     <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-                    <th>Cantidad a Devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a Devolver" data-content="Es la cantidad que el encargado solicitó devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                    <th>Cantidad a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a devolver" data-content="Es la cantidad que el encargado solicitó devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                    <th>Estado</th>
                   </thead>
                   <tbody>
 
                   </tbody>
                 </table>
               </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 5px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-secondary" type="submit" id="btnGuardar4"><i class="fa fa-save"></i> Guardar</button>
               </div>
@@ -177,7 +179,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Responsable despacho(*):</label>
                 <input type="hidden" name="iddevolucion" id="iddevolucion2">
-                <select id="idalmacenero2" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5"disabled>
+                <select id="idalmacenero2" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5" disabled>
                   <option value="">- Sin registrar -</option>
                 </select>
               </div>
@@ -203,17 +205,19 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Artículo</th>
                     <th>Categoría</th>
                     <th>Marca</th>
+                    <th>Local</th>
                     <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                     <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-                    <th>Cantidad Devuelta <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Devuelta" data-content="Es la cantidad que solicitaste devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-                    <th>Cantidad a Devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a Devolver" data-content="Digita la cantidad que deseas devolver al almacén (no debe superar la cantidad prestada)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                    <th>Cantidad solicitada a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad solicitada a devolver" data-content="Es la cantidad que solicitaste devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                    <th>Solicitar cantidad a devolver <a href="#" data-toggle="popover" data-placement="top" title="Solicitar cantidad a devolver" data-content="Digita la cantidad que deseas devolver al almacén (no debe superar la cantidad prestada)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                    <th>Estado</th>
                   </thead>
                   <tbody>
 
                   </tbody>
                 </table>
               </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 5px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-secondary" type="submit" id="btnGuardar3"><i class="fa fa-save"></i> Guardar</button>
               </div>
@@ -239,7 +243,7 @@ if (!isset($_SESSION["nombre"])) {
                 <input type="hidden" name="iddevolucion" id="iddevolucion">
                 <textarea type="text" class="form-control" style="resize: none;" name="comentario" id="comentario" maxlength="200" rows="4" placeholder="Cargando..."></textarea>
               </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 5px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-secondary" type="submit" id="btnGuardar2"><i class="fa fa-save"></i> Guardar</button>
               </div>
@@ -263,7 +267,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Responsable despacho(*):</label>
                 <input type="hidden" name="iddevolucion" id="iddevolucion">
-                <select id="idalmacenero" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5"disabled>
+                <select id="idalmacenero" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5" disabled>
                   <option value="">- Seleccione -</option>
                 </select>
               </div>
@@ -289,16 +293,18 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Artículo</th>
                     <th>Categoría</th>
                     <th>Marca</th>
+                    <th>Local</th>
                     <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                     <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-                    <th>Cantidad Devuelta <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Devuelta" data-content="Es la cantidad que solicitaste devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                    <th>Cantidad solicitada a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad solicitada a devolver" data-content="Es la cantidad que solicitaste devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                    <th>Estado</th>
                   </thead>
                   <tbody>
 
                   </tbody>
                 </table>
               </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 5px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-secondary" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Enviar</button>
               </div>

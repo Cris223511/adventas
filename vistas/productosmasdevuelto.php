@@ -68,7 +68,7 @@ if (!isset($_SESSION["nombre"])) {
         }
       }
     </style>
-    
+
     <div class="content-wrapper">
       <section class="content">
         <div class="row">
@@ -94,6 +94,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock normal</th>
                     <th>Imagen</th>
                     <th>Veces devueltos</th>
+                    <th>Fecha de devolución</th>
                   </thead>
                   <tbody>
                   </tbody>
@@ -106,6 +107,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock normal</th>
                     <th>Imagen</th>
                     <th>Veces devueltos</th>
+                    <th>Fecha de devolución</th>
                   </tfoot>
                 </table>
               </div>
@@ -129,6 +131,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock normal</th>
                     <th>Imagen</th>
                     <th>Veces devueltos</th>
+                    <th>Fecha de devolución</th>
                   </thead>
                   <tbody>
                   </tbody>
@@ -141,6 +144,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock normal</th>
                     <th>Imagen</th>
                     <th>Veces devueltos</th>
+                    <th>Fecha de devolución</th>
                   </tfoot>
                 </table>
               </div>

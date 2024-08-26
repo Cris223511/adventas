@@ -63,7 +63,7 @@ if (!isset($_SESSION["nombre"])) {
                     </a>
                   <?php } ?>
                   &nbsp;<a href="#" data-toggle="popover" data-placement="bottom" title="Información de módulo solicitud" data-html="true" data-content="Módulo en el que se solicita productos del almacén para que sean prestados. El <strong>encargado</strong> es el quien solicita, el <strong>almacenero</strong> es el quien acepta o no la solicitud del préstamo. Una vez acepte, el stock del producto solicitado se reduce del almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
-                  </h1>
+                </h1>
                 <div class="box-tools pull-right">
                 </div>
               </div>
@@ -114,7 +114,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Responsable despacho(*):</label>
                 <input type="hidden" name="idsolicitud" id="idsolicitud2">
-                <select id="idalmacenero2" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5"disabled>
+                <select id="idalmacenero2" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5" disabled>
                   <option value="">- Sin registrar -</option>
                 </select>
               </div>
@@ -140,16 +140,18 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Artículo</th>
                     <th>Categoría</th>
                     <th>Marca</th>
+                    <th>Local</th>
                     <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                     <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el almacenero prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                     <th>Cantidad a Prestar <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a Prestar" data-content="Digita la cantidad que deseas prestar al encargado (no debe superar la cantidad solicitada)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                    <th>Estado</th>
                   </thead>
                   <tbody>
 
                   </tbody>
                 </table>
               </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 5px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-secondary" type="submit" id="btnGuardar3"><i class="fa fa-save"></i> Guardar</button>
               </div>
@@ -175,7 +177,7 @@ if (!isset($_SESSION["nombre"])) {
                 <input type="hidden" name="idsolicitud" id="idsolicitud">
                 <textarea type="text" class="form-control" style="resize: none;" name="comentario" id="comentario" maxlength="200" rows="4" placeholder="Cargando..."></textarea>
               </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 5px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-secondary" type="submit" id="btnGuardar2"><i class="fa fa-save"></i> Guardar</button>
               </div>
@@ -199,7 +201,7 @@ if (!isset($_SESSION["nombre"])) {
               <input type="hidden" name="idsolicitud" id="idsolicitud">
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 despachador" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                 <label style="width: 100px;">Responsable despacho(*):</label>
-                <select id="idalmacenero" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5"disabled>
+                <select id="idalmacenero" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5" disabled>
                   <option value="">- Sin registrar -</option>
                 </select>
               </div>
@@ -230,15 +232,17 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Artículo</th>
                     <th>Categoría</th>
                     <th>Marca</th>
+                    <th>Local</th>
                     <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                     <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el almacenero prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                    <th>Estado</th>
                   </thead>
                   <tbody>
 
                   </tbody>
                 </table>
               </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 5px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-secondary" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
               </div>
@@ -260,27 +264,48 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-body table-responsive" style="overflow-x: visible !important;">
             <table id="tblarticulos" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
               <thead>
-                <th>Opciones</th>
-                <th>Nombre</th>
-                <th>Categoría</th>
-                <th>Stock normal</th>
-                <th>Stock mínimo</th>
-                <th>Precio de venta</th>
-                <th>Imagen</th>
-                <th>Estado</th>
+                <th>OPCIONES</th>
+                <th>IMAGEN</th>
+                <th>NOMBRE</th>
+                <th>U. MEDIDA</th>
+                <th>CATEGORÍA</th>
+                <th>UBICACIÓN DEL LOCAL</th>
+                <th>MARCA</th>
+                <th>C. PRODUCTO</th>
+                <th>C. BARRA</th>
+                <th>STOCK NORMAL</th>
+                <th>STOCK MÍNIMO</th>
+                <th>PRECIO DE COMPRA</th>
+                <th>PRECIO DE VENTA</th>
+                <th>PESO</th>
+                <th>TALLA</th>
+                <th>COLOR</th>
+                <th>POSICIÓN DE OBJETO</th>
+                <th>AGREGADO POR</th>
+                <th>ESTADO</th>
               </thead>
               <tbody>
-
               </tbody>
               <tfoot>
-                <th>Opciones</th>
-                <th>Nombre</th>
-                <th>Categoría</th>
-                <th>Stock normal</th>
-                <th>Stock mínimo</th>
-                <th>Precio de venta</th>
-                <th>Imagen</th>
-                <th>Estado</th>
+                <th>OPCIONES</th>
+                <th>IMAGEN</th>
+                <th>NOMBRE</th>
+                <th>U. MEDIDA</th>
+                <th>CATEGORÍA</th>
+                <th>UBICACIÓN DEL LOCAL</th>
+                <th>MARCA</th>
+                <th>C. PRODUCTO</th>
+                <th>C. BARRA</th>
+                <th>STOCK NORMAL</th>
+                <th>STOCK MÍNIMO</th>
+                <th>PRECIO DE COMPRA</th>
+                <th>PRECIO DE VENTA</th>
+                <th>PESO</th>
+                <th>TALLA</th>
+                <th>COLOR</th>
+                <th>POSICIÓN DE OBJETO</th>
+                <th>AGREGADO POR</th>
+                <th>ESTADO</th>
               </tfoot>
             </table>
           </div>

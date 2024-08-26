@@ -4,7 +4,6 @@ var tabla;
 function init() {
 	limpiar();
 	listar();
-	listarArticulos();
 
 	$("#formulario2").on("submit", function (e) {
 		guardaryeditar2(e);
@@ -123,41 +122,6 @@ function listar() {
 
 	tabla.on('init.dt', function () {
 		$('[data-toggle="popover"]').popover();
-	});
-}
-
-
-//Función ListarArticulos
-function listarArticulos() {
-	tabla = $('#tblarticulos').DataTable({
-		"aProcessing": true,
-		"aServerSide": true,
-		"dom": 'Bfrtip',
-		"buttons": [],
-		"ajax": {
-			url: '../ajax/devoluciones.php?op=listarArticulosDevolucion',
-			type: "GET",
-			dataType: "json",
-			error: function (e) {
-				console.log(e.responseText);
-			}
-		},
-		"bDestroy": true,
-		"iDisplayLength": 5,
-		"order": [],
-		"drawCallback": function (settings) {
-			// Vuelve a habilitar los botones de los artículos
-			$('#tblarticulos button[data-idarticulo]').removeAttr('disabled');
-
-			// Obtén los detalles actuales
-			var detalles = getDetalles();
-
-			// Itera sobre cada detalle y deshabilita el botón correspondiente
-			for (var i = 0; i < detalles.length; i++) {
-				var idarticulo = detalles[i].idarticulo;
-				$('#tblarticulos button[data-idarticulo="' + idarticulo + '"]').attr('disabled', true);
-			}
-		}
 	});
 }
 

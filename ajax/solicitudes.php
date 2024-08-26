@@ -96,17 +96,28 @@ if (!isset($_SESSION["nombre"])) {
 
 				$rspta = $solicitud->listarDetalle($id);
 				$total = 0;
+
+				$estado = '';
+
 				echo '<thead style="background-color:#A9D0F5">
                                     <th>Opciones</th>
                                     <th>Artículo</th>
                                     <th>Categoría</th>
                                     <th>Marca</th>
+									<th>Local</th>
                                     <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                                     <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el almacenero prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+									<th>Estado</th>
                                 </thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td></tr>';
+					if ($reg->cantidad == $reg->cantidad_prestada) {
+						$estado = '<span class="label bg-green">Completado</span>';
+					} else {
+						$estado = '<span class="label bg-orange">Incompleto</span>';
+					}
+
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td>' . $estado . '</td></tr>';
 				}
 				break;
 
@@ -116,19 +127,30 @@ if (!isset($_SESSION["nombre"])) {
 
 				$rspta = $solicitud->listarDetalle2($id);
 				$total = 0;
+
+				$estado = '';
+
 				echo '<thead style="background-color:#A9D0F5">
 										<th>Opciones</th>
 										<th>Artículo</th>
 										<th>Categoría</th>
 										<th>Marca</th>
+										<th>Local</th>
 										<th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 										<th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el almacenero prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 										<th>Cantidad a Prestar <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a Prestar" data-content="Digita la cantidad que deseas prestar al encargado (no debe superar la cantidad solicitada)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+										<th>Estado</th>
 									</thead>';
 
 				$iterador = 1;
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td data-cantidadsolicitada="' . $iterador . '">' . $reg->cantidad . '</td><td data-cantidadprestada="' . $iterador . '">' . $reg->cantidad_prestada . '</td><td><input type="number" data-cantidadprestar="' . $iterador . '" name="cantidad_prestada[]" id="cantidad_prestada[]" step="any" value="0" min="0.1" required></td></tr>';
+					if ($reg->cantidad == $reg->cantidad_prestada) {
+						$estado = '<span class="label bg-green">Completado</span>';
+					} else {
+						$estado = '<span class="label bg-orange">Incompleto</span>';
+					}
+
+					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td data-cantidadsolicitada="' . $iterador . '">' . $reg->cantidad . '</td><td data-cantidadprestada="' . $iterador . '">' . $reg->cantidad_prestada . '</td><td><input type="number" data-cantidadprestar="' . $iterador . '" name="cantidad_prestada[]" id="cantidad_prestada[]" step="any" value="0" min="0.1" required></td><td>' . $estado . '</td></tr>';
 					$iterador = $iterador + 1;
 				}
 				break;
@@ -231,14 +253,26 @@ if (!isset($_SESSION["nombre"])) {
 
 				while ($reg = $rspta->fetch_object()) {
 					$data[] = array(
-						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(\'' . $reg->marca . '\',\'' . $reg->categoria . '\',\'' . $reg->idarticulo . '\',\'' . $reg->stock . '\',\'' . $reg->nombre . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
-						"1" => $reg->nombre,
-						"2" => $reg->categoria,
-						"3" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
-						"4" => $reg->stock_minimo,
-						"5" => $reg->precio_venta == '' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"6" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
-						"7" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(\'' . $reg->marca . '\',\'' . $reg->almacen . '\',\'' . $reg->categoria . '\',\'' . $reg->idarticulo . '\',\'' . $reg->stock . '\',\'' . $reg->nombre . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
+						"2" => $reg->nombre,
+						"3" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,
+						"4" => $reg->categoria,
+						"5" => $reg->almacen,
+						"6" => $reg->marca,
+						"7" => $reg->codigo_producto,
+						"8" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
+						"9" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
+						"10" => $reg->stock_minimo,
+						"11" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
+						"12" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"13" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"14" => ($reg->peso == '0.00') ? 'Sin registrar.' : $reg->peso,
+						"15" => ($reg->talla == '') ? 'Sin registrar.' : $reg->talla,
+						"16" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
+						"17" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
+						"18" => $reg->usuario . ' - ' . $cargo_detalle,
+						"19" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 				$results = array(
