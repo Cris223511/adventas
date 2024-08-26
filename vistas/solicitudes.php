@@ -261,7 +261,7 @@ if (!isset($_SESSION["nombre"])) {
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title infotitulo">Seleccione un Artículo</h4>
           </div>
-          <div class="modal-body table-responsive" style="overflow-x: visible !important;">
+          <div class="modal-body table-responsive">
             <table id="tblarticulos" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
               <thead>
                 <th>OPCIONES</th>

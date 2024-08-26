@@ -247,11 +247,36 @@ if (!isset($_SESSION["nombre"])) {
 				require_once "../modelos/Articulo.php";
 				$articulo = new Articulo();
 
-				$rspta = $articulo->listarActivosVenta();
+				$rspta = $articulo->listar();
 				//Vamos a declarar un array
 				$data = array();
 
 				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cliente':
+							$cargo_detalle = "Cliente";
+							break;
+						case 'vendedor':
+							$cargo_detalle = "Vendedor";
+							break;
+						case 'almacenero':
+							$cargo_detalle = "Almacenero";
+							break;
+						case 'encargado':
+							$cargo_detalle = "Encargado";
+							break;
+						default:
+							break;
+					}
+
 					$data[] = array(
 						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(\'' . $reg->marca . '\',\'' . $reg->almacen . '\',\'' . $reg->categoria . '\',\'' . $reg->idarticulo . '\',\'' . $reg->stock . '\',\'' . $reg->nombre . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
