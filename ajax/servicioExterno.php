@@ -144,9 +144,9 @@ if (!isset($_SESSION["nombre"])) {
 									<img src="../files/servicios/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
 								</a>',
 						"2" => $reg->nombre,
-						"3" => $reg->categoria,
-						"4" => $reg->almacen,
-						"5" => $reg->codigo_producto,
+						"3" => $reg->almacen,
+						"4" => $reg->codigo_producto,
+						"5" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
 						"6" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
 						"7" => $reg->usuario . ' - ' . $cargo_detalle,
 						"8" => ($reg->estado == '1') ? '<span class="label bg-green">Activado</span>' :

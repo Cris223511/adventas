@@ -76,7 +76,7 @@ if (!isset($_SESSION["nombre"])) {
                                 </thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->stock . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->precio_compra . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>S/.' . number_format($reg->precio_compra * $reg->cantidad, 2, '.', '') . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->stock . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->precio_compra . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>S/.' . number_format($reg->precio_compra * $reg->cantidad, 2) . '</td></tr>';
 					$total = $total + ($reg->precio_compra * $reg->cantidad);
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? ($reg->precio_compra * $reg->cantidad) * 0.18 : ($reg->precio_compra * $reg->cantidad) * 0);
 				}
@@ -90,7 +90,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th></th>
 						<th></th>
 						<th></th>
-						<th><h4 id="igv">S/.' . number_format($igv, 2, '.', '') . '</h4><input type="hidden" name="total_igv" id="total_igv"></th>
+						<th><h4 id="igv">S/.' . number_format($igv, 2) . '</h4><input type="hidden" name="total_igv" id="total_igv"></th>
 						</tr>
 						<tr>
 						<th>TOTAL</th>
@@ -99,7 +99,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th></th>
 						<th></th>
 						<th></th>
-						<th><h4 id="total">S/.' . number_format($rspta2["total_compra"], 2, '.', '') . '</h4><input type="hidden" name="total_compra" id="total_compra"></th>
+						<th><h4 id="total">S/.' . number_format($rspta2["total_compra"], 2) . '</h4><input type="hidden" name="total_compra" id="total_compra"></th>
 						</tr>
 					</tfoot>';
 				break;
@@ -270,25 +270,32 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(' . $reg->idarticulo . ',\'' . $reg->nombre . '\',\'' . $reg->stock . '\',\'' . $reg->precio_compra . '\',\'' . $reg->precio_venta . '\'); bloquearPrecios(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
-						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
+						"1" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
 						"2" => $reg->nombre,
-						"3" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,
-						"4" => $reg->categoria,
-						"5" => $reg->almacen,
-						"6" => $reg->marca,
-						"7" => $reg->codigo_producto,
-						"8" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
-						"9" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: orange; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
-						"10" => $reg->stock_minimo,
-						"11" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
-						"12" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"13" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
-						"14" => ($reg->peso == '0.00') ? 'Sin registrar.' : $reg->peso,
-						"15" => ($reg->talla == '') ? 'Sin registrar.' : $reg->talla,
-						"16" => ($reg->color == '') ? 'Sin registrar.' : $reg->color,
-						"17" => ($reg->posicion == '') ? 'Sin registrar.' : $reg->posicion,
-						"18" => $reg->usuario . ' - ' . $cargo_detalle,
-						"19" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						"3" => $reg->medida,
+						"4" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
+						"5" => $reg->categoria,
+						"6" => $reg->almacen,
+						"7" => $reg->marca,
+						"8" => $reg->codigo_producto,
+						"9" => ($reg->codigo == '') ? 'Sin registrar.' : $reg->codigo,
+						"10" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
+						"11" => $reg->stock_minimo,
+						"12" => $reg->precio_compra == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_compra,
+						"13" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"14" => $reg->ganancia == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->ganancia,
+						"15" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;' readonly>" . (($reg->talla == "") ? 'Sin registrar.' : $reg->talla) . "</textarea>",
+						"16" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;' readonly>" . (($reg->color == "") ? 'Sin registrar.' : $reg->color) . "</textarea>",
+						"17" => ($reg->peso == "0.00") ? 'Sin registrar.' : $reg->peso,
+						"18" => ($reg->posicion == "") ? 'Sin registrar.' : $reg->posicion,
+						"19" => ($reg->fecha_emision == '00-00-0000') ? 'Sin registrar.' : $reg->fecha_emision,
+						"20" => ($reg->fecha_vencimiento == '00-00-0000') ? 'Sin registrar.' : $reg->fecha_vencimiento,
+						"21" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;' readonly>" . (($reg->nota_1 == "") ? 'Sin registrar.' : $reg->nota_1) . "</textarea>",
+						"22" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;' readonly>" . (($reg->nota_2 == "") ? 'Sin registrar.' : $reg->nota_2) . "</textarea>",
+						"23" => $reg->usuario . ' - ' . $cargo_detalle,
+						"24" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>'),
 					);
 				}
 				$results = array(

@@ -93,7 +93,7 @@ if (!isset($_SESSION["nombre"])) {
         "CANTIDAD" => "$regd->cantidad",
         "P.C." => "$regd->precio_compra",
         "P.V." => "$regd->precio_venta",
-        "SUBTOTAL" => "$regd->subtotal"
+        "SUBTOTAL" => number_format($regd->subtotal, 2)
       );
       $size = $pdf->addLine($y, $line);
       $y   += $size + 2;

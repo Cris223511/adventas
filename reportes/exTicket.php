@@ -142,7 +142,7 @@ if (!isset($_SESSION["nombre"])) {
           </tr>
           <?php
           $id = $_GET['id'];
-          
+
           $rsptad = $venta->ventadetalle($_GET["id"]);
           $rspta3 = $venta->mostrar($id);
           $cantidad = 0;
@@ -152,7 +152,7 @@ if (!isset($_SESSION["nombre"])) {
             echo "<tr>";
             echo "<td>" . $regd->cantidad . "</td>";
             echo "<td>" . $regd->articulo;
-            echo "<td align='right'>S/ " . $regd->subtotal . "</td>";
+            echo "<td align='right'>S/ " . number_format($regd->subtotal, 2) . "</td>";
             echo "</tr>";
             $cantidad += $regd->cantidad;
             $igv = $igv + ($rspta3["impuesto"] == 18 ? $regd->subtotal * 0.18 : $regd->subtotal * 0);
@@ -162,12 +162,12 @@ if (!isset($_SESSION["nombre"])) {
           <tr>
             <td>&nbsp;</td>
             <td align="right"><b>IGV:</b></td>
-            <td align="right"><b>S/ <?php echo number_format($igv, 2, '.', ''); ?></b></td>
+            <td align="right"><b>S/ <?php echo number_format($igv, 2); ?></b></td>
           </tr>
           <tr>
             <td>&nbsp;</td>
             <td align="right"><b>TOTAL:</b></td>
-            <td align="right"><b>S/ <?php echo number_format($rspta3["total_venta"], 2, '.', '') ?></b></td>
+            <td align="right"><b>S/ <?php echo number_format($rspta3["total_venta"], 2) ?></b></td>
           </tr>
           <tr>
             <td colspan="3">Nº de artículos: <?php echo $cantidad; ?></td>

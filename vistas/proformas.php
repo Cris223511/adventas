@@ -238,20 +238,18 @@ if (!isset($_SESSION["nombre"])) {
                     <label style="width: 100px;">Ganancia(*):</label>
                     <input type="number" class="form-control" name="ganancia" id="ganancia" step="any" placeholder="Ganancia total." disabled required>
                   </div>
-                  <div class="form-group col-lg-12 col-md-6 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                    <label class="label_input" style="width: 90px;">Descripción:</label>
-                    <input type="text" class="form-control" name="descripcion" id="descripcion5" maxlength="10000" placeholder="Descripción del artículo" autocomplete="off">
+                  <div class="form-group col-lg-12 col-md-12">
+                    <label>Descripción:</label>
+                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" rows="4" placeholder="Descripción del artículo."></textarea>
                   </div>
-                  <div class="form-group col-lg-6 col-md-6 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                    <label class="label_input" style="width: 90px;">Imagen:</label>
+                  <div class="form-group col-lg-6 col-md-12">
+                    <label>Imagen:</label>
                     <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">
                     <input type="hidden" name="imagenactual" id="imagenactual">
                   </div>
-                  <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                    <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                      <label style="width: 100px;">Código del producto(*):</label>
-                      <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="13" placeholder="Código del producto" onblur="convertirMayus(this)" required>
-                    </div>
+                  <div class="form-group col-lg-6 col-md-12">
+                    <label>Código del producto(*):</label>
+                    <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="13" placeholder="Código del producto" onblur="convertirMayus(this)" required>
                   </div>
                   <div class="form-group col-lg-12 col-md-12" style="display: flex; justify-content: center;">
                     <button class="btn btn-success" type="button" id="btnDetalles1" onclick="frmDetalles(true)"><i class="fa fa-plus"></i> Más detalles</button>
@@ -259,13 +257,13 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <!-- form detalles -->
                   <div id="frmDetalles" class="col-lg-12 col-md-12" style="margin: 0 !important; padding: 0 !important;">
-                    <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group col-lg-6 col-md-12">
                       <label>Talla:</label>
-                      <input type="text" class="form-control" name="talla" id="talla" maxlength="15" placeholder="Ingrese la talla del producto." autocomplete="off">
+                      <textarea type="text" class="form-control" name="talla" id="talla" maxlength="10000" rows="4" placeholder="Ingrese la talla del producto."></textarea>
                     </div>
-                    <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group col-lg-6 col-md-12">
                       <label>Color:</label>
-                      <input type="text" class="form-control" name="color" id="color" maxlength="30" placeholder="Ingrese el color del producto." autocomplete="off">
+                      <textarea type="text" class="form-control" name="color" id="color" maxlength="10000" rows="4" placeholder="Ingrese el color del producto."></textarea>
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                       <label>Posición de objeto:</label>
@@ -593,49 +591,59 @@ if (!isset($_SESSION["nombre"])) {
           </div>
           <div class="modal-body table-responsive">
             <table id="tblarticulos" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important; margin: 0 !important;">
-            <thead>
-                <th>OPCIONES</th>
-                <th>IMAGEN</th>
-                <th>NOMBRE</th>
-                <th>U. MEDIDA</th>
-                <th>CATEGORÍA</th>
-                <th>UBICACIÓN DEL LOCAL</th>
-                <th>MARCA</th>
-                <th>C. PRODUCTO</th>
-                <th>C. BARRA</th>
-                <th>STOCK NORMAL</th>
-                <th>STOCK MÍNIMO</th>
-                <th>PRECIO DE COMPRA</th>
-                <th>PRECIO DE VENTA</th>
-                <th>PESO</th>
-                <th>TALLA</th>
-                <th>COLOR</th>
-                <th>POSICIÓN DE OBJETO</th>
-                <th>AGREGADO POR</th>
-                <th>ESTADO</th>
+              <thead>
+                <th>Opciones</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>U. medida</th>
+                <th style="width: 20%; min-width: 300px;">Descripción</th>
+                <th>Categoría</th>
+                <th>Ubicación del local</th>
+                <th>Marca</th>
+                <th>C. producto</th>
+                <th>C. barra</th>
+                <th>Stock normal</th>
+                <th>Stock mínimo</th>
+                <th>Precio de compra</th>
+                <th>Precio de venta</th>
+                <th style="width: 20%; min-width: 200px;">Talla</th>
+                <th style="width: 20%; min-width: 200px;">Color</th>
+                <th>Peso</th>
+                <th>Posición</th>
+                <th>Fecha emisión</th>
+                <th>Fecha vencimiento</th>
+                <th style="width: 20%; min-width: 200px;">Nota 1</th>
+                <th style="width: 20%; min-width: 200px;">Nota 2</th>
+                <th>Agregado por</th>
+                <th>Estado</th>
               </thead>
               <tbody>
               </tbody>
               <tfoot>
-                <th>OPCIONES</th>
-                <th>IMAGEN</th>
-                <th>NOMBRE</th>
-                <th>U. MEDIDA</th>
-                <th>CATEGORÍA</th>
-                <th>UBICACIÓN DEL LOCAL</th>
-                <th>MARCA</th>
-                <th>C. PRODUCTO</th>
-                <th>C. BARRA</th>
-                <th>STOCK NORMAL</th>
-                <th>STOCK MÍNIMO</th>
-                <th>PRECIO DE COMPRA</th>
-                <th>PRECIO DE VENTA</th>
-                <th>PESO</th>
-                <th>TALLA</th>
-                <th>COLOR</th>
-                <th>POSICIÓN DE OBJETO</th>
-                <th>AGREGADO POR</th>
-                <th>ESTADO</th>
+                <th>Opciones</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>U. medida</th>
+                <th>Descripción</th>
+                <th>Categoría</th>
+                <th>Ubicación del local</th>
+                <th>Marca</th>
+                <th>C. producto</th>
+                <th>C. barra</th>
+                <th>Stock normal</th>
+                <th>Stock mínimo</th>
+                <th>Precio de compra</th>
+                <th>Precio de venta</th>
+                <th>Talla</th>
+                <th>Color</th>
+                <th>Peso</th>
+                <th>Posición</th>
+                <th>Fecha emisión</th>
+                <th>Fecha vencimiento</th>
+                <th>Nota 1</th>
+                <th>Nota 2</th>
+                <th>Agregado por</th>
+                <th>Estado</th>
               </tfoot>
             </table>
           </div>

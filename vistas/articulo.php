@@ -96,8 +96,8 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Precio de compra</th>
                     <th>Precio de venta</th>
                     <th>Ganancia</th>
-                    <th>Talla</th>
-                    <th>Color</th>
+                    <th style="width: 20%; min-width: 200px;">Talla</th>
+                    <th style="width: 20%; min-width: 200px;">Color</th>
                     <th>Peso</th>
                     <th>Posición</th>
                     <th>Fecha emisión</th>
@@ -189,20 +189,18 @@ if (!isset($_SESSION["nombre"])) {
                         <label style="width: 100px;">Ganancia(*):</label>
                         <input type="number" class="form-control" name="ganancia" id="ganancia" step="any" placeholder="Ganancia total." disabled required>
                       </div>
-                      <div class="form-group col-lg-12 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                        <label class="label_input" style="width: 90px;">Descripción:</label>
-                        <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" placeholder="Descripción del artículo" autocomplete="off">
+                      <div class="form-group col-lg-12 col-md-12">
+                        <label>Descripción:</label>
+                        <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" rows="4" placeholder="Descripción del artículo."></textarea>
                       </div>
-                      <div class="form-group col-lg-6 col-md-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                        <label class="label_input" style="width: 90px;">Imagen:</label>
+                      <div class="form-group col-lg-6 col-md-12">
+                        <label>Imagen:</label>
                         <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">
                         <input type="hidden" name="imagenactual" id="imagenactual">
                       </div>
                       <div class="form-group col-lg-6 col-md-12">
-                        <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                          <label style="width: 100px;">Código del producto(*):</label>
-                          <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="13" placeholder="Código del producto" onblur="convertirMayus(this)" required>
-                        </div>
+                        <label>Código del producto(*):</label>
+                        <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="13" placeholder="Código del producto" onblur="convertirMayus(this)" required>
                       </div>
                       <div class="form-group col-lg-12 col-md-12" style="display: flex; justify-content: center;">
                         <button class="btn btn-success" type="button" id="btnDetalles1" onclick="frmDetalles(true)"><i class="fa fa-plus"></i> Más detalles</button>
@@ -212,11 +210,11 @@ if (!isset($_SESSION["nombre"])) {
                       <div id="frmDetalles" class="col-lg-12 col-md-12" style="margin: 0 !important; padding: 0 !important;">
                         <div class="form-group col-lg-6 col-md-12">
                           <label>Talla:</label>
-                          <input type="text" class="form-control" name="talla" id="talla" maxlength="15" placeholder="Ingrese la talla del producto." autocomplete="off">
+                          <textarea type="text" class="form-control" name="talla" id="talla" maxlength="10000" rows="4" placeholder="Ingrese la talla del producto."></textarea>
                         </div>
                         <div class="form-group col-lg-6 col-md-12">
                           <label>Color:</label>
-                          <input type="text" class="form-control" name="color" id="color" maxlength="30" placeholder="Ingrese el color del producto." autocomplete="off">
+                          <textarea type="text" class="form-control" name="color" id="color" maxlength="10000" rows="4" placeholder="Ingrese el color del producto."></textarea>
                         </div>
                         <div class="form-group col-lg-6 col-md-12">
                           <label>Posición de objeto:</label>

@@ -149,9 +149,10 @@ if (!isset($_SESSION["nombre"])) {
 						"2" => $reg->nombre,
 						"3" => $reg->almacen,
 						"4" => $reg->codigo_producto,
-						"5" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
-						"6" => $reg->usuario . ' - ' . $cargo_detalle,
-						"7" => ($reg->estado == '1') ? '<span class="label bg-green">Activado</span>' :
+						"5" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
+						"6" => $reg->precio_venta == '0.00' ? "S/. 0.00" : 'S/. ' . $reg->precio_venta,
+						"7" => $reg->usuario . ' - ' . $cargo_detalle,
+						"8" => ($reg->estado == '1') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}

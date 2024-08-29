@@ -80,7 +80,7 @@ if (!isset($_SESSION["nombre"])) {
                                 </thead>';
 
 				while ($reg = $rspta->fetch_object()) {
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. $reg->precio_venta</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. $reg->subtotal</nav>" . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->cantidad . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . "<nav>S/. $reg->descuento</nav>" . '</td><td>' . "<nav>S/. " . number_format($reg->subtotal, 2) . "</nav>" . '</td></tr>';
 					$igv = $igv + ($rspta2["impuesto"] == 18 ? $reg->subtotal * 0.18 : $reg->subtotal * 0);
 				}
 
@@ -92,7 +92,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th></th>
 						<th></th>
 						<th></th>
-						<th><h4 id="igv">S/.' . number_format($igv, 2, '.', '') . '</h4><input type="hidden" name="total_igv" id="total_igv"></th>
+						<th><h4 id="igv">S/.' . number_format($igv, 2) . '</h4><input type="hidden" name="total_igv" id="total_igv"></th>
 						</tr>
 						<tr>
 						<th>TOTAL</th>
@@ -100,7 +100,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th></th>
 						<th></th>
 						<th></th>
-						<th><h4 id="total">S/.' . number_format($rspta2["total_venta"], 2, '.', '') . '</h4><input type="hidden" name="total_venta" id="total_venta"></th>
+						<th><h4 id="total">S/.' . number_format($rspta2["total_venta"], 2) . '</h4><input type="hidden" name="total_venta" id="total_venta"></th>
 						</tr>
 					</tfoot>';
 				break;

@@ -719,7 +719,7 @@ function listarArticulos() {
 		"dom": 'Bfrtip',
 		"buttons": [],
 		"ajax": {
-			url: '../ajax/venta.php?op=listarArticulosVenta',
+			url: '../ajax/cuotas.php?op=listarArticulosVenta',
 			type: "GET",
 			dataType: "json",
 			error: function (e) {
@@ -940,7 +940,7 @@ function verificar_stock(idarticulo, articulo) {
 		console.log('El nombre del artículo es: ' + articulo);
 		console.log('El idarticulo que verificaremos es: ' + idarticulo);
 
-		$.post("../ajax/venta.php?op=verificarStockMinimo&id=" + idarticulo + "&nombre=" + articulo + "&cantidad=" + cantidad, function (data) {
+		$.post("../ajax/cuotas.php?op=verificarStockMinimo&id=" + idarticulo + "&nombre=" + articulo + "&cantidad=" + cantidad, function (data) {
 			if (data !== '') {
 				bootbox.alert(data);
 			}
