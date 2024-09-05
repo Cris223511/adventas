@@ -161,7 +161,7 @@
       }
 
       function nowrapCell() {
-        ["#tbllistado", "#tbllistado_1", "#tbllistado_2", "#detalles", "#tbllistado2", "#tbllistado3", "#tblarticulos", "#tbltrabajadores"].forEach(selector => {
+        ["#tbllistado", "#tbllistado_1", "#tbllistado_2", "#detalles", "#detalles2", "#detalles3", "#tbllistado2", "#tbllistado3", "#tblarticulos", "#tbltrabajadores"].forEach(selector => {
           addClassToCells(selector, "nowrap-cell");
         });
       }

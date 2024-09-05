@@ -19,6 +19,7 @@ if (!isset($_SESSION["nombre"])) {
 		$telefono = isset($_POST["telefono"]) ? limpiarCadena($_POST["telefono"]) : "";
 		$comentario = isset($_POST["comentario"]) ? limpiarCadena($_POST["comentario"]) : "";
 		$empresa = isset($_POST["empresa"]) ? limpiarCadena($_POST["empresa"]) : "";
+		$destino = isset($_POST["destino"]) ? limpiarCadena($_POST["destino"]) : "";
 		$opcion = isset($_POST["opcion"]) ? limpiarCadena($_POST["opcion"]) : "";
 
 		switch ($_GET["op"]) {
@@ -75,8 +76,8 @@ if (!isset($_SESSION["nombre"])) {
 									<th>Categoría</th>
 									<th>Marca</th>
 									<th>Local</th>
-                                    <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-                                    <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                                    <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al receptor del pedido." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                                    <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el receptor del pedido (almacenero)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                                     <th>Cantidad solicitada a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad solicitada a devolver" data-content="Es la cantidad que solicitaste devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 									<th>Estado</th>
                                 </thead>';
@@ -107,8 +108,8 @@ if (!isset($_SESSION["nombre"])) {
 						<th>Categoría</th>
 						<th>Marca</th>
 						<th>Local</th>
-						<th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-						<th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+						<th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al receptor del pedido." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+						<th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el receptor del pedido (almacenero)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 						<th>Cantidad solicitada a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad solicitada a devolver" data-content="Es la cantidad que solicitaste devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 						<th>Solicitar cantidad a devolver <a href="#" data-toggle="popover" data-placement="top" title="Solicitar cantidad a devolver" data-content="Digita la cantidad que deseas devolver al almacén (no debe superar la cantidad prestada)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 						<th>Estado</th>
@@ -142,9 +143,9 @@ if (!isset($_SESSION["nombre"])) {
 									<th>Categoría</th>
 									<th>Marca</th>
 									<th>Local</th>
-									<th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-									<th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el almacenero." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-									<th>Cantidad a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a devolver" data-content="Es la cantidad que el encargado solicitó devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+									<th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al receptor del pedido." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+									<th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el receptor del pedido (almacenero)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+									<th>Cantidad a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a devolver" data-content="Es la cantidad que el emisor del pedido (encargado) solicitó devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 									<th>Estado</th>
 								</thead>';
 
@@ -219,6 +220,10 @@ if (!isset($_SESSION["nombre"])) {
 							break;
 					}
 
+					$reg->telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
+					$reg->destino = ($reg->destino == '') ? 'Sin registrar' : ($reg->destino);
+					$reg->empresa = ($reg->empresa == '') ? 'Sin registrar' : ($reg->empresa);
+
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							(($reg->estado == 'Pendiente') ?
@@ -244,8 +249,9 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => ucwords($reg->responsable_pedido) . " - " . $cargo_pedido,
 						"5" => ucwords($reg->responsable_despacho) . " - " . $cargo_despacho,
 						"6" => $reg->empresa,
-						"7" => $reg->telefono,
-						"8" => ($reg->estado == 'Pendiente') ? '<span class="label bg-blue">Pendiente</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ((($reg->estado == 'En curso') ? '<span class="label bg-orange">En curso</span>' : '<span class="label bg-red">Rechazado</span>')))
+						"7" => $reg->destino,
+						"8" => $reg->telefono,
+						"9" => ($reg->estado == 'Pendiente') ? '<span class="label bg-blue">Pendiente</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ((($reg->estado == 'En curso') ? '<span class="label bg-orange">En curso</span>' : '<span class="label bg-red">Rechazado</span>')))
 					);
 				}
 				$results = array(

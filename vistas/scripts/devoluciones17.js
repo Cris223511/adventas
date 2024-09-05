@@ -39,6 +39,7 @@ function limpiar() {
 	$("#codigo_pedido").val("");
 	$("#telefono").val("");
 	$("#empresa").val("");
+	$("#destino").val("");
 
 	$("#idalmacenero2").val($("#idalmacenero2 option:first").val());
 	$("#idalmacenero2").selectpicker('refresh');
@@ -46,11 +47,14 @@ function limpiar() {
 	$("#codigo_pedido2").val("");
 	$("#telefono2").val("");
 	$("#empresa2").val("");
+	$("#destino2").val("");
 
 	$(".filas").remove();
 	$("input[name='opcion']").prop("checked", false);
 
 	$('#tblarticulos button').removeAttr('disabled');
+
+	nowrapCell();
 }
 
 function ocultarModal() {
@@ -282,6 +286,7 @@ function mostrar(iddevolucion) {
 		$("#codigo_pedido").val(data.codigo_pedido);
 		$("#telefono").val(data.telefono);
 		$("#empresa").val(data.empresa);
+		$("#destino").val(data.destino);
 		$('[data-toggle="popover"]').popover();
 	});
 
@@ -307,6 +312,7 @@ function mostrar2(iddevolucion) {
 		$("#codigo_pedido2").val(data.codigo_pedido);
 		$("#telefono2").val(data.telefono);
 		$("#empresa2").val(data.empresa);
+		$("#destino2").val(data.destino);
 		$('[data-toggle="popover"]').popover();
 	});
 
@@ -336,6 +342,7 @@ function mostrar3(iddevolucion) {
 		$("#codigo_pedido3").val(data.codigo_pedido);
 		$("#telefono3").val(data.telefono);
 		$("#empresa3").val(data.empresa);
+		$("#destino3").val(data.destino);
 
 		$("input[name='opcion'][value='" + data.opcion + "']").prop("checked", true);
 		$('[data-toggle="popover"]').popover();

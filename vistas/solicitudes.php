@@ -13,27 +13,17 @@ if (!isset($_SESSION["nombre"])) {
 ?>
 
     <style>
-      .popover {
+      .box-title .popover {
         z-index: 10000 !important;
-        width: 200px !important;
+        width: 300px !important;
+        max-width: max-content !important;
+        max-height: 500px !important;
+        overflow-x: hidden !important;
       }
 
-      tbody .popover {
+      table .popover {
         z-index: 10000 !important;
         width: 190px !important;
-      }
-
-
-      @media (max-width: 991px) {
-        .label_serie {
-          width: 100px !important;
-        }
-      }
-
-      @media (max-width: 767px) {
-        label {
-          width: 100px !important;
-        }
       }
     </style>
 
@@ -44,17 +34,13 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Solicitud de materiales
-                  <?php
-                  if (($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin' || $_SESSION['cargo'] == 'encargado')) {
-                  ?>
+                  <?php if (($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin' || $_SESSION['cargo'] == 'encargado')) { ?>
                     <a data-toggle="modal" href="#myModal2">
                       <button type="button" class="btn btn-secondary" style="color: black !important;" onclick="limpiar()">
                         <span class="fa fa-plus-circle"></span> Agregar
                       </button>
                     </a>
-                  <?php
-                  }
-                  ?>
+                  <?php } ?>
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin" || $_SESSION["cargo"] == "encargado") { ?>
                     <a href="../reportes/rptsolicitudes.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
@@ -62,21 +48,22 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  &nbsp;<a href="#" data-toggle="popover" data-placement="bottom" title="Información de módulo solicitud" data-html="true" data-content="Módulo en el que se solicita productos del almacén para que sean prestados. El <strong>encargado</strong> es el quien solicita, el <strong>almacenero</strong> es el quien acepta o no la solicitud del préstamo. Una vez acepte, el stock del producto solicitado se reduce del almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
+                  &nbsp;<a href="#" data-toggle="popover" data-placement="bottom" title="Información de módulo solicitud" data-html="true" data-content="Módulo en el que se solicita productos del almacén para que sean prestados. El <strong>emisor del pedido</strong> (o el encargado) es el quien solicita, el <strong>receptor del pedido</strong> (o el almacenero / despachador) es el quien acepta o no la solicitud del préstamo. Una vez acepte, el stock del producto solicitado se reduce del almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
               </div>
-              <div class="panel-body table-responsive" id="listadoregistros">
-                <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+              <div class="panel-body table-responsive" style="margin-bottom: 20px;" id="listadoregistros">
+                <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important; margin-bottom: 0px;">
                   <thead>
                     <th style="width: 12%;">Opciones</th>
                     <th>Código</th>
                     <th>Fecha pedido</th>
                     <th>Fecha despacho</th>
-                    <th>Responsable pedido</th>
-                    <th>Responsable despacho</th>
+                    <th>Usuario emisor del pedido</th>
+                    <th>Usuario receptor del pedido</th>
                     <th>Empresa</th>
+                    <th>Lugar de destino</th>
                     <th>Teléfono</th>
                     <th>Estado</th>
                   </thead>
@@ -87,9 +74,10 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Código</th>
                     <th>Fecha pedido</th>
                     <th>Fecha despacho</th>
-                    <th>Responsable pedido</th>
-                    <th>Responsable despacho</th>
+                    <th>Usuario emisor del pedido</th>
+                    <th>Usuario receptor del pedido</th>
                     <th>Empresa</th>
+                    <th>Lugar de destino</th>
                     <th>Telefono</th>
                     <th>Estado</th>
                   </tfoot>
@@ -111,49 +99,62 @@ if (!isset($_SESSION["nombre"])) {
           </div>
           <div class="panel-body">
             <form name="formulario3" id="formulario3" method="POST">
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                <label style="width: 100px;">Responsable despacho(*):</label>
+              <?php if (($_SESSION['cargo'] == 'superadmin')) { ?>
+                <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                  <label>Usuario emisor del pedido(*):</label> <a href="#" data-toggle="popover" data-placement="bottom" title="Usuario emisor del pedido" data-html="true" data-content="Es el usuario que ha solicitado el préstamo de materiales del almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
+                  <select id="idencargado" class="form-control selectpicker" data-size="4" disabled></select>
+                </div>
+              <?php } ?>
+              <div class="<?php echo ($_SESSION['cargo'] == 'superadmin') ? 'form-group col-lg-6 col-md-6 col-sm-12 col-xs-12' : 'form-group col-lg-12 col-md-12 col-sm-12 col-xs-12'; ?>">
+                <label>Usuario receptor del pedido(*):</label> <?php if (($_SESSION['cargo'] == 'superadmin')) { ?><a href="#" data-toggle="popover" data-placement="bottom" title="Usuario receptor del pedido" data-html="true" data-content="Selecciona al usuario que aceptará el préstamo de los productos al solicitante (el emisor del pedido)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a><?php } ?>
                 <input type="hidden" name="idsolicitud" id="idsolicitud2">
-                <select id="idalmacenero2" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5" disabled>
+                <select id="idalmacenero2" name="receptor" class="form-control selectpicker" data-size="5" <?php echo ($_SESSION['cargo'] != 'superadmin') ? 'disabled' : 'required'; ?>>
                   <option value="">- Sin registrar -</option>
                 </select>
               </div>
               <div class="row" style="padding-left: 15px; padding-right: 15px;">
-                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                  <label style="width: 125px;">Código LCL(*):</label>
-                  <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido2" maxlength="10" placeholder="Cargando..." disabled>
+                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                  <label>Código(*):</label>
+                  <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido2" maxlength="10" placeholder="Sin registrar." disabled>
                 </div>
-                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                  <label style="width: 125px;">Teléfono(*):</label>
-                  <input type="number" class="form-control" name="telefono" id="telefono2" maxlength="9" placeholder="Cargando..." disabled>
+                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                  <label>Teléfono:</label>
+                  <input type="number" class="form-control" name="telefono" id="telefono2" maxlength="9" placeholder="Sin registrar." disabled>
                 </div>
-                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                  <label class="label_serie">Empresa(*):</label>
-                  <input type="text" class="form-control" name="empresa" id="empresa2" maxlength="50" placeholder="Cargando..." disabled>
+                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                  <label class="label_serie">Nombre o empresa:</label>
+                  <input type="text" class="form-control" name="empresa" id="empresa2" maxlength="50" placeholder="Sin registrar." disabled>
+                </div>
+                <div class="form-group col-lg-12 col-md-12">
+                  <label>Lugar de destino:</label>
+                  <input type="text" class="form-control" name="destino" id="destino2" maxlength="100" placeholder="Sin registrar." disabled>
                 </div>
               </div>
 
-              <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive" style="overflow-x: visible !important;">
-                <table id="detalles2" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
-                  <thead style="background-color:#A9D0F5">
-                    <th>Opciones</th>
-                    <th>Artículo</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Local</th>
-                    <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-                    <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el almacenero prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-                    <th>Cantidad a Prestar <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a Prestar" data-content="Digita la cantidad que deseas prestar al encargado (no debe superar la cantidad solicitada)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-                    <th>Estado</th>
-                  </thead>
-                  <tbody>
+              <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" style="overflow-x: visible !important;">
+                <div class="table-responsive" style="margin-bottom: 20px;">
+                  <table id="detalles2" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important; margin-bottom: 0px;">
+                    <thead style="background-color:#A9D0F5">
+                      <th>Opciones</th>
+                      <th>Artículo</th>
+                      <th>Categoría</th>
+                      <th>Marca</th>
+                      <th>Local</th>
+                      <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                      <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el receptor de pedido prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                      <th>Cantidad a Prestar <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a Prestar" data-content="Digita la cantidad que deseas prestar al emisor de pedido (no debe superar la cantidad solicitada)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                      <th>Estado</th>
+                    </thead>
+                    <tbody>
 
-                  </tbody>
-                </table>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 5px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-secondary" type="submit" id="btnGuardar3"><i class="fa fa-save"></i> Guardar</button>
+                <!-- <button class="btn btn-info" type="button" id="btnProbar" onclick="probarDatos()"><i class="fa fa-bug"></i> Probar</button> -->
               </div>
             </form>
           </div>
@@ -175,7 +176,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Comentario(*):</label>
                 <input type="hidden" name="idsolicitud" id="idsolicitud">
-                <textarea type="text" class="form-control" style="resize: none;" name="comentario" id="comentario" maxlength="200" rows="4" placeholder="Cargando..."></textarea>
+                <textarea type="text" class="form-control" style="resize: none;" name="comentario" id="comentario" maxlength="200" rows="4" placeholder="Sin registrar."></textarea>
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 5px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
@@ -199,25 +200,40 @@ if (!isset($_SESSION["nombre"])) {
           <div class="panel-body">
             <form name="formulario" id="formulario" method="POST">
               <input type="hidden" name="idsolicitud" id="idsolicitud">
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 despachador" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                <label style="width: 100px;">Responsable despacho(*):</label>
-                <select id="idalmacenero" name="idalmacenero" class="form-control selectpicker" data-live-search="true" data-size="5" disabled>
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 despachador">
+                <label>Usuario receptor del pedido(*):</label>
+                <select id="idalmacenero" name="idalmacenero" class="form-control selectpicker" data-size="5" disabled>
                   <option value="">- Sin registrar -</option>
                 </select>
               </div>
               <div class="row" style="padding-left: 15px; padding-right: 15px;">
-                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                  <label style="width: 125px;">Código(*):</label>
-                  <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumero(this)" maxlength="10" onpaste="false" ondrop="false" placeholder="Ingrese el código correlativo." required>
+                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                  <label>Código(*):</label>
+                  <input type="text" class="form-control" name="codigo_pedido" id="codigo_pedido" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumero(this)" maxlength="20" onpaste="false" ondrop="false" placeholder="Ingrese el código correlativo." required>
                 </div>
-                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                  <label style="width: 125px;">Teléfono(*):</label>
-                  <input type="number" class="form-control" name="telefono" id="telefono" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" placeholder="Ingrese el número telefónico." required>
+                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                  <label>Teléfono:</label>
+                  <input type="number" class="form-control" name="telefono" id="telefono" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" placeholder="Ingrese el número telefónico.">
                 </div>
-                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
-                  <label class="label_serie">Empresa(*):</label>
-                  <input type="text" class="form-control" name="empresa" id="empresa" maxlength="50" placeholder="Ingrese la empresa." required>
+                <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                  <label class="label_serie">Nombre o empresa:</label>
+                  <input type="text" class="form-control" name="empresa" id="empresa" maxlength="50" placeholder="Ingrese la empresa.">
                 </div>
+                <?php if (($_SESSION['cargo'] == 'superadmin')) { ?>
+                  <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <label>Usuario emisor del pedido(*):</label> <a href="#" data-toggle="popover" data-placement="top" title="Usuario emisor del pedido" data-html="true" data-content="Selecciona al usuario que va a solicitar prestado los productos del almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
+                    <select name="emisor" id="emisor" class="form-control selectpicker" data-size="4" required></select>
+                  </div>
+                  <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <label>Lugar de destino:</label>
+                    <input type="text" class="form-control" name="destino" id="destino" maxlength="100" placeholder="Ingrese el lugar de destino.">
+                  </div>
+                <?php } else { ?>
+                  <div class="form-group col-lg-12 col-md-12">
+                    <label>Lugar de destino:</label>
+                    <input type="text" class="form-control" name="destino" id="destino" maxlength="100" placeholder="Ingrese el lugar de destino.">
+                  </div>
+                <?php } ?>
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="float: left;">
                 <a data-toggle="modal" href="#myModal">
@@ -225,22 +241,24 @@ if (!isset($_SESSION["nombre"])) {
                 </a>
               </div>
 
-              <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive" style="overflow-x: visible !important;">
-                <table id="detalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
-                  <thead style="background-color:#A9D0F5">
-                    <th>Opciones</th>
-                    <th>Artículo</th>
-                    <th>Categoría</th>
-                    <th>Marca</th>
-                    <th>Local</th>
-                    <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-                    <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el almacenero prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
-                    <th>Estado</th>
-                  </thead>
-                  <tbody>
+              <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" style="overflow-x: visible !important;">
+                <div class="table-responsive" style="margin-bottom: 20px;">
+                  <table id="detalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important; margin-bottom: 0px;">
+                    <thead style="background-color:#A9D0F5">
+                      <th>Opciones</th>
+                      <th>Artículo</th>
+                      <th>Categoría</th>
+                      <th>Marca</th>
+                      <th>Local</th>
+                      <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                      <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el receptor de pedido prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
+                      <th>Estado</th>
+                    </thead>
+                    <tbody>
 
-                  </tbody>
-                </table>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 5px;">
                 <button id="btnCancelar" class="btn btn-secondary" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>

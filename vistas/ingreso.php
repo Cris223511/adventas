@@ -267,7 +267,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-12">
                     <label>Código del producto(*):</label>
-                    <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="13" placeholder="Código del producto" onblur="convertirMayus(this)" required>
+                    <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="20" placeholder="Código del producto" onblur="convertirMayus(this)" required>
                   </div>
                   <div class="form-group col-lg-12 col-md-12" style="display: flex; justify-content: center;">
                     <button class="btn btn-success" type="button" id="btnDetalles1" onclick="frmDetalles(true)"><i class="fa fa-plus"></i> Más detalles</button>

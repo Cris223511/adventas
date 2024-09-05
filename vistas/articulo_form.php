@@ -130,7 +130,7 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="form-group col-lg-6 col-md-12">
                       <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                         <label style="width: 100px;">Código del producto(*):</label>
-                        <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="13" placeholder="Código del producto" onblur="convertirMayus(this)" required>
+                        <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="20" placeholder="Código del producto" onblur="convertirMayus(this)" required>
                       </div>
                       <div style="display: flex; justify-content: end;">
                         <div id="camera"></div>

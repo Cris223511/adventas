@@ -46,7 +46,7 @@ if (!isset($_SESSION["nombre"])) {
       $ext_logo
     );
 
-    $pdf->fact_dev(utf8_decode("Cod. LCL: N° $regs->codigo_pedido"));
+    $pdf->fact_dev(utf8_decode("COD: N° $regs->codigo_pedido"));
     $pdf->fact_dev2(utf8_decode($regs->estado));
 
     $pdf->temporaire("");
@@ -56,17 +56,24 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->addDate2($regs->fecha_hora_pedido);
 
     //Enviamos los datos del ENCARGADO al método addClientAdresse de la clase Factura
-    $pdf->addClientAdresse1("Nombres: " . utf8_decode($regs->responsable_pedido) . " " . utf8_decode($regs->responsable_pedido_apellido), "Domicilio: " . utf8_decode($regs->direccion_pedido), $regs->tipo_documento_pedido . ": " . $regs->num_documento_pedido, "Email: " . $regs->email_pedido, "Telefono: " . $regs->telefono_pedido);
 
     if (($regs->idalmacenero != 0 || $regs->idalmacenero != "0")) {
       //Enviamos los datos del DESPACHADOR al método addClientAdresse de la clase Factura
+      $pdf->addClientAdresse1("Nombres: " . utf8_decode($regs->responsable_pedido) . " " . utf8_decode($regs->responsable_pedido_apellido), "Domicilio: " . utf8_decode($regs->direccion_pedido), $regs->tipo_documento_pedido . ": " . $regs->num_documento_pedido, "Email: " . $regs->email_pedido, "Telefono: " . $regs->telefono_pedido);
       $pdf->addClientAdresse2("Nombres: " . utf8_decode($regs->responsable_despacho) . " " . utf8_decode($regs->responsable_despacho_apellido), "Domicilio: " . utf8_decode($regs->direccion_despacho), $regs->tipo_documento_despacho . ": " . $regs->num_documento_despacho, "Email: " . $regs->email_despacho, "Telefono: " . $regs->telefono_despacho);
+    } else {
+      $pdf->addClientAdresse("Nombres: " . utf8_decode($regs->responsable_pedido) . " " . utf8_decode($regs->responsable_pedido_apellido), "Domicilio: " . utf8_decode($regs->direccion_pedido), $regs->tipo_documento_pedido . ": " . $regs->num_documento_pedido, "Email: " . $regs->email_pedido, "Telefono: " . $regs->telefono_pedido);
     }
+
+    $regs->telefono = ($regs->telefono == '') ? 'Sin registrar.' : number_format($regs->telefono, 0, '', ' ');
+    $regs->destino = ($regs->destino == '') ? 'Sin registrar' : ($regs->destino);
+
+    $pdf->additionalInfo(utf8_decode($regs->empresa), utf8_decode($regs->telefono), utf8_decode($regs->destino));
 
     //Establecemos las columnas que va a tener la sección donde mostramos los detalles de la solicitud
     $cols = array(
       "CODIGO" => 34,
-      "DESCRIPCION" => 80,
+      "NOMBRE DE PRODUCTO" => 80,
       "CANTIDAD" => 28,
       "C. PRESTADA" => 28,
       "P.V." => 20

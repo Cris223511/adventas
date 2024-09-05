@@ -9,7 +9,7 @@ class Solicitud
 	{
 	}
 
-	public function insertar($idencargado, $codigo_pedido, $telefono, $empresa, $idarticulo, $cantidad)
+	public function insertar($idencargado, $codigo_pedido, $telefono, $empresa, $destino, $idarticulo, $cantidad)
 	{
 		// Primero, debemos verificar si hay suficiente stock para cada artículo
 		$error = $this->validarStock($idarticulo, $cantidad);
@@ -18,12 +18,12 @@ class Solicitud
 			return false;
 		}
 
-		$sql = "INSERT INTO solicitud (idalmacenero, idencargado, codigo_pedido, telefono, comentario, empresa, fecha_hora_pedido, fecha_hora_despacho, estado)
-		VALUES (0, '$idencargado', '$codigo_pedido', '$telefono', '', '$empresa', SYSDATE(), '2000-01-01 00:00:00', 'Recibido')";
+		$sql = "INSERT INTO solicitud (idalmacenero, idencargado, codigo_pedido, telefono, comentario, empresa, destino, fecha_hora_pedido, fecha_hora_despacho, estado)
+		VALUES (0, '$idencargado', '$codigo_pedido', '$telefono', '', '$empresa', '$destino', SYSDATE(), '2000-01-01 00:00:00', 'Recibido')";
 		$idsolicitudnew = ejecutarConsulta_retornarID($sql);
 
-		$sql2 = "INSERT INTO devolucion (idalmacenero, idencargado, codigo_pedido, telefono, comentario, empresa, fecha_hora_pedido, fecha_hora_devolucion, opcion, estado)
-		VALUES (0, '$idencargado', '$codigo_pedido', '$telefono', '', '$empresa', SYSDATE(), '2000-01-01 00:00:00', '1', 'Recibido')";
+		$sql2 = "INSERT INTO devolucion (idalmacenero, idencargado, codigo_pedido, telefono, comentario, empresa, destino, fecha_hora_pedido, fecha_hora_devolucion, opcion, estado)
+		VALUES (0, '$idencargado', '$codigo_pedido', '$telefono', '', '$empresa', '$destino', SYSDATE(), '2000-01-01 00:00:00', '1', 'Recibido')";
 		ejecutarConsulta($sql2);
 
 		$num_elementos = 0;
@@ -53,7 +53,7 @@ class Solicitud
 		return false;
 	}
 
-	public function actualizarSolicitud($idalmaceneroActual, $idsolicitud, $idarticulo, $cantidad_prestada)
+	public function actualizarSolicitud($idalmacenero, $idsolicitud, $idarticulo, $cantidad_prestada)
 	{
 		// Primero, debemos verificar si hay suficiente stock a prestar para cada artículo
 		$error = $this->validarStockPrestar($idsolicitud, $idarticulo, $cantidad_prestada);
@@ -66,6 +66,8 @@ class Solicitud
 		$num_elementos = 0;
 		$sw = true;
 
+		$this->validarCantidadFinalizada($idalmacenero, $idsolicitud, $idarticulo, $cantidad_prestada);
+
 		while ($num_elementos < count($idarticulo)) {
 			$sql_detalle1 = "UPDATE detalle_solicitud SET cantidad_prestada=cantidad_prestada+'$cantidad_prestada[$num_elementos]' WHERE idsolicitud='$idsolicitud' AND idarticulo='$idarticulo[$num_elementos]'";
 			ejecutarConsulta($sql_detalle1) or $sw = false;
@@ -73,8 +75,6 @@ class Solicitud
 			ejecutarConsulta($sql_detalle2) or $sw = false;
 			$num_elementos = $num_elementos + 1;
 		}
-
-		$this->validarCantidadFinalizada($idalmaceneroActual, $idsolicitud, $idarticulo, $cantidad_prestada);
 
 		return $sw;
 	}
@@ -120,6 +120,45 @@ class Solicitud
 
 		ejecutarConsulta($sql3);
 		ejecutarConsulta($sql4);
+	}
+
+	public function obtenerDatosParaPrueba($idalmacenero, $idsolicitud, $idarticulo, $cantidad_prestada)
+	{
+		$resultados = array();
+		$todosCompletos = true;
+
+		for ($i = 0; $i < count($idarticulo); $i++) {
+			$sql = "SELECT ds.cantidad, ds.cantidad_prestada, a.nombre AS nombre_articulo 
+					FROM detalle_solicitud ds 
+					JOIN articulo a ON ds.idarticulo = a.idarticulo 
+					WHERE ds.idsolicitud='$idsolicitud' AND ds.idarticulo='$idarticulo[$i]'";
+			$res = ejecutarConsultaSimpleFila($sql);
+
+			$cantidadSolicitada = $res['cantidad'];
+			$cantidadPrestadaActual = $res['cantidad_prestada'];
+			$nombreArticulo = $res['nombre_articulo'];
+
+			if (($cantidadPrestadaActual + $cantidad_prestada[$i]) == $cantidadSolicitada) {
+				$todosCompletos = false;
+			}
+
+			$resultados[] = array(
+				'idarticulo' => $idarticulo[$i],
+				'nombre_articulo' => $nombreArticulo,
+				'cantidad_solicitada' => $cantidadSolicitada,
+				'cantidad_prestada_actual' => $cantidadPrestadaActual,
+				'cantidad_prestada_nueva' => $cantidad_prestada[$i],
+			);
+		}
+
+		$estadoGeneral = $todosCompletos ? "FINALIZADO" : "PENDIENTE";
+
+		return array(
+			'idalmacenero' => $idalmacenero,
+			'idsolicitud' => $idsolicitud,
+			'articulos' => $resultados,
+			'todos_completos' => $estadoGeneral
+		);
 	}
 
 	public function validarStockPrestar($idsolicitud, $idarticulo, $cantidad_prestada)
@@ -197,12 +236,15 @@ class Solicitud
 		$sql = "SELECT
 					s.idsolicitud,
 					ual.idusuario AS idalmacenero,
+					uen.idusuario AS idencargado,
 					s.codigo_pedido,
 					s.empresa,
+					s.destino,
 					s.telefono,
 					s.estado
 				FROM solicitud s
 				LEFT JOIN usuario ual ON s.idalmacenero = ual.idusuario
+				LEFT JOIN usuario uen ON s.idencargado = uen.idusuario
 				WHERE s.idsolicitud='$idsolicitud'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -218,6 +260,7 @@ class Solicitud
 					ual.cargo AS cargo_despacho,
 					s.codigo_pedido,
 					s.empresa,
+					s.destino,
 					s.telefono,
 					DATE_FORMAT(s.fecha_hora_pedido, '%d-%m-%Y %H:%i:%s') AS fecha_hora_pedido,
 					DATE_FORMAT(s.fecha_hora_despacho, '%d-%m-%Y %H:%i:%s') AS fecha_hora_despacho,
@@ -240,6 +283,7 @@ class Solicitud
 					ual.cargo AS cargo_despacho,
 					s.codigo_pedido,
 					s.empresa,
+					s.destino,
 					s.telefono,
 					DATE_FORMAT(s.fecha_hora_pedido, '%d-%m-%Y %H:%i:%s') AS fecha_hora_pedido,
 					DATE_FORMAT(s.fecha_hora_despacho, '%d-%m-%Y %H:%i:%s') AS fecha_hora_despacho,
@@ -317,6 +361,7 @@ class Solicitud
 					ual.direccion AS direccion_despacho, ual.tipo_documento AS tipo_documento_despacho, ual.num_documento AS num_documento_despacho, ual.email AS email_despacho, ual.telefono AS telefono_despacho,
 					s.codigo_pedido,
 					s.empresa,
+					s.destino,
 					s.telefono,
 					s.estado,
 					DATE_FORMAT(s.fecha_hora_pedido, '%d-%m-%Y %H:%i:%s') AS fecha_hora_pedido,
