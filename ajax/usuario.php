@@ -384,13 +384,12 @@ switch ($_GET["op"]) {
 			in_array(5, $valores) ? $_SESSION['ventas'] = 1 : $_SESSION['ventas'] = 0;
 			in_array(6, $valores) ? $_SESSION['acceso'] = 1 : $_SESSION['acceso'] = 0;
 			in_array(7, $valores) ? $_SESSION['cuotas'] = 1 : $_SESSION['cuotas'] = 0;
-			in_array(8, $valores) ? $_SESSION['solicitud'] = 1 : $_SESSION['solicitud'] = 0;
-			in_array(9, $valores) ? $_SESSION['devolucion'] = 1 : $_SESSION['devolucion'] = 0;
-			in_array(10, $valores) ? $_SESSION['proforma'] = 1 : $_SESSION['proforma'] = 0;
-			in_array(11, $valores) ? $_SESSION['perfilu'] = 1 : $_SESSION['perfilu'] = 0;
-			in_array(12, $valores) ? $_SESSION['pagos'] = 1 : $_SESSION['pagos'] = 0;
-			in_array(13, $valores) ? $_SESSION['reporte'] = 1 : $_SESSION['reporte'] = 0;
-			in_array(14, $valores) ? $_SESSION['reporteP'] = 1 : $_SESSION['reporteP'] = 0;
+			in_array(8, $valores) ? $_SESSION['proforma'] = 1 : $_SESSION['proforma'] = 0;
+			in_array(9, $valores) ? $_SESSION['prestamo'] = 1 : $_SESSION['prestamo'] = 0;
+			in_array(10, $valores) ? $_SESSION['perfilu'] = 1 : $_SESSION['perfilu'] = 0;
+			in_array(11, $valores) ? $_SESSION['pagos'] = 1 : $_SESSION['pagos'] = 0;
+			in_array(12, $valores) ? $_SESSION['reporte'] = 1 : $_SESSION['reporte'] = 0;
+			in_array(13, $valores) ? $_SESSION['reporteP'] = 1 : $_SESSION['reporteP'] = 0;
 		}
 		echo json_encode($fetch);
 		break;

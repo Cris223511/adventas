@@ -135,33 +135,37 @@ function marcarCheckboxPorRol(selectElement) {
 			checkboxes[2].checked = true; // Servicios
 			checkboxes[4].checked = true; // Ventas
 			checkboxes[6].checked = true; // Cuotas
-			checkboxes[9].checked = true; // Proforma
-			checkboxes[10].checked = true; // Perfil Usuario
-			checkboxes[11].checked = true; // Método de Pago
+			checkboxes[7].checked = true; // Proforma
+			checkboxes[9].checked = true; // Perfil Usuario
+			checkboxes[10].checked = true; // Método de Pago
 			break;
 		case "cliente":
 			checkboxes[0].checked = true; // Escritorio
 			checkboxes[3].checked = true; // Compras
-			checkboxes[11].checked = true; // Método de Pago
-			checkboxes[10].checked = true; // Perfil Usuario
+			checkboxes[9].checked = true; // Perfil Usuario
+			checkboxes[10].checked = true; // Método de Pago
 			break;
 		case "almacenero":
 			checkboxes[0].checked = true; // Escritorio
 			checkboxes[1].checked = true; // Almacen
-			checkboxes[8].checked = true; // Solicitudes
-			checkboxes[9].checked = true; // Devoluciones
-			checkboxes[10].checked = true; // Perfil Usuario
-			checkboxes[11].checked = true; // Método de Pago
+			checkboxes[8].checked = true; // Prestamo de productos
+			checkboxes[9].checked = true; // Perfil Usuario
+			checkboxes[10].checked = true; // Método de Pago
 			break;
 		case "encargado":
 			checkboxes[0].checked = true; // Escritorio
 			checkboxes[1].checked = true; // Almacen
-			checkboxes[8].checked = true; // Solicitudes
-			checkboxes[9].checked = true; // Devoluciones
-			checkboxes[10].checked = true; // Perfil Usuario
-			checkboxes[11].checked = true; // Método de Pago
+			checkboxes[8].checked = true; // Prestamo de productos
+			checkboxes[9].checked = true; // Perfil Usuario
+			checkboxes[10].checked = true; // Método de Pago
 			break;
 		case "admin":
+			checkboxes.forEach(function (checkbox) {
+				checkbox.checked = true;
+			});
+			$("#checkAll").prop("checked", true);
+			break;
+		case "superadmin":
 			checkboxes.forEach(function (checkbox) {
 				checkbox.checked = true;
 			});

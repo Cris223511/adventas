@@ -7,7 +7,7 @@ if (strlen(session_id()) < 1)
 if (!isset($_SESSION["nombre"])) {
   echo 'Debe ingresar al sistema correctamente para visualizar el reporte';
 } else {
-  if ($_SESSION['solicitud'] == 1) {
+  if ($_SESSION['prestamo'] == 1) {
     //Incluímos el archivo FacturaSolicitud.php
     require('FacturaSolicitud.php');
 
@@ -105,7 +105,7 @@ if (!isset($_SESSION["nombre"])) {
         "NOMBRE DE PRODUCTO" => utf8_decode("$regd->nombre"),
         "CANTIDAD" => "$regd->cantidad",
         "C. PRESTADA" => "$regd->cantidad_prestada",
-        "P.V." => $regd->precio_venta == '' ? "0.00" : $regd->precio_venta
+        "P.V." => $regd->precio_venta
       );
       $size = $pdf->addLine($y, $line);
       $y   += $size + 2;

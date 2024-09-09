@@ -156,6 +156,7 @@ class Devolucion
 					m.nombre as marca,
 					al.ubicacion as almacen,
 					dd.cantidad,
+					dd.precio_venta,
 					dd.cantidad_prestada,
 					dd.cantidad_devuelta
 				FROM detalle_devolucion dd
@@ -171,6 +172,7 @@ class Devolucion
 	{
 		$sql = "SELECT
 					d.iddevolucion,
+					d.idalmacenero,
 					uen.nombre AS responsable_pedido,
 					ual.nombre AS responsable_despacho,
 					uen.apellido AS responsable_pedido_apellido,
@@ -201,7 +203,7 @@ class Devolucion
 					dd.idarticulo,
 					a.nombre,
 					a.codigo_producto,
-					(SELECT precio_venta FROM detalle_ingreso WHERE idarticulo=dd.idarticulo order by iddetalle_ingreso desc limit 0,1) as precio_venta,
+					dd.precio_venta,
 					dd.cantidad,
 					dd.cantidad_devuelta as cantidad_devuelta
 				FROM detalle_devolucion dd

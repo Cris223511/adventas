@@ -9,7 +9,7 @@ if (!isset($_SESSION["nombre"])) {
   require '../config/Conexion.php';
   require 'header.php';
 
-  if ($_SESSION['devolucion'] == 1) {
+  if ($_SESSION['prestamo'] == 1) {
 ?>
 
     <style>
@@ -141,6 +141,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Categoría</th>
                       <th>Marca</th>
                       <th>Local</th>
+                      <th>Precio venta</th>
                       <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al receptor del pedido." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                       <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el receptor del pedido (almacenero)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                       <th>Cantidad a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a devolver" data-content="Es la cantidad que el emisor del pedido (encargado) solicitó devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
@@ -208,6 +209,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Categoría</th>
                       <th>Marca</th>
                       <th>Local</th>
+                      <th>Precio venta</th>
                       <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al receptor del pedido." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                       <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el receptor del pedido (almacenero)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                       <th>Cantidad solicitada a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad solicitada a devolver" data-content="Es la cantidad que solicitaste devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
@@ -302,6 +304,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Categoría</th>
                       <th>Marca</th>
                       <th>Local</th>
+                      <th>Precio venta</th>
                       <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al receptor del pedido." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                       <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el receptor del pedido (almacenero)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                       <th>Cantidad solicitada a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad solicitada a devolver" data-content="Es la cantidad que solicitaste devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>

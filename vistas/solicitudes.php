@@ -9,7 +9,7 @@ if (!isset($_SESSION["nombre"])) {
   require '../config/Conexion.php';
   require 'header.php';
 
-  if ($_SESSION['solicitud'] == 1) {
+  if ($_SESSION['prestamo'] == 1) {
 ?>
 
     <style>
@@ -140,6 +140,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Categoría</th>
                       <th>Marca</th>
                       <th>Local</th>
+                      <th>Precio venta</th>
                       <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                       <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el receptor de pedido prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                       <th>Cantidad a Prestar <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a Prestar" data-content="Digita la cantidad que deseas prestar al emisor de pedido (no debe superar la cantidad solicitada)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
@@ -250,6 +251,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Categoría</th>
                       <th>Marca</th>
                       <th>Local</th>
+                      <th>Precio venta</th>
                       <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad solicitada a prestar." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                       <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que el receptor de pedido prestó." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                       <th>Estado</th>

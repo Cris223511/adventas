@@ -242,7 +242,7 @@ class PDF_Invoice extends FPDF
 		$this->SetXY($r1 + 1 + ($r2 - $r1) / 2 + 3, $y1 + 2);
 		$this->SetFont("Arial", "B", 8.5);
 		$this->Cell(10, 5, utf8_decode("Fecha Devolución"), 0, 0, "C");
-		$this->SetXY($r1 + ($r2 - $r1) / 2 + 3, $y1 + 10.5);
+		$this->SetXY($r1 + ($r2 - $r1) / 2 + 3.5, $y1 + 10.5);
 		$this->SetFont("Arial", "", 8.5);
 		$this->Cell(10, 5, $date1, 0, 0, "C");
 	}
@@ -259,7 +259,7 @@ class PDF_Invoice extends FPDF
 		$this->SetXY($r1 + ($r2 - $r1) / 2 - 32, $y1 + 2);
 		$this->SetFont("Arial", "B", 8.5);
 		$this->Cell(10, 5, "Fecha Pedido", 0, 0, "C");
-		$this->SetXY($r1 - 1 + ($r2 - $r1) / 2 - 32, $y1 + 10.5);
+		$this->SetXY($r1 - 1 + ($r2 - $r1) / 2 - 31.5, $y1 + 10.5);
 		$this->SetFont("Arial", "", 8.5);
 		$this->Cell(10, 5, $date2, 0, 0, "C");
 	}

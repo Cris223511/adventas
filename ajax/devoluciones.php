@@ -7,7 +7,7 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 	//Validamos el acceso solo al usuario logueado y autorizado.
-	if ($_SESSION['devolucion'] == 1) {
+	if ($_SESSION['prestamo'] == 1) {
 		require_once "../modelos/Devoluciones.php";
 
 		$devolucion = new Devolucion();
@@ -76,6 +76,7 @@ if (!isset($_SESSION["nombre"])) {
 									<th>Categoría</th>
 									<th>Marca</th>
 									<th>Local</th>
+									<th>Precio venta</th>
                                     <th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al receptor del pedido." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                                     <th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el receptor del pedido (almacenero)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
                                     <th>Cantidad solicitada a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad solicitada a devolver" data-content="Es la cantidad que solicitaste devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
@@ -89,7 +90,7 @@ if (!isset($_SESSION["nombre"])) {
 						$estado = '<span class="label bg-orange">Incompleto</span>';
 					}
 
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td>' . $reg->cantidad_devuelta . '</td><td>' . $estado . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td>' . $reg->cantidad_devuelta . '</td><td>' . $estado . '</td></tr>';
 				}
 				break;
 
@@ -108,6 +109,7 @@ if (!isset($_SESSION["nombre"])) {
 						<th>Categoría</th>
 						<th>Marca</th>
 						<th>Local</th>
+						<th>Precio venta</th>
 						<th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al receptor del pedido." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 						<th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el receptor del pedido (almacenero)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 						<th>Cantidad solicitada a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad solicitada a devolver" data-content="Es la cantidad que solicitaste devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
@@ -123,7 +125,7 @@ if (!isset($_SESSION["nombre"])) {
 						$estado = '<span class="label bg-orange">Incompleto</span>';
 					}
 
-					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . $reg->cantidad . '</td><td data-cantidadprestada="' . $iterador . '">' . $reg->cantidad_prestada . '</td><td data-cantidaddevuelta="' . $iterador . '">' . $reg->cantidad_devuelta . '</td><td><input type="number" data-cantidaddevolver="' . $iterador . '" name="cantidad_devuelta[]" id="cantidad_devuelta[]" step="any" value="0" min="0.1" required></td><td>' . $estado . '</td></tr>';
+					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td data-cantidadprestada="' . $iterador . '">' . $reg->cantidad_prestada . '</td><td data-cantidaddevuelta="' . $iterador . '">' . $reg->cantidad_devuelta . '</td><td><input type="number" data-cantidaddevolver="' . $iterador . '" name="cantidad_devuelta[]" id="cantidad_devuelta[]" step="any" value="0" min="0.1" required></td><td>' . $estado . '</td></tr>';
 					$iterador = $iterador + 1;
 				}
 				break;
@@ -143,6 +145,7 @@ if (!isset($_SESSION["nombre"])) {
 									<th>Categoría</th>
 									<th>Marca</th>
 									<th>Local</th>
+									<th>Precio venta</th>
 									<th>Cantidad Solicitada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Solicitada" data-content="Es la cantidad que solicitaste prestar al receptor del pedido." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 									<th>Cantidad Prestada <a href="#" data-toggle="popover" data-placement="top" title="Cantidad Prestada" data-content="Es la cantidad que te prestó el receptor del pedido (almacenero)." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
 									<th>Cantidad a devolver <a href="#" data-toggle="popover" data-placement="top" title="Cantidad a devolver" data-content="Es la cantidad que el emisor del pedido (encargado) solicitó devolver al almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a></th>
@@ -156,7 +159,7 @@ if (!isset($_SESSION["nombre"])) {
 						$estado = '<span class="label bg-orange">Incompleto</span>';
 					}
 
-					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td><input type="number" name="cantidad_devuelta[]" id="cantidad_devuelta[]" step="any" min="0.1" value="' . $reg->cantidad_devuelta . '" disabled></td><td>' . $estado . '</td></tr>';
+					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td><input type="number" name="cantidad_devuelta[]" id="cantidad_devuelta[]" step="any" min="0.1" value="' . $reg->cantidad_devuelta . '" disabled></td><td>' . $estado . '</td></tr>';
 				}
 				break;
 

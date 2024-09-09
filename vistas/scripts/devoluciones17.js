@@ -27,7 +27,7 @@ function init() {
 		$('#idalmacenero3').selectpicker('refresh');
 	});
 
-	$('#mDevolucion').addClass("treeview active");
+	$('#mPrestamo').addClass("treeview active");
 	$('#lDevolucion').addClass("active");
 }
 
@@ -210,10 +210,29 @@ function guardaryeditar3(e) {
 
 function guardaryeditar4(e) {
 	e.preventDefault();
+
+	var opcionSeleccionada = $('input[name="opcion"]:checked').val();
+
+	if (opcionSeleccionada === "1") {
+		var todosCompletos = true;
+
+		$('#detalles3 tbody tr').each(function () {
+			var estado = $(this).find('td').eq(9).text().trim();
+			if (estado === 'Incompleto') {
+				todosCompletos = false;
+				return false;
+			}
+		});
+
+		if (!todosCompletos) {
+			bootbox.alert("Uno o más artículos aún no están completos. Para aceptar la devolución al <strong>almacén de origen</strong>, el emisor debe haber solicitado devolver <strong>toda la cantidad prestada</strong>.");
+			return;
+		}
+	}
+
 	$('input[name="cantidad_devuelta[]"]').prop('disabled', false);
 
 	var formData = new FormData($("#formulario4")[0]);
-	var opcionSeleccionada = $('input[name="opcion"]:checked').val();
 	formData.append('opcion', opcionSeleccionada);
 
 	$('input[name="cantidad_devuelta[]"]').prop('disabled', true);
@@ -242,7 +261,6 @@ function guardaryeditar4(e) {
 		}
 	});
 }
-
 
 function verificarCantidades() {
 	const filas = document.querySelectorAll('.filas');

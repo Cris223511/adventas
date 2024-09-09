@@ -9,7 +9,7 @@ class Solicitud
 	{
 	}
 
-	public function insertar($idencargado, $codigo_pedido, $telefono, $empresa, $destino, $idarticulo, $cantidad)
+	public function insertar($idencargado, $codigo_pedido, $telefono, $empresa, $destino, $idarticulo, $cantidad, $precio_venta)
 	{
 		// Primero, debemos verificar si hay suficiente stock para cada artículo
 		$error = $this->validarStock($idarticulo, $cantidad);
@@ -30,9 +30,9 @@ class Solicitud
 		$sw = true;
 
 		while ($num_elementos < count($idarticulo)) {
-			$sql_detalle1 = "INSERT INTO detalle_solicitud(idsolicitud, idarticulo, cantidad, cantidad_prestada) VALUES ('$idsolicitudnew', '$idarticulo[$num_elementos]','$cantidad[$num_elementos]',0)";
+			$sql_detalle1 = "INSERT INTO detalle_solicitud(idsolicitud, idarticulo, cantidad, cantidad_prestada, precio_venta) VALUES ('$idsolicitudnew', '$idarticulo[$num_elementos]','$cantidad[$num_elementos]',0,'$precio_venta[$num_elementos]')";
 			ejecutarConsulta($sql_detalle1) or $sw = false;
-			$sql_detalle2 = "INSERT INTO detalle_devolucion(iddevolucion, idarticulo, cantidad, cantidad_prestada, cantidad_devuelta, cantidad_a_devolver, fecha_hora) VALUES ('$idsolicitudnew', '$idarticulo[$num_elementos]','$cantidad[$num_elementos]',0,0,0,SYSDATE())";
+			$sql_detalle2 = "INSERT INTO detalle_devolucion(iddevolucion, idarticulo, cantidad, cantidad_prestada, cantidad_devuelta, cantidad_a_devolver, precio_venta, fecha_hora) VALUES ('$idsolicitudnew', '$idarticulo[$num_elementos]','$cantidad[$num_elementos]',0,0,0,'$precio_venta[$num_elementos]',SYSDATE())";
 			ejecutarConsulta($sql_detalle2) or $sw = false;
 			$num_elementos = $num_elementos + 1;
 		}
@@ -264,9 +264,12 @@ class Solicitud
 					s.telefono,
 					DATE_FORMAT(s.fecha_hora_pedido, '%d-%m-%Y %H:%i:%s') AS fecha_hora_pedido,
 					DATE_FORMAT(s.fecha_hora_despacho, '%d-%m-%Y %H:%i:%s') AS fecha_hora_despacho,
-					s.estado FROM solicitud s
+					s.estado,
+					d.estado as estado_devolucion
+				FROM solicitud s
 				LEFT JOIN usuario uen ON s.idencargado = uen.idusuario
 				LEFT JOIN usuario ual ON s.idalmacenero = ual.idusuario
+				LEFT JOIN devolucion d ON s.idsolicitud = d.iddevolucion
 				ORDER BY s.idsolicitud DESC";
 
 		return ejecutarConsulta($sql);
@@ -287,9 +290,12 @@ class Solicitud
 					s.telefono,
 					DATE_FORMAT(s.fecha_hora_pedido, '%d-%m-%Y %H:%i:%s') AS fecha_hora_pedido,
 					DATE_FORMAT(s.fecha_hora_despacho, '%d-%m-%Y %H:%i:%s') AS fecha_hora_despacho,
-					s.estado FROM solicitud s
+					s.estado,
+					d.estado as estado_devolucion
+				FROM solicitud s
 				LEFT JOIN usuario uen ON s.idencargado = uen.idusuario
 				LEFT JOIN usuario ual ON s.idalmacenero = ual.idusuario
+				LEFT JOIN devolucion d ON s.idsolicitud = d.iddevolucion
 				WHERE s.idencargado = '$idencargado' 
 				ORDER BY s.idsolicitud DESC";
 
@@ -316,6 +322,7 @@ class Solicitud
 					c.nombre as categoria,
 					m.nombre as marca,
 					al.ubicacion as almacen,
+					ds.precio_venta,
 					ds.cantidad,
 					ds.cantidad_prestada
 				FROM detalle_solicitud ds
@@ -335,6 +342,7 @@ class Solicitud
 					c.nombre as categoria,
 					m.nombre as marca,
 					al.ubicacion as almacen,
+					ds.precio_venta,
 					ds.cantidad,
 					ds.cantidad_prestada
 				FROM detalle_solicitud ds
@@ -381,7 +389,7 @@ class Solicitud
 					a.nombre,
 					a.codigo_producto,
 					ds.cantidad_prestada,
-					(SELECT precio_venta FROM detalle_ingreso WHERE idarticulo=ds.idarticulo order by iddetalle_ingreso desc limit 0,1) as precio_venta,
+					ds.precio_venta,
 					ds.cantidad
 				FROM detalle_solicitud ds
 				LEFT JOIN articulo a ON ds.idarticulo = a.idarticulo
