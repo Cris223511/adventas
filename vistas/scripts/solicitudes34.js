@@ -65,6 +65,8 @@ function limpiar() {
 
 	$("#idalmacenero").val($("#idalmacenero option:first").val());
 	$("#idalmacenero").selectpicker('refresh');
+	$("#emisor").val($("#emisor option:first").val());
+	$("#emisor").selectpicker('refresh');
 
 	$("#codigo_pedido").val(lastCodigoPedido);
 	$("#telefono").val("");
@@ -121,6 +123,8 @@ function limpiar() {
 	`);
 
 	$('[data-toggle="popover"]').popover();
+
+	nowrapCell();
 }
 
 function ocultarModal() {
@@ -390,8 +394,8 @@ function mostrar(idsolicitud) {
 		$("#idsolicitud").val(data.idsolicitud);
 		$("#idalmacenero").val(data.idalmacenero);
 		$("#idalmacenero").selectpicker('refresh');
-		$("#idencargado").val(data.idencargado);
-		$("#idencargado").selectpicker('refresh');
+		$("#emisor").val(data.idencargado);
+		$("#emisor").selectpicker('refresh');
 
 		$("#codigo_pedido").val(data.codigo_pedido);
 		$("#telefono").val(data.telefono);

@@ -51,6 +51,8 @@ class Devolucion
 
 			$sql2 = "UPDATE devolucion SET opcion='$opcion', estado='Finalizado', fecha_hora_devolucion=SYSDATE() WHERE iddevolucion='$iddevolucion'";
 			ejecutarConsulta($sql2);
+			$sql3 = "UPDATE solicitud SET estado='Finalizado', fecha_hora_despacho=SYSDATE() WHERE idsolicitud='$iddevolucion'";
+			ejecutarConsulta($sql3);
 		}
 
 		return $sw;
@@ -75,6 +77,7 @@ class Devolucion
 		$sql = "SELECT
 					d.iddevolucion,
 					ual.idusuario AS idalmacenero,
+					uen.idusuario AS idencargado,
 					d.codigo_pedido,
 					d.empresa,
 					d.destino,
@@ -83,6 +86,7 @@ class Devolucion
 					d.estado
 				FROM devolucion d
 				LEFT JOIN usuario ual ON d.idalmacenero = ual.idusuario
+				LEFT JOIN usuario uen ON d.idencargado = uen.idusuario
 				WHERE d.iddevolucion='$iddevolucion' AND (d.estado = 'Pendiente' OR d.estado = 'Finalizado' OR d.estado = 'En curso')";
 		return ejecutarConsultaSimpleFila($sql);
 	}

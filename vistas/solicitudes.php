@@ -102,7 +102,7 @@ if (!isset($_SESSION["nombre"])) {
               <?php if (($_SESSION['cargo'] == 'superadmin')) { ?>
                 <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
                   <label>Usuario emisor del pedido(*):</label> <a href="#" data-toggle="popover" data-placement="bottom" title="Usuario emisor del pedido" data-html="true" data-content="Es el usuario que ha solicitado el préstamo de materiales del almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
-                  <select id="idencargado" class="form-control selectpicker" data-size="4" disabled></select>
+                  <select id="idencargado" class="form-control selectpicker" data-size="5" disabled></select>
                 </div>
               <?php } ?>
               <div class="<?php echo ($_SESSION['cargo'] == 'superadmin') ? 'form-group col-lg-6 col-md-6 col-sm-12 col-xs-12' : 'form-group col-lg-12 col-md-12 col-sm-12 col-xs-12'; ?>">
@@ -223,7 +223,7 @@ if (!isset($_SESSION["nombre"])) {
                 <?php if (($_SESSION['cargo'] == 'superadmin')) { ?>
                   <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <label>Usuario emisor del pedido(*):</label> <a href="#" data-toggle="popover" data-placement="top" title="Usuario emisor del pedido" data-html="true" data-content="Selecciona al usuario que va a solicitar prestado los productos del almacén." style="color: #418bb7"><i class="fa fa-question-circle"></i></a>
-                    <select name="emisor" id="emisor" class="form-control selectpicker" data-size="4" required></select>
+                    <select name="emisor" id="emisor" class="form-control selectpicker" data-size="5" required></select>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <label>Lugar de destino:</label>

@@ -323,6 +323,7 @@ class Consultas
 				  a.descripcion as descripcion,
 				  a.imagen as imagen,
 				  COUNT(dd.idarticulo) as cantidad,
+				  dd.cantidad_devuelta as cantidad_devuelta,
 				  DATE_FORMAT(dd.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha
 				FROM detalle_devolucion dd
 				LEFT JOIN articulo a ON dd.idarticulo = a.idarticulo
@@ -352,6 +353,7 @@ class Consultas
 				  a.descripcion as descripcion,
 				  a.imagen as imagen,
 				  COUNT(dd.idarticulo) as cantidad,
+				  dd.cantidad_devuelta as cantidad_devuelta,
 				  DATE_FORMAT(dd.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha
 				FROM detalle_devolucion dd
 				LEFT JOIN articulo a ON dd.idarticulo = a.idarticulo

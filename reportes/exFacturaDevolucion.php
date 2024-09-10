@@ -63,9 +63,10 @@ if (!isset($_SESSION["nombre"])) {
       $pdf->addClientAdresse("Nombres: " . utf8_decode($regs->responsable_pedido) . " " . utf8_decode($regs->responsable_pedido_apellido), "Domicilio: " . utf8_decode($regs->direccion_pedido), $regs->tipo_documento_pedido . ": " . $regs->num_documento_pedido, "Email: " . $regs->email_pedido, "Telefono: " . $regs->telefono_pedido);
     }
 
+    $regs->empresa = ($regs->empresa == '') ? 'Sin registrar.' : ($regs->empresa);
     $regs->telefono = ($regs->telefono == '') ? 'Sin registrar.' : number_format($regs->telefono, 0, '', ' ');
-    $regs->destino = ($regs->destino == '') ? 'Sin registrar' : ($regs->destino);
-
+    $regs->destino = ($regs->destino == '') ? 'Sin registrar.' : ($regs->destino);
+    
     $pdf->additionalInfo(utf8_decode($regs->empresa), utf8_decode($regs->telefono), utf8_decode($regs->destino));
 
     // Establecemos las columnas que va a tener la sección donde mostramos los detalles de la devolucion

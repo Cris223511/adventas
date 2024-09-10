@@ -90,7 +90,7 @@ if (!isset($_SESSION["nombre"])) {
 						$estado = '<span class="label bg-orange">Incompleto</span>';
 					}
 
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td>' . $reg->cantidad_devuelta . '</td><td>' . $estado . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . (($reg->categoria != "") ? $reg->categoria : "Sin registrar.") . '</td><td>' . (($reg->marca != "") ? $reg->marca : "Sin registrar.") . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td>' . $reg->cantidad_devuelta . '</td><td>' . $estado . '</td></tr>';
 				}
 				break;
 
@@ -125,7 +125,7 @@ if (!isset($_SESSION["nombre"])) {
 						$estado = '<span class="label bg-orange">Incompleto</span>';
 					}
 
-					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td data-cantidadprestada="' . $iterador . '">' . $reg->cantidad_prestada . '</td><td data-cantidaddevuelta="' . $iterador . '">' . $reg->cantidad_devuelta . '</td><td><input type="number" data-cantidaddevolver="' . $iterador . '" name="cantidad_devuelta[]" id="cantidad_devuelta[]" step="any" value="0" min="0.1" required></td><td>' . $estado . '</td></tr>';
+					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . (($reg->categoria != "") ? $reg->categoria : "Sin registrar.") . '</td><td>' . (($reg->marca != "") ? $reg->marca : "Sin registrar.") . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td data-cantidadprestada="' . $iterador . '">' . $reg->cantidad_prestada . '</td><td data-cantidaddevuelta="' . $iterador . '">' . $reg->cantidad_devuelta . '</td><td><input type="number" data-cantidaddevolver="' . $iterador . '" name="cantidad_devuelta[]" id="cantidad_devuelta[]" step="any" value="0" min="0.1" required></td><td>' . $estado . '</td></tr>';
 					$iterador = $iterador + 1;
 				}
 				break;
@@ -159,7 +159,7 @@ if (!isset($_SESSION["nombre"])) {
 						$estado = '<span class="label bg-orange">Incompleto</span>';
 					}
 
-					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td><input type="number" name="cantidad_devuelta[]" id="cantidad_devuelta[]" step="any" min="0.1" value="' . $reg->cantidad_devuelta . '" disabled></td><td>' . $estado . '</td></tr>';
+					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . (($reg->categoria != "") ? $reg->categoria : "Sin registrar.") . '</td><td>' . (($reg->marca != "") ? $reg->marca : "Sin registrar.") . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td><input type="number" name="cantidad_devuelta[]" id="cantidad_devuelta[]" step="any" min="0.1" value="' . $reg->cantidad_devuelta . '" disabled></td><td>' . $estado . '</td></tr>';
 				}
 				break;
 

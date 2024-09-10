@@ -19,6 +19,8 @@ function init() {
 
 	//Cargamos los items al select cliente
 	$.post("../ajax/devoluciones.php?op=selectAlmacenero", function (r) {
+		$("#idencargado").html(r);
+		$('#idencargado').selectpicker('refresh');
 		$("#idalmacenero").html(r);
 		$('#idalmacenero').selectpicker('refresh');
 		$("#idalmacenero2").html(r);
@@ -300,6 +302,8 @@ function mostrar(iddevolucion) {
 		$("#iddevolucion").val(data.iddevolucion);
 		$("#idalmacenero").val(data.idalmacenero);
 		$("#idalmacenero").selectpicker('refresh');
+		$("#idencargado").val(data.idencargado);
+		$("#idencargado").selectpicker('refresh');
 
 		$("#codigo_pedido").val(data.codigo_pedido);
 		$("#telefono").val(data.telefono);
@@ -311,6 +315,7 @@ function mostrar(iddevolucion) {
 	$.post("../ajax/devoluciones.php?op=listarDetalle&id=" + iddevolucion, function (r) {
 		$("#detalles").html(r);
 		$('[data-toggle="popover"]').popover();
+		nowrapCell();
 	});
 }
 
@@ -337,6 +342,7 @@ function mostrar2(iddevolucion) {
 	$.post("../ajax/devoluciones.php?op=listarDetalle2&id=" + iddevolucion, function (r) {
 		$("#btnGuardar3").show();
 		$("#detalles2").html(r);
+		nowrapCell();
 		verificarCantidades();
 		$('[data-toggle="popover"]').popover();
 	});
@@ -373,6 +379,7 @@ function mostrar3(iddevolucion) {
 
 			$("#detalles3").html(r);
 			$('[data-toggle="popover"]').popover();
+			nowrapCell();
 		});
 	});
 

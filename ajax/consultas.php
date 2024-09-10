@@ -5571,7 +5571,9 @@ if (!isset($_SESSION["nombre"])) {
 						"2" => $reg->almacen,
 						"3" => $reg->codigo_producto,
 						"4" => $reg->stock,
-						"5" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
+						"5" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
 						"6" => $reg->cantidad,
 					);
 				}
@@ -5596,13 +5598,16 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => $reg->codigo_producto,
 						"1" => $reg->nombre,
-						"2" => $reg->categoria,
-						"3" => $reg->marca,
+						"2" => (($reg->categoria != "") ? $reg->categoria : "Sin registrar."),
+						"3" => (($reg->marca != "") ? $reg->marca : "Sin registrar."),
 						"4" => $reg->almacen,
 						"5" => $reg->stock,
-						"6" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
+						"6" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
 						"7" => $reg->cantidad,
-						"8" => $reg->fecha,
+						"8" => $reg->cantidad_devuelta,
+						"9" => $reg->fecha,
 					);
 				}
 				$results = array(
@@ -5624,13 +5629,16 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => $reg->codigo_producto,
 						"1" => $reg->nombre,
-						"2" => $reg->categoria,
-						"3" => $reg->marca,
+						"2" => (($reg->categoria != "") ? $reg->categoria : "Sin registrar."),
+						"3" => (($reg->marca != "") ? $reg->marca : "Sin registrar."),
 						"4" => $reg->almacen,
 						"5" => $reg->stock,
-						"6" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
+						"6" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
 						"7" => $reg->cantidad,
-						"8" => $reg->fecha,
+						"8" => $reg->cantidad_devuelta,
+						"9" => $reg->fecha,
 					);
 				}
 				$results = array(

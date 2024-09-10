@@ -94,6 +94,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock normal</th>
                     <th>Imagen</th>
                     <th>Veces devueltos</th>
+                    <th>Cantidad devuelta</th>
                     <th>Fecha de devolución</th>
                   </thead>
                   <tbody>
@@ -107,6 +108,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock normal</th>
                     <th>Imagen</th>
                     <th>Veces devueltos</th>
+                    <th>Cantidad devuelta</th>
                     <th>Fecha de devolución</th>
                   </tfoot>
                 </table>
@@ -131,6 +133,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock normal</th>
                     <th>Imagen</th>
                     <th>Veces devueltos</th>
+                    <th>Cantidad devuelta</th>
                     <th>Fecha de devolución</th>
                   </thead>
                   <tbody>
@@ -144,6 +147,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Stock normal</th>
                     <th>Imagen</th>
                     <th>Veces devueltos</th>
+                    <th>Cantidad devuelta</th>
                     <th>Fecha de devolución</th>
                   </tfoot>
                 </table>

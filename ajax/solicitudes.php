@@ -138,7 +138,7 @@ if (!isset($_SESSION["nombre"])) {
 						$estado = '<span class="label bg-orange">Incompleto</span>';
 					}
 
-					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td>' . $estado . '</td></tr>';
+					echo '<tr class="filas"><td></td><td>' . $reg->nombre . '</td><td>' . (($reg->categoria != "") ? $reg->categoria : "Sin registrar.") . '</td><td>' . (($reg->marca != "") ? $reg->marca : "Sin registrar.") . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td>' . $reg->cantidad . '</td><td>' . $reg->cantidad_prestada . '</td><td>' . $estado . '</td></tr>';
 				}
 				break;
 
@@ -172,7 +172,7 @@ if (!isset($_SESSION["nombre"])) {
 						$estado = '<span class="label bg-orange">Incompleto</span>';
 					}
 
-					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . $reg->categoria . '</td><td>' . $reg->marca . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td data-cantidadsolicitada="' . $iterador . '">' . $reg->cantidad . '</td><td data-cantidadprestada="' . $iterador . '">' . $reg->cantidad_prestada . '</td><td><input type="number" data-cantidadprestar="' . $iterador . '" name="cantidad_prestada[]" id="cantidad_prestada[]" step="any" value="0" min="0.1" required></td><td>' . $estado . '</td></tr>';
+					echo '<tr class="filas"><td></td><td><input type="hidden" name="idarticulo[]" value="' . $reg->idarticulo . '">' . $reg->nombre . '</td><td>' . (($reg->categoria != "") ? $reg->categoria : "Sin registrar.") . '</td><td>' . (($reg->marca != "") ? $reg->marca : "Sin registrar.") . '</td><td>' . $reg->almacen . '</td><td>' . "<nav>S/. " . number_format($reg->precio_venta, 2) . "</nav>" . '</td><td data-cantidadsolicitada="' . $iterador . '">' . $reg->cantidad . '</td><td data-cantidadprestada="' . $iterador . '">' . $reg->cantidad_prestada . '</td><td><input type="number" data-cantidadprestar="' . $iterador . '" name="cantidad_prestada[]" id="cantidad_prestada[]" step="any" value="0" min="0.1" required></td><td>' . $estado . '</td></tr>';
 					$iterador = $iterador + 1;
 				}
 				break;
@@ -326,7 +326,7 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$data[] = array(
-						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(\'' . $reg->marca . '\',\'' . $reg->almacen . '\',\'' . $reg->precio_venta . '\',\'' . $reg->categoria . '\',\'' . $reg->idarticulo . '\',\'' . $reg->stock . '\',\'' . $reg->nombre . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(\'' . (($reg->categoria != "") ? $reg->categoria : "Sin registrar.") . '\',\'' . $reg->almacen . '\',\'' . $reg->precio_venta . '\',\'' . (($reg->marca != "") ? $reg->marca : "Sin registrar.") . '\',\'' . $reg->idarticulo . '\',\'' . $reg->stock . '\',\'' . $reg->nombre . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
 						"3" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,
