@@ -235,7 +235,12 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'selectLocales':
-				$rspta = $almacenes->listarActivosASC();
+				if ($cargo == "superadmin") {
+					$rspta = $almacenes->listarActivosASC();
+				} else {
+					$rspta = $almacenes->listarPorUsuarioActivosASC($idlocal_session);
+				}
+
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
 
 				$data = [];

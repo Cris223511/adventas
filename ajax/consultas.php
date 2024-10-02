@@ -5594,22 +5594,38 @@ if (!isset($_SESSION["nombre"])) {
 				$rspta = $consulta->articulosmasdevueltos_tipo1();
 				$data = array();
 
+				$lastIdDevolucion = null;
+				$firstIteration = true;
+				$devolucionesUnicas = array();
+
 				while ($reg = $rspta->fetch_object()) {
+					if (!$firstIteration && $reg->iddevolucion != $lastIdDevolucion) {
+						$data[] = array_fill(0, 10, '');
+					}
+
 					$data[] = array(
-						"0" => $reg->codigo_producto,
-						"1" => $reg->nombre,
-						"2" => (($reg->categoria != "") ? $reg->categoria : "Sin registrar."),
-						"3" => (($reg->marca != "") ? $reg->marca : "Sin registrar."),
-						"4" => $reg->almacen,
-						"5" => $reg->stock,
-						"6" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+						"0" => 'N° ' . $reg->codigo_pedido,
+						"1" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
 									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
 								</a>',
-						"7" => $reg->cantidad,
+						"2" => $reg->nombre,
+						"3" => $reg->almacen,
+						"4" => (($reg->categoria != "") ? $reg->categoria : "Sin registrar."),
+						"5" => '<div class="nowrap-cell">' . (($reg->marca != "") ? $reg->marca : "Sin registrar.") . '</div>',
+						"6" => $reg->codigo_producto,
+						"7" => $reg->stock,
 						"8" => $reg->cantidad_devuelta,
 						"9" => $reg->fecha,
 					);
+
+					if (!isset($devolucionesUnicas[$reg->iddevolucion])) {
+						$devolucionesUnicas[$reg->iddevolucion] = true;
+					}
+
+					$firstIteration = false;
+					$lastIdDevolucion = $reg->iddevolucion;
 				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -5625,22 +5641,38 @@ if (!isset($_SESSION["nombre"])) {
 				$rspta = $consulta->articulosmasdevueltos_tipo2();
 				$data = array();
 
+				$lastIdDevolucion = null;
+				$firstIteration = true;
+				$devolucionesUnicas = array();
+
 				while ($reg = $rspta->fetch_object()) {
+					if (!$firstIteration && $reg->iddevolucion != $lastIdDevolucion) {
+						$data[] = array_fill(0, 10, '');
+					}
+
 					$data[] = array(
-						"0" => $reg->codigo_producto,
-						"1" => $reg->nombre,
-						"2" => (($reg->categoria != "") ? $reg->categoria : "Sin registrar."),
-						"3" => (($reg->marca != "") ? $reg->marca : "Sin registrar."),
-						"4" => $reg->almacen,
-						"5" => $reg->stock,
-						"6" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+						"0" => 'N° ' . $reg->codigo_pedido,
+						"1" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
 									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
 								</a>',
-						"7" => $reg->cantidad,
+						"2" => $reg->nombre,
+						"3" => $reg->almacen,
+						"4" => (($reg->categoria != "") ? $reg->categoria : "Sin registrar."),
+						"5" => '<div class="nowrap-cell">' . (($reg->marca != "") ? $reg->marca : "Sin registrar.") . '</div>',
+						"6" => $reg->codigo_producto,
+						"7" => $reg->stock,
 						"8" => $reg->cantidad_devuelta,
 						"9" => $reg->fecha,
 					);
+
+					if (!isset($devolucionesUnicas[$reg->iddevolucion])) {
+						$devolucionesUnicas[$reg->iddevolucion] = true;
+					}
+
+					$firstIteration = false;
+					$lastIdDevolucion = $reg->iddevolucion;
 				}
+
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
 					"iTotalRecords" => count($data), //enviamos el total registros al datatable
@@ -5650,6 +5682,7 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($results);
 
 				break;
+
 
 				// compras
 

@@ -27,7 +27,7 @@ function toggleCheckboxes(checkbox) {
 	var checkboxes = document.querySelectorAll('#permisos input[type="checkbox"]');
 
 	checkboxes.forEach(function (cb) {
-		if ((cb.value === '1' || cb.value === '11') && cb.disabled) {
+		if ((cb.value === '1' || cb.value === '10') && cb.disabled) {
 			return;
 		}
 
@@ -227,14 +227,14 @@ function guardaryeditar(e) {
 	e.preventDefault(); // No se activará la acción predeterminada del evento
 
 	$("input[name='permiso[]'][value='1']").prop("disabled", false); // Escritorio
-	$("input[name='permiso[]'][value='11']").prop("disabled", false); // Perfil Usuario
+	$("input[name='permiso[]'][value='10']").prop("disabled", false); // Perfil Usuario
 
 	$("#btnGuardar").prop("disabled", true);
 
 	var formData = new FormData($("#formulario")[0]);
 
 	$("input[name='permiso[]'][value='1']").prop("disabled", true); // Escritorio
-	$("input[name='permiso[]'][value='11']").prop("disabled", true); // Perfil Usuario
+	$("input[name='permiso[]'][value='10']").prop("disabled", true); // Perfil Usuario
 
 	$.ajax({
 		url: "../ajax/usuario.php?op=guardaryeditar",
@@ -266,7 +266,7 @@ function guardaryeditar(e) {
 
 function mostrar(idusuario) {
 	$.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
-		// console.log(data);
+		console.log(data);
 		data = JSON.parse(data);
 		console.log(data);
 		mostrarform(true);

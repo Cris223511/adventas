@@ -368,7 +368,7 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
                 <li id="lSolicitud"><a href="solicitudes.php"><i class="fa fa-circle-o"></i> Solicitudes</a></li>  
                 <li id="lDevolucion"><a href="devoluciones.php"><i class="fa fa-circle-o"></i> Devoluciones</a></li>
-                <li id="lConsultaD"><a href="productosmasdevuelto.php"><i class="fa fa-circle-o"></i> Productos más Devueltos</a></li>
+                <li id="lConsultaD"><a href="productosmasdevuelto.php"><i class="fa fa-circle-o"></i> Productos devueltos</a></li>
               </ul>
             </li>';
           }
