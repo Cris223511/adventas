@@ -309,13 +309,19 @@ function agregarMedida(e) {
 }
 
 function changeGanancia() {
-	let precio_venta = $("#precio_venta").val();
-	let precio_compra = $("#precio_compra").val();
+	let precio_compra = parseFloat($("#precio_compra").val()) || 0;
+	let precio_venta = parseFloat($("#precio_venta").val()) || 0;
 
-	// Verificar si ambos campos están llenos
-	if (precio_venta !== '' && precio_compra !== '') {
+	if (precio_venta === 0) {
+		$("#ganancia").val("0.00");
+		return;
+	}
+
+	if (precio_venta > 0 && precio_compra >= 0) {
 		let ganancia = precio_venta - precio_compra;
 		$("#ganancia").val(ganancia.toFixed(2));
+	} else {
+		$("#ganancia").val("0.00");
 	}
 }
 
@@ -750,7 +756,8 @@ function limpiarModalProducto() {
 	$("#stock_minimo").val("");
 	$("#precio_compra").val("");
 	$("#precio_venta").val("");
-	$("#ganancia").val("");
+	$("#precio_venta_mayor").val("");
+	$("#ganancia").val("0.00");
 	$("#imagenmuestra").attr("src", "");
 	$("#imagenmuestra").hide();
 	$("#imagenactual").val("");
@@ -805,11 +812,12 @@ function guardaryeditar4(e) {
 	// 	return;
 	// }
 
-	var precio_compra = parseFloat($("#precio_compra").val());
-	var precio_venta = parseFloat($("#precio_venta").val());
+	var precio_compra = parseFloat($("#precio_compra").val()) || 0;
+	var precio_venta = parseFloat($("#precio_venta").val()) || 0;
+	var precio_venta_mayor = parseFloat($("#precio_venta_mayor").val()) || 0;
 
-	if (precio_compra > precio_venta) {
-		bootbox.alert("El precio de compra no puede ser mayor que el precio de venta.");
+	if ((precio_venta > 0 || precio_venta_mayor > 0) && (precio_compra > precio_venta || precio_compra > precio_venta_mayor)) {
+		bootbox.alert("El precio de venta no puede ser menor que el precio de compra.");
 		return;
 	}
 

@@ -295,8 +295,9 @@ if (!isset($_SESSION["nombre"])) {
                 <th>C. BARRA</th>
                 <th>STOCK NORMAL</th>
                 <th>STOCK MÍNIMO</th>
-                <th>PRECIO DE COMPRA</th>
-                <th>PRECIO DE VENTA</th>
+                <th>Precio de compra</th>
+                <th>Precio de venta</th>
+                <th>Precio venta por mayor</th>
                 <th>PESO</th>
                 <th>TALLA</th>
                 <th>COLOR</th>
@@ -318,8 +319,9 @@ if (!isset($_SESSION["nombre"])) {
                 <th>C. BARRA</th>
                 <th>STOCK NORMAL</th>
                 <th>STOCK MÍNIMO</th>
-                <th>PRECIO DE COMPRA</th>
-                <th>PRECIO DE VENTA</th>
+                <th>Precio de compra</th>
+                <th>Precio de venta</th>
+                <th>Precio venta por mayor</th>
                 <th>PESO</th>
                 <th>TALLA</th>
                 <th>COLOR</th>

@@ -5567,7 +5567,7 @@ if (!isset($_SESSION["nombre"])) {
 				while ($reg = $rspta->fetch_object()) {
 					$data[] = array(
 						"0" => $reg->nombre,
-						"1" => $reg->categoria,
+						"1" => (($reg->categoria != "") ? $reg->categoria : "Sin registrar."),
 						"2" => $reg->almacen,
 						"3" => $reg->codigo_producto,
 						"4" => $reg->stock,

@@ -49,7 +49,7 @@ if (!isset($_SESSION["nombre"])) {
 
         while ($reg = $rspta->fetch_object()) {
             $nombre = $reg->nombre;
-            $categoria = $reg->categoria;
+            $categoria = (($reg->categoria != "") ? $reg->categoria : "Sin registrar.");
             $codigo = $reg->codigo;
             $stock = $reg->stock;
             $cantidad = $reg->cantidad;

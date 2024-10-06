@@ -57,7 +57,7 @@ if (!isset($_SESSION["nombre"])) {
     while ($reg = $rspta->fetch_object()) {
       $nombre = $reg->nombre;
       $almacen = $reg->almacen;
-      $categoria = $reg->categoria;
+      $categoria = (($reg->categoria != "") ? $reg->categoria : "Sin registrar.");
       $codigo = $reg->codigo_producto;
 
       $pdf->SetFont('Arial', '', 10);

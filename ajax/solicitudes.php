@@ -326,7 +326,7 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$data[] = array(
-						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(\'' . (($reg->categoria != "") ? $reg->categoria : "Sin registrar.") . '\',\'' . $reg->almacen . '\',\'' . $reg->precio_venta . '\',\'' . (($reg->marca != "") ? $reg->marca : "Sin registrar.") . '\',\'' . $reg->idarticulo . '\',\'' . $reg->stock . '\',\'' . $reg->nombre . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"0" => ($reg->stock != '0') ? '<button class="btn btn-secondary" data-idarticulo="' . $reg->idarticulo . '" onclick="agregarDetalle(\'' . (($reg->categoria != "") ? $reg->categoria : "Sin registrar.") . '\',\'' . $reg->almacen . '\',\'' . (($reg->medida != "Paquetes") ? ($reg->precio_venta) : ($reg->precio_venta_mayor)) . '\',\'' . (($reg->marca != "") ? $reg->marca : "Sin registrar.") . '\',\'' . $reg->idarticulo . '\',\'' . $reg->stock . '\',\'' . $reg->nombre . '\'); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
 						"3" => ($reg->medida == '') ? 'Sin registrar.' : $reg->medida,
