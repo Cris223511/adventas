@@ -36,7 +36,7 @@ if (!isset($_SESSION["nombre"])) {
 					$targetFile = $uploadDirectory . $newFileName;
 
 					// Verificar si es una imagen y mover el archivo
-					$allowedExtensions = array('jpg', 'jpeg', 'png');
+					$allowedExtensions = array('jpg', 'jpeg', 'png', 'jfif', 'bmp');
 					if (in_array($fileExtension, $allowedExtensions) && move_uploaded_file($tempFile, $targetFile)) {
 						// El archivo se ha movido correctamente, ahora $newFileName contiene el nombre del archivo
 						$imagen = $newFileName;
@@ -169,11 +169,11 @@ if (!isset($_SESSION["nombre"])) {
 				/* ======================= SELECTS ======================= */
 
 			case 'listarTodosActivos':
-				// if ($cargo == "superadmin") {
-				// 	$rspta = $servicio->listarTodosActivos();
-				// } else {
-				$rspta = $servicio->listarTodosActivosPorUsuario($idusuario, $idalmacenSession);
-				// }
+				if ($cargo == "superadmin") {
+					$rspta = $servicio->listarTodosActivos();
+				} else {
+					$rspta = $servicio->listarTodosActivosPorUsuario($idusuario, $idalmacenSession);
+				}
 
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
 

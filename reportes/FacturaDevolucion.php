@@ -143,7 +143,7 @@ class PDF_Invoice extends FPDF
 		$x1 = 33;
 		$y1 = 8;
 		//Positionnement en bas
-		$this->Image($logo, 5, 3, 25, 25, $ext_logo);
+		$this->Image($logo, 11, 7, 25, 25, $ext_logo);
 		$this->SetXY($x1, $y1);
 		$this->SetFont('Arial', 'B', 12);
 		$length = $this->GetStringWidth($nom);

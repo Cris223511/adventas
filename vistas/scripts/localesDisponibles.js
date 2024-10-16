@@ -13,6 +13,7 @@ function init() {
 		guardaryeditar2(e);
 	});
 
+	$("#imagenmuestra").hide();
 	$('#mPerfilUsuario').addClass("treeview active");
 	$('#lLocalesDisponibles').addClass("active");
 
@@ -93,7 +94,7 @@ function cancelarform2() {
 function listar() {
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [15, 25, 50, 100],
+			"lengthMenu": [5, 10, 25, 75, 100],
 			"aProcessing": true,
 			"aServerSide": true,
 			dom: '<Bl<f>rtip>',
@@ -122,10 +123,10 @@ function listar() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 15,
+			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -150,21 +151,20 @@ function guardaryeditar(e) {
 
 		success: function (datos) {
 			datos = limpiarCadena(datos);
-			if (!datos) {
-				console.log("No se recibieron datos del servidor.");
-				$("#btnGuardar").prop("disabled", false);
-				return;
-			} else if (datos == "El nombre del local ya existe.") {
+			if (datos == "El nombre del local ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
-			} else {
-				limpiar();
-				bootbox.alert(datos);
-				mostrarform(false);
-				tabla.ajax.reload();
-				cargarLocalesDisponibles();
 			}
+			limpiar();
+			bootbox.alert(datos);
+			mostrarform(false);
+			tabla.ajax.reload();
+			cargarLocalesDisponibles();
+
+			var idalmacen = formData.get("idalmacen");
+			actualizarInfoUsuario(idalmacen);
+
 		}
 	});
 }
@@ -182,17 +182,27 @@ function guardaryeditar2(e) {
 		processData: false,
 
 		success: function (datos) {
-			datos = limpiarCadena(datos);
-			if (!datos) {
-				console.log("No se recibieron datos del servidor.");
-				$("#btnGuardar2").prop("disabled", false);
-				return;
-			} else {
-				limpiar();
-				bootbox.alert(datos);
-				mostrarform2(false);
-				tabla.ajax.reload();
-				cargarLocalesDisponibles();
+			limpiar();
+			bootbox.alert(datos);
+			mostrarform2(false);
+			tabla.ajax.reload();
+			cargarLocalesDisponibles();
+		}
+	});
+}
+
+// función para actualizar la información del usuario en sesión en tiempo real
+function actualizarInfoUsuario(idalmacen) {
+	$.ajax({
+		url: "../ajax/localesDisponibles.php?op=actualizarSession",
+		type: "POST",
+		data: { idalmacen: idalmacen },
+		dataType: 'json',
+		success: function (data) {
+			console.log(data);
+			if (data.local) {
+				// actualizar la imagen y el nombre del usuario en la cabecera
+				$('.user-menu .local').html('<strong> Local: ' + data.local + '</strong>');
 			}
 		}
 	});
@@ -208,6 +218,9 @@ function mostrar(idalmacen) {
 
 		$("#ubicacion").val(data.ubicacion);
 		$("#local_ruc").val(data.local_ruc);
+		$("#imagenmuestra").show();
+		$("#imagenmuestra").attr("src", "../files/locales/" + data.imagen);
+		$("#imagenactual").val(data.imagen);
 		$("#descripcion").val(data.descripcion);
 		$("#idalmacen").val(data.idalmacen);
 	})
@@ -249,6 +262,4 @@ function eliminar(idalmacen) {
 	})
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-	init();
-});
+init();

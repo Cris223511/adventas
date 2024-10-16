@@ -9,7 +9,7 @@ function init() {
 		guardaryeditar(e);
 	});
 
-	$.post("../ajax/locales.php?op=selectAlmacen", function (r) {
+	$.post("../ajax/locales.php?op=selectLocal", function (r) {
 		console.log(r)
 		$("#idalmacen").html(r);
 		$('#idalmacen').selectpicker('refresh');

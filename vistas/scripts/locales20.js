@@ -15,6 +15,7 @@ function init() {
 	$("#formulario").on("submit", function (e) {
 		guardaryeditar(e);
 	});
+
 	$('#mAlmacen').addClass("treeview active");
 	$('#lLocales').addClass("active");
 }
@@ -26,6 +27,10 @@ function limpiar() {
 	$("#idalmacen").val("");
 	$("#ubicacion").val("");
 	$("#local_ruc").val("");
+	$("#imagenmuestra").attr("src", "");
+	$("#imagenmuestra").hide();
+	$("#imagenactual").val("");
+	$("#imagen").val("");
 	$("#descripcion").val("");
 }
 
@@ -50,15 +55,9 @@ function cancelarform() {
 }
 
 function listar() {
-	// $("#fecha_inicio").val("");
-	// $("#fecha_fin").val("");
-
-	// var fecha_inicio = $("#fecha_inicio").val();
-	// var fecha_fin = $("#fecha_fin").val();
-
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [15, 25, 50, 100],
+			"lengthMenu": [5, 10, 25, 75, 100],
 			"aProcessing": true,
 			"aServerSide": true,
 			dom: '<Bl<f>rtip>',
@@ -70,7 +69,6 @@ function listar() {
 			"ajax":
 			{
 				url: '../ajax/locales.php?op=listar',
-				// data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin },
 				type: "get",
 				dataType: "json",
 				error: function (e) {
@@ -88,65 +86,13 @@ function listar() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 15,
+			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
-
-// function buscar() {
-// 	var fecha_inicio = $("#fecha_inicio").val();
-// 	var fecha_fin = $("#fecha_fin").val();
-
-// 	if (fecha_inicio == "" || fecha_fin == "") {
-// 		alert("Los campos de fecha inicial y fecha final son obligatorios.");
-// 		return;
-// 	} else if (fecha_inicio > fecha_fin) {
-// 		alert("La fecha inicial no puede ser mayor que la fecha final.");
-// 		return;
-// 	}
-
-// 	tabla = $('#tbllistado').dataTable(
-// 		{
-// 			"lengthMenu": [15, 25, 50, 100],
-// 			"aProcessing": true,
-// 			"aServerSide": true,
-// 			dom: '<Bl<f>rtip>',
-// 			buttons: [
-// 				'copyHtml5',
-// 				'excelHtml5',
-// 				'csvHtml5',
-// 			],
-// 			"ajax":
-// 			{
-// 				url: '../ajax/locales.php?op=listar',
-// 				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin },
-// 				type: "get",
-// 				dataType: "json",
-// 				error: function (e) {
-// 					console.log(e.responseText);
-// 				}
-// 			},
-// 			"language": {
-// 				"lengthMenu": "Mostrar : _MENU_ registros",
-// 				"buttons": {
-// 					"copyTitle": "Tabla Copiada",
-// 					"copySuccess": {
-// 						_: '%d líneas copiadas',
-// 						1: '1 línea copiada'
-// 					}
-// 				}
-// 			},
-// 			"bDestroy": true,
-// 			"iDisplayLength": 15,
-// 			"order": [],
-// 			"createdRow": function (row, data, dataIndex) {
-// 				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
-// 			}
-// 		}).DataTable();
-// }
 
 function guardaryeditar(e) {
 	e.preventDefault();
@@ -168,21 +114,16 @@ function guardaryeditar(e) {
 
 		success: function (datos) {
 			datos = limpiarCadena(datos);
-			if (!datos) {
-				console.log("No se recibieron datos del servidor.");
-				$("#btnGuardar").prop("disabled", false);
-				return;
-			} else if (datos == "El nombre del local ya existe.") {
+			if (datos == "El nombre del local ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
-			} else {
-				limpiar();
-				bootbox.alert(datos);
-				mostrarform(false);
-				tabla.ajax.reload();
-				actualizarInfoUsuario();
 			}
+			limpiar();
+			bootbox.alert(datos);
+			mostrarform(false);
+			tabla.ajax.reload();
+			actualizarInfoUsuario();
 		}
 	});
 }
@@ -212,6 +153,9 @@ function mostrar(idalmacen) {
 		$("#local_ruc").val(data.local_ruc);
 		$("#descripcion").val(data.descripcion);
 		$("#idalmacen").val(data.idalmacen);
+		$("#imagenmuestra").show();
+		$("#imagenmuestra").attr("src", "../files/locales/" + data.imagen);
+		$("#imagenactual").val(data.imagen);
 	})
 }
 
@@ -229,11 +173,14 @@ function mostrar2(idalmacen) {
 		$("#local_ruc").val(data.local_ruc);
 		$("#descripcion").val(data.descripcion);
 		$("#idalmacen").val(data.idalmacen);
+		$("#imagenmuestra").show();
+		$("#imagenmuestra").attr("src", "../files/locales/" + data.imagen);
+		$("#imagenactual").val(data.imagen);
 	})
 }
 
-function trabajadores(idalmacen, ubicacion) {
-	$("#local").text(ubicacion);
+function trabajadores(idalmacen, titulo) {
+	$("#local").text(titulo);
 	tabla = $('#tbltrabajadores').DataTable({
 		"aProcessing": true,
 		"aServerSide": true,
@@ -251,14 +198,13 @@ function trabajadores(idalmacen, ubicacion) {
 		"iDisplayLength": 5,
 		"order": [],
 		"createdRow": function (row, data, dataIndex) {
-			$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
+			// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
 		}
 	});
 }
 
-
 function desactivar(idalmacen) {
-	bootbox.confirm("¿Está seguro de desactivar el local?", function (result) {
+	bootbox.confirm("¿Está seguro de desactivar el almacén?", function (result) {
 		if (result) {
 			$.post("../ajax/locales.php?op=desactivar", { idalmacen: idalmacen }, function (e) {
 				bootbox.alert(e);
@@ -269,7 +215,7 @@ function desactivar(idalmacen) {
 }
 
 function activar(idalmacen) {
-	bootbox.confirm("¿Está seguro de activar el local?", function (result) {
+	bootbox.confirm("¿Está seguro de activar el almacén?", function (result) {
 		if (result) {
 			$.post("../ajax/locales.php?op=activar", { idalmacen: idalmacen }, function (e) {
 				bootbox.alert(e);
@@ -280,7 +226,7 @@ function activar(idalmacen) {
 }
 
 function eliminar(idalmacen) {
-	bootbox.confirm("¿Estás seguro de eliminar el local?", function (result) {
+	bootbox.confirm("¿Estás seguro de eliminar el almacén?", function (result) {
 		if (result) {
 			$.post("../ajax/locales.php?op=eliminar", { idalmacen: idalmacen }, function (e) {
 				bootbox.alert(e);
@@ -290,6 +236,4 @@ function eliminar(idalmacen) {
 	})
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-	init();
-});
+init();

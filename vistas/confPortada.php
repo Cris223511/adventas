@@ -8,12 +8,12 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['perfilu'] == 1) {
+  if ($_SESSION['perfilu'] == 1 && ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin")) {
 ?>
     <style>
       .marco {
         background-color: white;
-        border-top: 3px #3d3f3f solid;
+        border-top: 3px #002a8e solid;
       }
 
       .imagenActual {
@@ -65,7 +65,7 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="panel-body marco" id="formularioregistros">
                     <label>Imagen actual:</label>
                     <div class="imgContenido">
-                      <img src="" width="100%" id="imagenmuestra" style="display: none;">
+                      <img src="" width="100%" id="imagenmuestra">
                     </div>
                   </div>
                 </div>
@@ -76,10 +76,10 @@ if (!isset($_SESSION["nombre"])) {
                     <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
                       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label>Actualizar imagen(*):</label>
-                        <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg" required>
+                        <input type="file" class="form-control" name="imagen" id="imagen" accept=".jpg,.jpeg,.png,.jfif,.bmp" required>
                       </div>
                       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0;">
-                        <button class="btn btn-secondary" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
+                        <button class="btn btn-bcp" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
                       </div>
                     </form>
                   </div>

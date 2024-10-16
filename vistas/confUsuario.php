@@ -13,7 +13,7 @@ if (!isset($_SESSION["nombre"])) {
     <style>
       .marco {
         background-color: white;
-        border-top: 3px #3d3f3f solid;
+        border-top: 3px #002a8e solid;
       }
     </style>
     <div class="content-wrapper">
@@ -22,7 +22,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Configuración de perfil del <?php echo $_SESSION["cargo_detalle"] ?></h1>
+                <h1 class="box-title">Configuración de perfil del <strong style="text-transform: uppercase;"><?php echo $_SESSION["cargo_detalle"] ?></strong></h1>
                 <div class="box-tools pull-right">
                 </div>
               </div>
@@ -61,7 +61,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Local principal(*):</label>
-                    <select class="form-control selectpicker" name="idalmacen" id="idalmacen" data-live-search="true" data-size="5" onchange="actualizarRUC()" required>
+                    <select class="form-control selectpicker" name="idalmacen" id="idalmacen" data-live-search="true" onchange="actualizarRUC()" required>
                     </select>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -76,18 +76,14 @@ if (!isset($_SESSION["nombre"])) {
                     <label>Clave(*):</label>
                     <div style="display: flex;">
                       <input type="password" class="form-control" name="clave" id="clave" maxlength="30" placeholder="Clave" required>
-                      <a onclick="mostrarClave()">
-                        <button type="button" id="mostrarClave" class="btn btn-secondary" style="display: flex; align-items: center; height: 35px; color: #726f6a !important;">
-                          <i class="fa fa-eye"></i>
-                        </button>
-                      </a>
+                      <a id="mostrarClave" class="btn btn-bcp" style="display: flex; align-items: center;"><i class="fa fa-eye"></i></a>
                     </div>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Imagen:</label>
-                    <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">
+                    <input type="file" class="form-control" name="imagen" id="imagen" accept=".jpg,.jpeg,.png,.jfif,.bmp">
                     <input type="hidden" name="imagenactual" id="imagenactual"><br>
-                    <img src="" width="150px" height="150px" id="imagenmuestra" style="display: none;">
+                    <img src="" width="150px" id="imagenmuestra">
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="btn btn-bcp" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>

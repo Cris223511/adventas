@@ -238,11 +238,11 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                     <label style="width: 100px;">Stock:</label>
-                    <input type="number" class="form-control" name="stock" id="stock" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Stock">
+                    <input type="number" class="form-control" name="stock" id="stock" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" step="any" min="0" placeholder="Stock">
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                     <label style="width: 100px;">Stock mínimo:</label>
-                    <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" step="any" min="0.1" placeholder="Stock mínimo">
+                    <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" onkeydown="evitarNumerosNegativos(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" step="any" min="0" placeholder="Stock mínimo">
                   </div>
                   <div class="form-group col-lg-4 col-md-6 col-sm-12" style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
                     <label class="label_input" style="width: 115px;">Precio compra(*):</label>

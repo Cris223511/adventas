@@ -49,7 +49,7 @@ function init() {
 		$('#idservicio').selectpicker('refresh');
 	});
 
-	$.post("../ajax/locales.php?op=selectAlmacen", function (r) {
+	$.post("../ajax/locales.php?op=selectLocal", function (r) {
 		$("#idalmacen").html(r);
 		$('#idalmacen').selectpicker('refresh');
 		$("#idalmacen2").html(r);

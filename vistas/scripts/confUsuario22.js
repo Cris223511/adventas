@@ -20,7 +20,7 @@ function init() {
 			select.html('<option value="">- Seleccione -</option>');
 
 			objSelects.almacenes.forEach(function (opcion) {
-				select.append('<option value="' + opcion.idalmacen + '" data-local-ruc="' + opcion.local_ruc + '">' + opcion.ubicacion + '</option>');
+				select.append('<option value="' + opcion.idalmacen + '" data-local-ruc="' + opcion.local_ruc + '">' + opcion.titulo + '</option>');
 			});
 			select.selectpicker('refresh');
 			mostrar();
@@ -55,21 +55,15 @@ function guardaryeditar(e) {
 		data: formData,
 		contentType: false,
 		processData: false,
-		success: function (datos) {
-			datos = limpiarCadena(datos);
-			if (!datos) {
-				console.log("No se recibieron datos del servidor.");
+		success: function (datas) {
+			if (datas == "El nombre que ha ingresado ya existe." || datas == "El número de documento que ha ingresado ya existe." || datas == "El email que ha ingresado ya existe." || datas == "El nombre del usuario que ha ingresado ya existe.") {
+				bootbox.alert(datas);
 				$("#btnGuardar").prop("disabled", false);
 				return;
-			} else if (datos == "El nombre del usuario que ha ingresado ya existe." || datos == "El número de documento que ha ingresado ya existe.") {
-				bootbox.alert(datos);
-				$("#btnGuardar").prop("disabled", false);
-				return;
-			} else {
-				bootbox.alert(datos);
-				actualizarInfoUsuario();
-				$("#btnGuardar").prop("disabled", false);
 			}
+			bootbox.alert(datas);
+			actualizarInfoUsuario();
+			$("#btnGuardar").prop("disabled", false);
 		}
 	});
 }
@@ -111,6 +105,4 @@ function mostrar() {
 	});
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-	init();
-});
+init();

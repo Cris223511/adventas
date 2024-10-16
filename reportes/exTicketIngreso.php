@@ -39,7 +39,7 @@ if (!isset($_SESSION["nombre"])) {
       $rspta2 = $perfil->mostrarReporte();
 
       //Establecemos los datos de la empresa
-      $logo = $rspta2["imagen"];
+      $logo = $_SESSION["local_imagen"];
       $empresa = $rspta2["titulo"];
       $documento = ($rspta2["ruc"] == '') ? 'Sin registrar' : $rspta2["ruc"];
       $direccion = ($rspta2["direccion"] == '') ? 'Sin registrar' : $rspta2["direccion"];

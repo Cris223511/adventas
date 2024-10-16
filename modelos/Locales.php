@@ -3,15 +3,16 @@ require "../config/Conexion.php";
 
 class Local
 {
-	public function __construct()
-	{
-	}
+	public function __construct() {}
 
-	public function agregar($idusuario, $ubicacion, $local_ruc, $descripcion)
+	public function agregar($idusuario, $ubicacion, $local_ruc, $descripcion, $imagen)
 	{
+		if (empty($imagen))
+			$imagen = "default.jpg";
+
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO almacen (idusuario, ubicacion, local_ruc, descripcion, fecha_hora, estado, eliminado)
-            VALUES ('$idusuario','$ubicacion','$local_ruc','$descripcion', SYSDATE(), 'activado', '0')";
+		$sql = "INSERT INTO almacen (idusuario, ubicacion, local_ruc, descripcion, imagen, fecha_hora, estado, eliminado)
+            VALUES ('$idusuario','$ubicacion','$local_ruc','$descripcion','$imagen', SYSDATE(), 'activado', '0')";
 		return ejecutarConsulta($sql);
 	}
 
@@ -20,10 +21,10 @@ class Local
 		$sql = "SELECT * FROM almacen WHERE ubicacion = '$ubicacion' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
-			// El ubicacion ya existe en la tabla
+			// La ubicación ya existe en la tabla
 			return true;
 		}
-		// El ubicacion no existe en la tabla
+		// La ubicación no existe en la tabla
 		return false;
 	}
 
@@ -32,16 +33,16 @@ class Local
 		$sql = "SELECT * FROM almacen WHERE ubicacion = '$ubicacion' AND idalmacen != '$idalmacen' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
-			// El ubicacion ya existe en la tabla
+			// La ubicación ya existe en la tabla
 			return true;
 		}
-		// El ubicacion no existe en la tabla
+		// La ubicación no existe en la tabla
 		return false;
 	}
 
-	public function editar($idalmacen, $ubicacion, $local_ruc, $descripcion)
+	public function editar($idalmacen, $ubicacion, $local_ruc, $descripcion, $imagen)
 	{
-		$sql = "UPDATE almacen SET ubicacion='$ubicacion',local_ruc='$local_ruc',descripcion='$descripcion' WHERE idalmacen='$idalmacen'";
+		$sql = "UPDATE almacen SET ubicacion='$ubicacion',local_ruc='$local_ruc',descripcion='$descripcion',imagen='$imagen' WHERE idalmacen='$idalmacen'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -73,25 +74,25 @@ class Local
 
 	public function listarPorUsuario($idalmacenSession)
 	{
-		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idalmacen = '$idalmacenSession' AND l.eliminado = '0' ORDER BY l.idalmacen DESC";
+		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.imagen, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idalmacen = '$idalmacenSession' AND l.eliminado = '0' ORDER BY l.idalmacen DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioFecha($idalmacenSession, $fecha_inicio, $fecha_fin)
 	{
-		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idalmacen = '$idalmacenSession' AND l.eliminado = '0' AND DATE(l.fecha_hora) >= '$fecha_inicio' AND DATE(l.fecha_hora) <= '$fecha_fin' ORDER BY l.idalmacen DESC";
+		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.imagen, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idalmacen = '$idalmacenSession' AND l.eliminado = '0' AND DATE(l.fecha_hora) >= '$fecha_inicio' AND DATE(l.fecha_hora) <= '$fecha_fin' ORDER BY l.idalmacen DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarActivos()
 	{
-		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.estado='activado' AND l.eliminado = '0' ORDER BY l.idalmacen DESC";
+		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.imagen, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.estado='activado' AND l.eliminado = '0' ORDER BY l.idalmacen DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarActivosASC()
 	{
-		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.estado='activado' AND l.eliminado = '0' ORDER BY l.idalmacen ASC";
+		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.imagen, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.estado='activado' AND l.eliminado = '0' ORDER BY l.idalmacen ASC";
 		return ejecutarConsulta($sql);
 	}
 
@@ -121,13 +122,13 @@ class Local
 
 	public function listarPorUsuarioActivos($idalmacenSession)
 	{
-		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idalmacen = '$idalmacenSession' AND l.estado='activado' AND l.eliminado = '0' ORDER BY l.idalmacen DESC";
+		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.imagen, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idalmacen = '$idalmacenSession' AND l.estado='activado' AND l.eliminado = '0' ORDER BY l.idalmacen DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioActivosASC($idalmacenSession)
 	{
-		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idalmacen = '$idalmacenSession' AND l.estado='activado' AND l.eliminado = '0' ORDER BY l.idalmacen ASC";
+		$sql = "SELECT l.idalmacen, u.idusuario, u.nombre as nombre, u.cargo as cargo, l.ubicacion, l.imagen, l.local_ruc, l.descripcion, DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, l.estado FROM almacen l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idalmacen = '$idalmacenSession' AND l.estado='activado' AND l.eliminado = '0' ORDER BY l.idalmacen ASC";
 		return ejecutarConsulta($sql);
 	}
 

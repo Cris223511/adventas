@@ -7,11 +7,11 @@ class LocalDisponible
 	{
 	}
 
-	public function agregar($ubicacion, $local_ruc, $descripcion)
+	public function agregar($ubicacion, $local_ruc, $descripcion, $imagen)
 	{
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO almacen (idusuario, ubicacion, local_ruc, descripcion, fecha_hora, estado, eliminado)
-            VALUES (0,'$ubicacion','$local_ruc','$descripcion', SYSDATE(), 'activado', '0')";
+		$sql = "INSERT INTO almacen (idusuario, ubicacion, local_ruc, descripcion, imagen, fecha_hora, estado, eliminado)
+            VALUES (0,'$ubicacion','$local_ruc','$descripcion','$imagen', SYSDATE(), 'activado', '0')";
 		return ejecutarConsulta($sql);
 	}
 
@@ -39,9 +39,9 @@ class LocalDisponible
 		return false;
 	}
 
-	public function editar($idalmacen, $ubicacion, $local_ruc, $descripcion)
+	public function editar($idalmacen, $ubicacion, $local_ruc, $descripcion, $imagen)
 	{
-		$sql = "UPDATE almacen SET ubicacion='$ubicacion',local_ruc='$local_ruc',descripcion='$descripcion' WHERE idalmacen='$idalmacen'";
+		$sql = "UPDATE almacen SET ubicacion='$ubicacion',local_ruc='$local_ruc',descripcion='$descripcion',imagen='$imagen' WHERE idalmacen='$idalmacen'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -75,7 +75,7 @@ class LocalDisponible
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	// almacenes disponibles
+	// almacen disponibles
 
 	public function listarLocalesDisponibles()
 	{
@@ -87,6 +87,7 @@ class LocalDisponible
 				  l.ubicacion,
 				  l.local_ruc,
 				  l.descripcion,
+				  l.imagen,
 				  DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
 				  l.estado
 				FROM almacen l 
@@ -108,6 +109,7 @@ class LocalDisponible
 				  l.ubicacion,
 				  l.local_ruc,
 				  l.descripcion,
+				  l.imagen,
 				  DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
 				  l.estado
 				FROM almacen l 

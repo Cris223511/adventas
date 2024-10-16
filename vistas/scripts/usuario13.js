@@ -39,7 +39,7 @@ function cargarLocalDisponible() {
 	select.empty();
 	// Cargamos los items al select "local principal"
 	$.post("../ajax/locales.php?op=selectLocales", function (data) {
-		// console.log(data);
+		console.log(data);
 		objSelects = JSON.parse(data);
 		console.log(objSelects);
 		if (objSelects.length != 0) {

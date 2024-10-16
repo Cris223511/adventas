@@ -25,19 +25,19 @@ if (!isset($_SESSION["nombre"])) {
 
     $pdf->SetFillColor(232, 232, 232);
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(40, 6, utf8_decode('Local'), 1, 0, 'C', 1);
+    $pdf->Cell(40, 6, utf8_decode('Ubicación'), 1, 0, 'C', 1);
     $pdf->Cell(110, 6, utf8_decode('Descripción'), 1, 0, 'C', 1);
     $pdf->Cell(40, 6, utf8_decode('Fecha y hora'), 1, 0, 'C', 1);
 
     $pdf->Ln(10);
     require_once "../modelos/LocalesExternos.php";
-    $almacenes = new LocalExterno();
+    $locales = new LocalExterno();
 
     $idusuario = $_SESSION["idusuario"];
     $idalmacenSession = $_SESSION["idalmacen"];
     $cargo = $_SESSION["cargo"];
 
-    $rspta = $almacenes->listar($idalmacenSession);
+    $rspta = $locales->listar($idalmacenSession);
 
     $pdf->SetWidths(array(40, 110, 40));
 

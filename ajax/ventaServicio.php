@@ -314,7 +314,7 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$data[] = array(
-						"0" => ($reg->estado == '1') ? '<button class="btn btn-secondary" data-idservicio="' . $reg->idservicio . '" onclick="agregarDetalle(' . $reg->idservicio . ',\'' . $reg->nombre . '\',\'' . (($reg->medida != "Paquetes") ? ($reg->precio_venta) : ($reg->precio_venta_mayor)) . '\'); bloquearPrecios(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
+						"0" => ($reg->estado == '1') ? '<button class="btn btn-secondary" data-idservicio="' . $reg->idservicio . '" onclick="agregarDetalle(' . $reg->idservicio . ',\'' . $reg->nombre . '\',\'' . $reg->precio_venta . '\'); bloquearPrecios(); disableButton(this);"><span class="fa fa-plus"></span></button>' : '',
 						"1" => "<img src='../files/servicios/" . $reg->imagen . "' height='50px' width='50px' >",
 						"2" => $reg->nombre,
 						"3" => $reg->almacen,

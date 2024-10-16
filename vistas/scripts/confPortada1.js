@@ -36,8 +36,10 @@ function mostrar() {
 
 		if (data && data !== "") {
 			$("#imagenmuestra").attr("src", "../files/portadas/" + data.imagen);
+			localStorage.setItem('imagen', data.imagen);
 		} else {
 			$("#imagenmuestra").attr("src", "../files/portadas/default.jpg");
+			localStorage.setItem('imagen', 'default.jpg');
 		}
 	});
 }
