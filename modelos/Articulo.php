@@ -194,4 +194,10 @@ class Articulo
 
 		return ejecutarConsulta($sql);
 	}
+
+	public function listarActivosPorArticulo($idarticulo)
+	{
+		$sql = "SELECT a.idarticulo,a.idcategoria,CONCAT(u.nombre,' ',u.apellido) AS usuario, al.ubicacion as almacen, u.idusuario, u.cargo AS cargo,c.nombre as categoria,m.nombre as marca,me.nombre as medida,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.precio_compra,a.precio_venta,a.precio_venta_mayor,a.ganancia,a.descripcion,a.talla,a.color,a.peso,a.posicion,DATE_FORMAT(a.fecha_emision, '%d-%m-%Y') as fecha_emision,DATE_FORMAT(a.fecha_vencimiento, '%d-%m-%Y') as fecha_vencimiento,a.nota_1,a.nota_2,a.imagen,a.estado FROM articulo a LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN almacen al ON a.idalmacen=al.idalmacen LEFT JOIN marcas m ON a.idmarcas=m.idmarcas WHERE a.eliminado = '0' AND a.idarticulo = $idarticulo ORDER BY a.idarticulo DESC";
+		return ejecutarConsulta($sql);
+	}
 }

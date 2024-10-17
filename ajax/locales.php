@@ -137,11 +137,11 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$data[] = array(
-						"0" => ($cargo != "mirador") ? ('<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
 							'<button class="btn btn-secondary" style="margin-right: 3px;" onclick="mostrar(' . $reg->idalmacen . ')"><i class="fa fa-pencil"></i></button>' .
 							'<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idalmacen . ')"><i class="fa fa-eye"></i></button>' .
 							'<a data-toggle="modal" href="#myModal"><button class="btn btn-secondary" style="margin-right: 3px; height: 35px; color: black !important;" onclick="trabajadores(' . $reg->idalmacen . ',\'' . $reg->ubicacion . '\')"><i class="fa fa-user"></i></button></a>' .
-							'</div>') : ('<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;"><button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idalmacen . ')"><i class="fa fa-eye"></i></button><a data-toggle="modal" href="#myModal"><button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idalmacen . ',\'' . $reg->ubicacion . '\')"><i class="fa fa-user"></i></button></a></div>'),
+							'</div>',
 						"1" => '<a href="../files/locales/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
 									<img src="../files/locales/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
 								</a>',

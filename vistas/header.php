@@ -285,6 +285,16 @@ $local_login = $_SESSION['local'];
           ?>
 
           <?php
+          if ($_SESSION['transferencias'] == 1) {
+            echo '<li id="mTransferencias">
+              <a href="transferencias.php">
+                <i class="fa fa-exchange"></i> <span>Transferencias</span>
+              </a>
+            </li>';
+          }
+          ?>
+
+          <?php
           if ($_SESSION['acceso'] == 1) {
             echo '<li id="mAcceso" class="treeview">
               <a href="#">
