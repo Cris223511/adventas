@@ -111,11 +111,11 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							(($reg->estado == 'activado') ?
-								(('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idalmacen . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idalmacen . ')"><i class="fa fa-close"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idalmacen . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" STYLE="margin-right: 3px;" onclick="mostrar(' . $reg->idalmacen . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idalmacen . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>')) .
-								(('<button class="btn btn-danger" style="width: 35px; height: 35px;" onclick="eliminar(' . $reg->idalmacen . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
+								(('<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idalmacen . ')"><i class="fa fa-pencil"></i></button>')) .
+								(('<button class="btn btn-secondary" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idalmacen . ')"><i class="fa fa-close"></i></button>')) .
+								(('<button class="btn btn-secondary" style="height: 35px;" onclick="eliminar(' . $reg->idalmacen . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-secondary" STYLE="margin-right: 3px;" onclick="mostrar(' . $reg->idalmacen . ')"><i class="fa fa-pencil"></i></button>')) .
+								(('<button class="btn btn-secondary" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idalmacen . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>')) .
+								(('<button class="btn btn-secondary" style="width: 35px; height: 35px;" onclick="eliminar(' . $reg->idalmacen . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
 						"1" => '<a href="../files/locales/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
 									<img src="../files/locales/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
 								</a>',

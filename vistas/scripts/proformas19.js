@@ -1100,7 +1100,10 @@ function listar() {
 				$(row).find('td:eq(1)').css({
 					"white-space": "nowrap"
 				});
-			}
+			},
+			"initComplete": function () {
+				agregarBuscadorColumna(this.api(), 5, "Buscar por N° documento.");
+			},
 		}).DataTable();
 
 	tabla.on('init.dt', function () {

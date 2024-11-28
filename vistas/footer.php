@@ -28,6 +28,22 @@
     <script src="../public/js/bootstrap-select.min.js"></script>
 
     <script>
+      function agregarBuscadorColumna(tabla, columnaIndex, placeholder) {
+        $('.dataTables_filter').append(
+          $('<input>', {
+            type: 'text',
+            placeholder: placeholder,
+            style: 'margin-left: 10px;',
+          }).on('keyup change', function() {
+            let valor = this.value;
+            let regex = valor ? `^.*${valor.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1')}.*$` : '';
+            tabla.column(columnaIndex).search(regex, true, false).draw();
+          })
+        );
+      }
+    </script>
+
+    <script>
       function inicializeGLightbox() {
         const glightbox = GLightbox({
           selector: '.glightbox'
@@ -181,6 +197,9 @@
       }
 
       $(document).on('draw.dt', function(e, settings) {
+        $('.dataTables_filter input[type="search"]').attr('placeholder', 'Buscar en toda la tabla.').css({
+          'font-weight': '500'
+        });
         if ($(settings.nTable).is('#tbllistado') || $(settings.nTable).is('#tbllistado2') || $(settings.nTable).is('#tbllistado3') || $(settings.nTable).is('#tbllistado_1') || $(settings.nTable).is('#tbllistado_2') || $(settings.nTable).is('#tblarticulos') || $(settings.nTable).is('#tbltrabajadores')) {
           const table = $(settings.nTable).DataTable();
           if (table.rows({

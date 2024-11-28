@@ -343,7 +343,10 @@ function listar() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 15,//Paginación
-			"order": []
+			"order": [],
+			"initComplete": function () {
+				agregarBuscadorColumna(this.api(), 8, "Buscar por código.");
+			},
 		}).DataTable();
 }
 //Función para guardar o editar

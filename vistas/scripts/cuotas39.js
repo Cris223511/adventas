@@ -666,7 +666,10 @@ function listar() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 15,//Paginación
-			"order": []
+			"order": [],
+			"initComplete": function () {
+				agregarBuscadorColumna(this.api(), 10, "Buscar por N° documento.");
+			},
 		}).DataTable();
 }
 

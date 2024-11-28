@@ -3,9 +3,7 @@ require "../config/Conexion.php";
 
 class LocalDisponible
 {
-	public function __construct()
-	{
-	}
+	public function __construct() {}
 
 	public function agregar($ubicacion, $local_ruc, $descripcion, $imagen)
 	{
@@ -91,9 +89,8 @@ class LocalDisponible
 				  DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
 				  l.estado
 				FROM almacen l 
-				LEFT JOIN usuario u ON l.idusuario = u.idusuario 
-				WHERE ((NOT EXISTS (SELECT 1 FROM usuario WHERE idalmacen = l.idalmacen)) AND l.eliminado = '0')
-				OR l.idusuario = '0' AND l.eliminado = '0'
+				LEFT JOIN usuario u ON l.idalmacen = u.idalmacen
+				WHERE u.idusuario IS NULL AND l.eliminado = '0'
 				ORDER BY l.idalmacen DESC";
 
 		return ejecutarConsulta($sql);
@@ -113,10 +110,8 @@ class LocalDisponible
 				  DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
 				  l.estado
 				FROM almacen l 
-				LEFT JOIN usuario u ON l.idusuario = u.idusuario 
-				WHERE ((NOT EXISTS (SELECT 1 FROM usuario WHERE idalmacen = l.idalmacen)) AND l.eliminado = '0')
-				OR l.idusuario = '0' AND l.eliminado = '0'
-				AND l.estado = 'activado'
+				LEFT JOIN usuario u ON l.idalmacen = u.idalmacen
+				WHERE u.idusuario IS NULL AND l.eliminado = '0' AND l.estado = 'activado'
 				ORDER BY l.idalmacen DESC";
 
 		return ejecutarConsulta($sql);

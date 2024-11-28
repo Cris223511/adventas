@@ -646,11 +646,9 @@ function listar() {
 			"bDestroy": true,
 			"iDisplayLength": 15,//Paginación
 			"order": [],
-			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(1)').css({
-					"white-space": "nowrap"
-				});
-			}
+			"initComplete": function () {
+				agregarBuscadorColumna(this.api(), 5, "Buscar por N° documento.");
+			},
 		}).DataTable();
 }
 
@@ -699,7 +697,10 @@ function buscar() {
 			},
 			"bDestroy": true,
 			"iDisplayLength": 15,
-			"order": []
+			"order": [],
+			"initComplete": function () {
+				agregarBuscadorColumna(this.api(), 5, "Buscar por N° documento.");
+			},
 		}).DataTable();
 }
 

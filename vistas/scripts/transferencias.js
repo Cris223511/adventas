@@ -213,7 +213,10 @@ function listar() {
 			},
 			"drawCallback": function (settings) {
 				ocultarColumnasPorNombre("tbllistado", columnasAocultar);
-			}
+			},
+			"initComplete": function () {
+				agregarBuscadorColumna(this.api(), 2, "Buscar por N° documento.");
+			},
 		}).DataTable();
 }
 
@@ -268,7 +271,10 @@ function buscar() {
 			},
 			"drawCallback": function (settings) {
 				ocultarColumnasPorNombre("tbllistado", columnasAocultar);
-			}
+			},
+			"initComplete": function () {
+				agregarBuscadorColumna(this.api(), 2, "Buscar por N° documento.");
+			},
 		}).DataTable();
 }
 
